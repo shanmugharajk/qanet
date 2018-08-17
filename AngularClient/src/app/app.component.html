@@ -1,0 +1,33 @@
+<div class="ui menu">
+  <a (click)="onQaNetClick()" class="header item">QaNet</a>
+
+  <div class="item">
+    <div class="ui transparent icon input">
+      <input class="prompt" type="text" placeholder="Search questions...">
+      <i class="search link icon"></i>
+    </div>
+  </div>
+
+  <div class="right menu">
+    <a (click)="onAskQuestionClick()" class="item">
+      <i class="question circle icon"></i>
+      Ask Question
+    </a>
+
+    <!--TODO Clean up required-->
+    <div id="menu" *ngIf="isAuthenticated" class="ui dropdown item">
+      <i class="user icon"></i> 
+      &nbsp; {{userId}} !! 
+      <i class="dropdown icon"></i>
+      <div class="menu">
+        <a *ngIf="isAuthenticated" (click)="onSignOutClick()" class="item">Sign out</a>
+      </div>
+    </div>
+
+    <a *ngIf="!isAuthenticated" (click)="onSignInClick()" class="item">Sign in</a>    
+  </div>
+</div>
+
+<app-error-message></app-error-message>
+<br>
+<router-outlet></router-outlet>

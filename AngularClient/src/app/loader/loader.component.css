@@ -1,0 +1,4 @@
+.busy-indicator {
+  height: calc(100vh - 180px);
+  position: relative;
+}

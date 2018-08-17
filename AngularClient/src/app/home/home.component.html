@@ -1,0 +1,42 @@
+<div id="main-menu" class="main">
+  <div class="header-wrapper">
+    <div class="ui container">
+      <div class="ui tabular menu">
+				<a 
+					class="item" (click)="onTabClick('allQuestion')" 
+					[ngClass]="{'active': selectedTab === 'allQuestion'}"
+					data-tab="first">All questions</a>
+				<a 
+					class="item" (click)="onTabClick('featuredQuestion')" 
+					[ngClass]="{'active': selectedTab === 'featuredQuestion'}"
+					data-tab="second">Featured Questions</a>
+      </div>
+    </div>
+    <div class="ui tabs divider"></div>
+  </div>
+
+  <div class="tab-container">
+    <div 
+      class="ui tab" 
+      [ngClass]="{'active': selectedTab === 'allQuestion'}"
+      data-tab="first">
+      <app-questions-list>
+      </app-questions-list>
+    </div>
+
+    <div 
+      class="ui tab" 
+      [ngClass]="{'active': selectedTab === 'featuredQuestion'}"
+      data-tab="second">
+      
+      <!--TODO Remove this when implementing the actual feature.-->
+      <div *ngIf="!questionsList || questionsList.count === 0" class="ui warning message">
+        <div class="header">
+          Not implemented
+        </div>
+        <p>This feature is coming soon.</p>
+      </div>
+
+    </div>
+  </div>
+</div>

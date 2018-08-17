@@ -1,0 +1,22 @@
+<div>
+  <h3 class="ui dividing header">Your Answer</h3>
+
+  <!--Warning Message for answer with length < 200-->
+  <div *ngIf="showWarning" id="message" class="ui warning message">
+    <div class="header">
+      Too short answer.
+    </div>
+    Please provide an answer with minimum of 200 characters.
+  </div>
+
+  <div class="editor" id='editor' #editor>
+  </div>
+  <span class="helperText">Please explain your answer in minimum 100 characters</span>
+  <br>
+  <br>
+  <button (click)="onPostAnswerClick()" class="ui primary mini button">
+    Post your answer
+  </button>
+  <br>
+  <br>
+</div>

@@ -1,0 +1,29 @@
+# @name login
+POST {{host}}/Account/Login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+	"userid": "shan",
+	"password": "mozzie"
+}
+###
+
+# @name login
+POST {{host}}/Account/Login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+	"userid": "raj",
+	"password": "mozzie"
+}
+###
+
+# @name login
+POST {{host}}/Account/Login HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+	"userid": "sherlock",
+	"password": "mozzie"
+}
+###

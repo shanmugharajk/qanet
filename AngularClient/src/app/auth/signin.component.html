@@ -1,0 +1,55 @@
+<div class="login-container">
+  <form
+    [ngClass]="{'loading': loading}" 
+    (ngSubmit)="login()" 
+    class="ui form" 
+    #signinForm="ngForm">
+    <h4 class="ui top attached header">
+      Sign In
+    </h4>
+
+    <div class="ui attached segment">
+      <div 
+        class="required inline field" 
+        [ngClass]="{'error': !userid.valid && userid.touched}">
+          <label for="userid">User Id</label>
+            <input
+              autocomplete="username"
+              ngModel 
+              id="userid" 
+              name="userid"
+              type="text"  
+              required
+              #userid="ngModel">
+      </div>
+
+      <div 
+        class="required inline field"
+        [ngClass]="{'error': !password.valid && password.touched}">
+          <label for="password">Password</label>
+            <input
+              ngModel 
+              id="password" 
+              name="password" 
+              type="password"
+              autocomplete="current-password" 
+              required
+              #password="ngModel">
+      </div>
+
+      <div class="inline field">
+        <label></label>
+        <button
+          [disabled]="!signinForm.valid" 
+          type="submit" 
+          class="ui green button">Sign In</button>
+        <a href="/user/forget_password">Forgot password?</a>
+      </div>
+
+      <div class="inline field">
+        <label></label>
+        <a href="/user/sign_up">Need an account? Sign up now.</a>
+      </div>
+    </div>
+  </form>
+</div>

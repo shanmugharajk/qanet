@@ -1,0 +1,21 @@
+
+
+.user-details {
+  float: right;
+  padding-right: 50px;
+}
+
+.user-details > span {
+  font-size: 12px;
+  color: #7d7b7b;
+  padding-right: 5px;
+}
+
+.user-details > a {
+  padding-right: 5px;
+  cursor: pointer;
+}
+
+.user-details > .points {
+  font-weight: bold;
+}

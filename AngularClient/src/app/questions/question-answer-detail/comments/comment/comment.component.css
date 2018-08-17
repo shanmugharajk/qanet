@@ -1,0 +1,31 @@
+.comment {
+  padding: 10px;
+  color: #0c0c0cde;
+  font-size: 12px;
+  border-bottom: 1px solid #2224260f;
+}
+
+.points {
+  padding-left: 5px;
+  font-size: 11px;
+  color: #7d7b7b;
+}
+
+.points a {
+  padding-right: 5px;
+  font-size: 13px;
+}
+
+.delete-comment {
+  padding-left: 5px;
+  cursor: pointer;
+  color: lightgray;
+}
+
+.delete-comment:hover {
+  color: red;
+}
+
+.hide {
+  display: none;
+}

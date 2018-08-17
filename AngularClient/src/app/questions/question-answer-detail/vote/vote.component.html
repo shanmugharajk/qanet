@@ -1,0 +1,35 @@
+<div class="vote-container">
+  <!--Upvote/DownVote-->
+  <div class="vote">
+    <div (click)="onUpVoteClick()"  [ngClass]="{'self-vote': selfVoted && selfVote === 1}">
+      <i class="huge caret up icon"></i>
+    </div>
+    <span>{{vote}}</span>
+    <div (click)="onDownVoteClick()" [ngClass]="{'self-vote': selfVoted && selfVote === 2}">
+      <i class="huge caret down icon"></i>
+    </div>
+  </div>
+
+  <!--Bookmark-->
+  <div 
+    *ngIf="showBookMark" 
+    class="light bookmark"
+    (click)="onBookmarkClick()"
+  >
+    <i class="big star icon"></i>
+    <div *ngIf="bookmarkCount > 0" class="bookmark-count">
+      <span>{{bookmarkCount}}</span>
+    </div>
+  </div>
+
+  <!--Accept answer-->
+  <div 
+    *ngIf="!showBookMark" 
+    [ngClass]="{'accepted': isAccepted, 'light': !isAccepted}"
+    (click)="onAcceptAnswerClick()">
+    <i class="big check icon"></i>
+  </div>
+
+  <!--Three dot Loading-->
+  <div class="dot-elastic" *ngIf="loading"></div>
+</div>

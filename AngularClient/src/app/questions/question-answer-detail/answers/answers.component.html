@@ -1,0 +1,29 @@
+<app-loader>
+</app-loader>
+
+<div class="answers" *ngIf="answers && answers.count > 0">
+  <h3 class="ui dividing header">{{title()}}</h3>
+
+  <div  *ngIf="answers.pages > 1" class="pagination-buttons ui basic mini buttons">
+    <div
+      (click)="onPreviousClick()" 
+      [ngClass]="{'disabled': !answers.hasPrevious}" 
+      class="ui button">
+        Prev
+    </div>
+
+    <div
+      (click)="onNextClick()" 
+      [ngClass]="{'disabled': !answers.hasNext}" 
+      class="ui button">
+        Next
+    </div>
+
+  </div>
+
+  <app-answer 
+    *ngFor="let answer of answers.items" 
+    [answer]="answer" 
+    [questionId]="questionId">
+  </app-answer>
+</div>

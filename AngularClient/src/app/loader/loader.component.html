@@ -1,0 +1,6 @@
+<div [ngClass]="{'busy-indicator': show}">
+  <div class="ui inverted dimmer" [ngClass]="{'hide': !show, 'active': show}">
+    <div class="ui tiny text loader">Please wait loading!</div>
+  </div>
+  <p></p>
+</div>

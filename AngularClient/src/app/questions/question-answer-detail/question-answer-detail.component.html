@@ -1,0 +1,85 @@
+<app-loader [show]="isLoading">
+</app-loader>
+
+<div *ngIf="!isLoading" class="ui container">
+  <h3 class="ui dividing header">{{question.title}}</h3>
+
+  <!-- Question -->
+  <div>
+    <div class="flex-container">
+      <!--Vote-->
+      <app-vote
+        [loading]="isVoteLoading"
+        [selfVote]="question.selfVote"
+        [selfVoted]="question.selfVoted" 
+        [selfBookmarked]="question.selfBookmarked" 
+        [showBookMark]="true"
+        [bookmarkCount]="question.totalBookmarks"
+        [vote]="question.votes"
+        (upVote)="onUpVoteClick()"
+        (downVote)="onDownVoteClick()"
+        (bookmark)="onBookmarkClick()">
+      </app-vote>
+  
+      <!--Content-->
+      <div class="content">
+        <div id='questionEditor' #questionEditor>
+        </div>
+  
+        <!--Tags-->
+        <div class="post-bottom-row">
+          <div class="tags">
+            <div 
+              *ngFor="let tag of question.tags" 
+              class="ui label">
+              {{tag}}
+            </div>
+          </div>
+  
+          <!--Menus-->
+          <div class="post-menu">
+            <a *ngIf="isOwner" href="#">delete</a>
+          </div>
+  
+          <!--Question Author details-->
+          <app-post-user-detail 
+            [createdAt]="question.createdAt" 
+            [authorPoints]="question.authorPoints" 
+            [author]="question.author"
+            [isQuestion]='true'>
+          </app-post-user-detail>
+  
+          <!--Comments-->
+          <app-comments
+            [isQuestion]='true'
+            [comments]="question.comments"
+            [id]="question.id">
+          </app-comments>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Answers -->
+  <app-answers [questionId]="question.id">
+  </app-answers>
+
+  <br>
+  
+  <!--New answer-->
+  <app-new-answer 
+    *ngIf="isAuthenticated"
+    [questionId]="question.id">
+  </app-new-answer>
+
+  <!--Redirect user to login page is not authenticated.-->
+  <div class="prompt-login-container" *ngIf="!isAuthenticated">
+    <button (click)="onLoginPromptClick()" class="ui primary mini button">
+      Login | Signup to post you answer
+    </button>
+  </div>
+
+  <!--Prompt shows user to login to answer question if not logged in.-->
+  <app-prompt-login-modal-component>
+  </app-prompt-login-modal-component>
+</div>

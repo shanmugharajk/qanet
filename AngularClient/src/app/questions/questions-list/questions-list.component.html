@@ -1,0 +1,16 @@
+<app-loader [show]="isLoading">
+</app-loader>
+
+<div *ngIf="(!questionsList || questionsList.count === 0) && !isLoading" class="ui warning message">
+  <div class="header">
+    No records
+  </div>
+  <p>There are not active questions posted at the moment.</p>
+</div>
+
+<div *ngIf="!!questionsList && questionsList.count > 0">
+  <app-question 
+    *ngFor="let question of questionsList.items"
+    [question]="question"
+  ></app-question>
+</div>

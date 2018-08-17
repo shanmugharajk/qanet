@@ -1,0 +1,51 @@
+<div class="ui container">
+  <br>
+  <form class="ui form">
+    <div 
+      [ngClass]="{'error': errors.title && touched.title}" 
+      class="field">
+      <label>Title*</label>
+      <input
+        type="text" 
+        name="title" 
+        placeholder="Question title in one line."
+        [(ngModel)]="title"
+        (blur)="onTitleBlur()"
+        (input)="onTitleChange()">
+    </div>
+
+    <div class="field error"
+      [ngClass]="{'error': touched.question &&  errors.question}">
+      <label [ngClass]="{'field error': true}">Body*</label>
+      <div [ngClass]="{'editor-container-error': touched.question &&  errors.question}">
+        <div class="editor" id='editor' #editor>
+        </div>
+      </div>
+    </div>
+
+    <div  
+      class="field"
+      [ngClass]="{'error': errors.tags && touched.tags}">
+      <label>Tags*</label>
+
+      <div 
+        class="ui fluid multiple search selection dropdown">
+        <input
+          name="tags" 
+          type="hidden" 
+          #tags>
+        <i class="dropdown icon"></i>
+        <div class="default text"></div>
+        <div class="menu">
+        </div>
+      </div>
+		</div>
+		
+		<br>
+    <button
+      (click)="onSaveClick()" 
+      class="ui primary mini button">
+        Post your question
+    </button>
+  
+  </form>

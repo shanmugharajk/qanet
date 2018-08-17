@@ -1,0 +1,55 @@
+.vote-container {
+  flex: 1 auto;
+  width: 50px;
+  text-align: center;
+}
+
+.vote-container i {
+  cursor: pointer;
+}
+
+.vote-container span {
+  font-size: 20px;
+  color: #0000008f;
+}
+
+.vote i {
+  color: #0000005c;
+}
+
+.light i {
+  color: #d3d3d363;
+}
+
+.vote .self-vote i {
+  color: #f57f24;
+}
+
+.vote-container i {
+  width: 50px;
+}
+
+.bookmark i {
+  font-size: 20px;
+}
+
+.bookmark-self i {
+  color: #ffd83d78;
+}
+
+.bookmark-count {
+  padding: 3px;
+}
+
+.bookmark-count span {
+  font-size: 11px;
+}
+
+.accepted i {
+  color: green;
+}
+
+.vote-container .dot-elastic {
+  margin-top: 20px;
+  margin-left: 20px;
+}
