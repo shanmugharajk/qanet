@@ -3,6 +3,8 @@ Question answer site with minimal features like stack overflow with dotnet core 
 
 ### ** Work in progress **
 
+Current demo [here](https://qanet.herokuapp.com/)
+
 ### Screen shots
 
 ### Home
