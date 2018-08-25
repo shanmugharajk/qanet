@@ -9,12 +9,12 @@ namespace QaNet.Respositories
 {
 	public class QuestionRepository : RepositoryBase<Question>, IQuestionRepository
 	{
-		private QaContext qaContext;
+		private readonly DbSet<Answer> answers;
 
 		public QuestionRepository(QaContext qaContext)
 		: base(qaContext)
 		{
-			this.qaContext = qaContext;
+			this.answers = qaContext.Set<Answer>();
 		}
 
 		public async Task<int> GetVotesAsync(int questionId) =>
@@ -26,7 +26,7 @@ namespace QaNet.Respositories
 
 		public async Task<bool> HasAcceptedAnswerAsync(int questionId)
 		{
-			IQueryable<Answer> query = this.qaContext.Answers
+			IQueryable<Answer> query = this.answers
 				.Where(o => o.IsAccepted == true && o.QuestionId == questionId);
 
 			return await query.CountAsync() > 0;
@@ -34,7 +34,7 @@ namespace QaNet.Respositories
 
 		public async Task<int> GetAnswersCountAsync(int questionId)
 		{
-			IQueryable<Answer> query = this.qaContext.Answers
+			IQueryable<Answer> query = this.answers
 				.Where(o => o.IsAccepted == true && o.QuestionId == questionId);
 
 			return await query.CountAsync();
@@ -42,7 +42,7 @@ namespace QaNet.Respositories
 
 		public bool HasAcceptedAnswer(int questionId)
 		{
-			IQueryable<Answer> query = this.qaContext.Answers
+			IQueryable<Answer> query = this.answers
 				.Where(o => o.IsAccepted == true && o.QuestionId == questionId);
 
 			return query.Count() > 0;
@@ -50,7 +50,7 @@ namespace QaNet.Respositories
 
 		public int GetAnswersCount(int questionId)
 		{
-			IQueryable<Answer> query = this.qaContext.Answers
+			IQueryable<Answer> query = this.answers
 				.Where(o => o.IsAccepted == true && o.QuestionId == questionId);
 
 			return query.Count();

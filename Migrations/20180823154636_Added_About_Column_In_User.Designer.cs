@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QaNet.Entities;
@@ -10,22 +9,19 @@ using QaNet.Entities;
 namespace QaNet.Migrations
 {
     [DbContext(typeof(QaContext))]
-    [Migration("20180806153552_Initial")]
-    partial class Initial
+    [Migration("20180823154636_Added_About_Column_In_User")]
+    partial class Added_About_Column_In_User
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "2.1.1-rtm-30846");
 
             modelBuilder.Entity("QaNet.Entities.Models.Answer", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("AnswerText")
                         .IsRequired();
@@ -58,8 +54,7 @@ namespace QaNet.Migrations
             modelBuilder.Entity("QaNet.Entities.Models.AnswerComment", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<int>("AnswerId");
 
@@ -102,23 +97,17 @@ namespace QaNet.Migrations
 
             modelBuilder.Entity("QaNet.Entities.Models.Bookmark", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("CreatedAt");
+                    b.Property<string>("UserId");
 
                     b.Property<int>("QuestionId");
 
+                    b.Property<DateTime>("CreatedAt");
+
                     b.Property<DateTime>("UpdatedAt");
 
-                    b.Property<string>("UserId");
-
-                    b.HasKey("Id");
+                    b.HasKey("UserId", "QuestionId");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Bookmark");
                 });
@@ -126,8 +115,7 @@ namespace QaNet.Migrations
             modelBuilder.Entity("QaNet.Entities.Models.Question", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Author");
 
@@ -175,8 +163,7 @@ namespace QaNet.Migrations
             modelBuilder.Entity("QaNet.Entities.Models.QuestionComment", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Author");
 
@@ -233,8 +220,7 @@ namespace QaNet.Migrations
             modelBuilder.Entity("QaNet.Entities.Models.Role", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -278,6 +264,8 @@ namespace QaNet.Migrations
                     b.Property<string>("UserId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("About");
+
                     b.Property<string>("DisplayName");
 
                     b.Property<bool>("IsActive");
@@ -315,8 +303,7 @@ namespace QaNet.Migrations
             modelBuilder.Entity("QaNet.Entities.Models.UserToken", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTimeOffset>("AccessTokenExpiresDateTime");
 
@@ -386,7 +373,8 @@ namespace QaNet.Migrations
 
                     b.HasOne("QaNet.Entities.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("QaNet.Entities.Models.Question", b =>

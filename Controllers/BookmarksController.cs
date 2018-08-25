@@ -20,28 +20,19 @@ namespace QaNet.Controllers
 			this.bookmarksService.CheckArgumentIsNull(nameof(BookmarksController.bookmarksService));
 		}
 
-		[HttpGet()]
-		public async Task<IActionResult> FetchBookmarks(
-			[FromQuery(Name = "index")] int indexParam,
-			[FromQuery(Name = "size")] int size)
-		{
-			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;
-			var bookmarksList = await this.bookmarksService.GetBookmarkedQuestionListAsync(index, size);
-			return Ok(bookmarksList);
-		}
-
 		[HttpPost("{questionId}")]
+		[AllowAnonymous]
 		public async Task<IActionResult> AddBookmark(int questionId)
 		{
-			await this.bookmarksService.AddToBookMarkAsync(questionId);
-			return NoContent();
+			var totalBookmarkCount = await this.bookmarksService.AddToBookMarkAsync(questionId);
+			return Ok(totalBookmarkCount);
 		}
 
 		[HttpDelete("{questionId}")]
 		public async Task<IActionResult> DeleteBookmark(int questionId)
 		{
-			await this.bookmarksService.DeleteBookmarkAsync(questionId);
-			return NoContent();
+			var totalBookmarkCount = await this.bookmarksService.DeleteBookmarkAsync(questionId);
+			return Ok(totalBookmarkCount);
 		}
 	}
 }

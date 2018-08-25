@@ -10,18 +10,14 @@ namespace QaNet.Respositories
 {
   public class RolesRepository : IRolesRepository
   {
-    private QaContext dbContext;
-
     private readonly DbSet<Role> roles;
 
     private readonly DbSet<User> users;
 
     public RolesRepository(QaContext dbContext)
     {
-      this.dbContext = dbContext;
-
-      this.roles = this.dbContext.Set<Role>();
-      this.users = this.dbContext.Set<User>();
+      this.roles = dbContext.Set<Role>();
+      this.users = dbContext.Set<User>();
     }
 
     public Task<List<Role>> FindUserRolesAsync(string userId)

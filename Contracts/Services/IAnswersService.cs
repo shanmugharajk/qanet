@@ -11,6 +11,7 @@ namespace QaNet.Contracts.Services
 			int size = 5
 		);
 
+		Task<AnswerDetailViewModel> FetchAnswer(int questionId, int answerId);
 		Task<BaseResponseViewModel> AddAnswerAsync(int questionId, string answer);
 
 		Task DeleteAnswerAsync(int questionId, int answerId);

@@ -25,6 +25,9 @@ import { AppComponent } from './app.component';
 import { AnswersComponent } from './questions/question-answer-detail/answers/answers.component';
 import { AnswerComponent } from './questions/question-answer-detail/answers/answer/answer.component';
 import { LoaderComponent } from './loader/loader.component';
+import { PostsComponent } from './posts/posts.component';
+import { ConfirmDialogComponent } from './controls/confirm-dialog/confirm-dialog.component';
+import { ProfileComponent } from './posts/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,10 @@ import { LoaderComponent } from './loader/loader.component';
     PromptLoginModalComponentComponent,
     AnswersComponent,
     AnswerComponent,
-    LoaderComponent
+    LoaderComponent,
+    PostsComponent,
+    ConfirmDialogComponent,
+    ProfileComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [

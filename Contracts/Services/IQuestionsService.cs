@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using QaNet.Contracts.Paging;
 using QaNet.Entities.ViewModels;
 
 namespace QaNet.Contracts.Services

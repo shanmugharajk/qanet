@@ -10,6 +10,8 @@ namespace QaNet.Constants
 
 		public const string NoRightsToModifyAnswer = "You dont right's to update/delete the answer";
 
+		public const string CantDeleteSinceItsAcceptedAnswer = "Sorry, you can't delete this answer since it's the accepted answer";
+
 		public const string CantDeleteSinceItHasUpVotes = "This question has upvotes, So can't be deleted since it may be useful to others.";
 
 		public const string CantDeleteSinceItHasAnswer = "This question has answers, So can't be deleted since it may be useful to others.";

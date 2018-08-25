@@ -10,7 +10,7 @@ export class StorageService {
     sessionStorage.setItem('token', token);
   }
 
-  public deleteToken() {
+  public deleteToken(): void {
     sessionStorage.removeItem('token');
   }
 
@@ -24,5 +24,9 @@ export class StorageService {
 
   public fetch(key: string): string {
     return sessionStorage.getItem(key) || '';
+  }
+
+  public delete(key: string): void {
+    sessionStorage.removeItem(key);
   }
 }

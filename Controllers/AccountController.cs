@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using QaNet.Contracts.Repository;
 using QaNet.Contracts.Services;
+using QaNet.CustomExceptions;
 using QaNet.Entities.Models;
 using QaNet.Entities.ViewModels;
 using QaNet.Extensions;
@@ -60,7 +61,7 @@ namespace QaNet.Controllers
 			var user = await this.usersService.FindUserAsync(loginViewModel.UserId, loginViewModel.Password);
 			if (user == null || !user.IsActive)
 			{
-				return Unauthorized();
+				throw new QaException("You've entered Invalid credentials");
 			}
 
 			var (accessToken, refreshToken, claims) = await this.tokenStoreService.CreateJwtTokensAsync(user, refreshTokenSource: null);

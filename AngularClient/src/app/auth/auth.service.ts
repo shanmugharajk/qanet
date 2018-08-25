@@ -48,6 +48,7 @@ export class AuthService {
       .pipe(
         map(response => {
           this.storageService.deleteToken();
+          this.storageService.delete('userId');
           return true;
         }),
         catchError(handleError));

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Observable } from 'rxjs';
 import { handleError } from '../shared/errorhandler';
 
 @Injectable({
@@ -19,7 +19,7 @@ export class VoteService {
       .post<{}>(`/api/questions/${questionId}/vote/${vote}`, {} , {
         observe: 'body'
       })
-      .pipe<any>(catchError(handleError));
+      .pipe<number>(catchError(handleError));
   }
 
   // Answer
@@ -28,7 +28,7 @@ export class VoteService {
     .post<{}>(`/api/answers/${answerId}/vote/${vote}`, {} , {
       observe: 'body'
     })
-    .pipe<any>(catchError(handleError));
+    .pipe<number>(catchError(handleError));
   }
 
   public acceptAnswer(questionId: number, answerId: number) {
@@ -36,11 +36,21 @@ export class VoteService {
     .post<{}>(`/api/questions/${questionId}/answers/${answerId}/accept`, {} , {
       observe: 'body'
     })
-    .pipe<any>(catchError(handleError));
+    .pipe(catchError(handleError));
   }
 
-  public bookmark(questionId: number) {
+  public AddToBookmark(questionId: number) {
+    return this.http.
+      post<{}>(`/api/bookmarks/${questionId}`, {}, {
+        observe: 'body'
+      })
+      .pipe<any>(catchError(handleError));
+  }
 
+  public DeleteBookmark(questionId: number) {
+    return this.http.
+      delete(`/api/bookmarks/${questionId}`)
+      .pipe<any>(catchError(handleError));
   }
 
   public notifyUserVoted() {

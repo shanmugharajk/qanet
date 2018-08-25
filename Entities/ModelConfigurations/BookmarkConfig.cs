@@ -8,6 +8,7 @@ namespace QaNet.Entities.ModelConfigurations
   {
     public void Configure(EntityTypeBuilder<Bookmark> builder)
     {
+			builder.HasKey(b => new { b.UserId, b.QuestionId });
     }
   }
 }

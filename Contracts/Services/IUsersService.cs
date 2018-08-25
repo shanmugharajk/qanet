@@ -1,25 +1,41 @@
 using System.Threading.Tasks;
+using QaNet.Contracts.Paging;
 using QaNet.Entities.Models;
+using QaNet.Entities.ViewModels;
 
 namespace QaNet.Contracts.Services
 {
-  public interface IUsersService
-  {
-    Task<string> GetSerialNumberAsync(string userId);
+	public interface IUsersService
+	{
+		Task<IPaginate<PostsViewModel>> FetchQuestionListAsync(string userId, int index, int size = 20);
 
-    Task<User> FindUserAsync(string userId, string password);
+		Task<IPaginate<PostsViewModel>> FetchAnswersListAsync(string userId, int index, int size = 20);
 
-    Task<User> FindUserAsync(string userId);
+		Task<IPaginate<PostsViewModel>> FetchBookmarksAsync(
+			string userId,
+			int index = 1,
+			int size = 20
+		);
 
-    Task UpdateUserLastActivityDateAsync(string userId);
+		Task<UserProfileViewModelResponse> FetchUserProfileAsync(string userId);
 
-    Task<User> GetCurrentUser();
+		Task UpdateUserProfileAsync(string userId, UserProfileUpdateRequestViewModel profileVm); 
 
-    string GetCurrentUserId();
+		Task<string> GetSerialNumberAsync(string userId);
 
-    Task<(bool Succeeded, string Error)> ChangePasswordAsync(
-      User user,
-      string currentPassword,
-      string newPassword);
-  }
+		Task<User> FindUserAsync(string userId, string password);
+
+		Task<User> FindUserAsync(string userId);
+
+		Task UpdateUserLastActivityDateAsync(string userId);
+
+		Task<User> GetCurrentUserAsync();
+
+		string GetCurrentUserId();
+
+		Task<(bool Succeeded, string Error)> ChangePasswordAsync(
+			User user,
+			string currentPassword,
+			string newPassword);
+	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace QaNet.Migrations
@@ -13,7 +12,7 @@ namespace QaNet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 450, nullable: false)
                 },
                 constraints: table =>
@@ -45,12 +44,14 @@ namespace QaNet.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Title = table.Column<string>(nullable: false),
                     QuestionText = table.Column<string>(nullable: false),
                     ShortDescription = table.Column<string>(nullable: true),
-                    Votes = table.Column<int>(nullable: false, defaultValue: 0),
-                    CloseVotes = table.Column<int>(nullable: false, defaultValue: 0),
+                    Votes = table.Column<int>(nullable: false, defaultValue: 0)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    CloseVotes = table.Column<int>(nullable: false, defaultValue: 0)
+                        .Annotation("Sqlite:Autoincrement", true),
                     BountyPoints = table.Column<int>(nullable: true),
                     BountyExpiryDate = table.Column<DateTime>(nullable: true),
                     IsActive = table.Column<bool>(nullable: true, defaultValue: true),
@@ -126,7 +127,7 @@ namespace QaNet.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     AccessTokenHash = table.Column<string>(nullable: true),
                     AccessTokenExpiresDateTime = table.Column<DateTimeOffset>(nullable: false),
                     RefreshTokenIdHash = table.Column<string>(maxLength: 450, nullable: false),
@@ -152,9 +153,10 @@ namespace QaNet.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     AnswerText = table.Column<string>(nullable: false),
-                    Votes = table.Column<int>(nullable: false, defaultValue: 0),
+                    Votes = table.Column<int>(nullable: false, defaultValue: 0)
+                        .Annotation("Sqlite:Autoincrement", true),
                     IsAccepted = table.Column<bool>(nullable: true, defaultValue: false),
                     QuestionId = table.Column<int>(nullable: false),
                     Author = table.Column<string>(nullable: true)
@@ -182,14 +184,12 @@ namespace QaNet.Migrations
                 {
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: false),
                     QuestionId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Bookmark", x => x.Id);
+                    table.PrimaryKey("PK_Bookmark", x => new { x.UserId, x.QuestionId });
                     table.ForeignKey(
                         name: "FK_Bookmark_Questions_QuestionId",
                         column: x => x.QuestionId,
@@ -201,7 +201,7 @@ namespace QaNet.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -211,7 +211,7 @@ namespace QaNet.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Comment = table.Column<string>(nullable: false),
                     Author = table.Column<string>(nullable: true),
                     QuestionId = table.Column<int>(nullable: false)
@@ -291,7 +291,7 @@ namespace QaNet.Migrations
                     CreatedAt = table.Column<DateTime>(nullable: false),
                     UpdatedAt = table.Column<DateTime>(nullable: false),
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                        .Annotation("Sqlite:Autoincrement", true),
                     Comment = table.Column<string>(nullable: false),
                     Author = table.Column<string>(nullable: true),
                     AnswerId = table.Column<int>(nullable: false)
@@ -369,11 +369,6 @@ namespace QaNet.Migrations
                 name: "IX_Bookmark_QuestionId",
                 table: "Bookmark",
                 column: "QuestionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bookmark_UserId",
-                table: "Bookmark",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_QuestionComments_Author",

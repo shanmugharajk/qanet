@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { CommentsService } from '../comments.service';
 import { MessageService } from '../../../../messages/message.service';
 
@@ -7,7 +7,7 @@ import { MessageService } from '../../../../messages/message.service';
   templateUrl: './new-comment.component.html',
   styleUrls: ['./new-comment.component.css']
 })
-export class NewCommentComponent implements OnInit {
+export class NewCommentComponent implements OnDestroy {
   comment: string;
   isValid: boolean;
   showInOrange: boolean;
@@ -25,7 +25,8 @@ export class NewCommentComponent implements OnInit {
       this.clearForm();
     }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this.messageService.clearError();
   }
 
   onCommentChange() {
@@ -62,7 +63,7 @@ export class NewCommentComponent implements OnInit {
   }
 
   addComment() {
-    this.messageService.hideError();
+    this.messageService.clearError();
 
     const successCb = id => {
       console.log(id);

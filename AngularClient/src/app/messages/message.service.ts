@@ -9,6 +9,7 @@ export class MessageService {
   hideError$ = new Subject();
 
   promptLoginModal$ = new Subject<boolean>();
+  promptYesNoModal$ = new Subject<{show: boolean, id: string}>();
 
   constructor() { }
 
@@ -16,11 +17,15 @@ export class MessageService {
     this.notifyError$.next({title, message});
   }
 
-  hideError() {
+  clearError() {
     this.hideError$.next();
   }
 
   promptLoginModal(show: boolean) {
     this.promptLoginModal$.next(show);
+  }
+
+  promptYesNoModal(show: boolean, id: string) {
+    this.promptYesNoModal$.next({show, id});
   }
 }

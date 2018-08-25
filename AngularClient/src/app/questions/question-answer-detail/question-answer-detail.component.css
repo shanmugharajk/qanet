@@ -24,6 +24,7 @@
 .post-menu a {
   padding: 0 3px 2px;
   color: #686f75;
+  cursor: pointer;
 }
 
 .post-menu a:hover {

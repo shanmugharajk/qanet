@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import Comment from '../comment.model';
 import { AuthService } from '../../../../auth/auth.service';
 import { CommentsService } from '../comments.service';
@@ -12,7 +12,7 @@ const moment = require('moment');
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.css']
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnDestroy {
   @Input() id: number;
   @Input() comment: Comment;
   @Input() showMore: boolean;
@@ -26,7 +26,8 @@ export class CommentComponent implements OnInit {
     private messagingService: MessageService
   ) {}
 
-  ngOnInit() {
+  ngOnDestroy() {
+    this.messagingService.clearError();
   }
 
   canShowDelete() {
@@ -35,23 +36,23 @@ export class CommentComponent implements OnInit {
   }
 
   onDeleteClick() {
-    this.messagingService.hideError();
+    this.messagingService.clearError();
 
-    const successCb = () => {
+    const afterCommentDeleted = () => {
       this.deleted.emit();
     };
 
-    const errorCb =  error => {
+    const onErrorInDeletingComment =  error => {
       console.log(error);
       this.messagingService.notifyError('Error in deleting', error.message);
     };
 
     if (this.isQuestion === true) {
       this.commentsService.deleteQuestionComment(this.id, this.comment.id)
-        .subscribe(successCb, errorCb);
+        .subscribe(afterCommentDeleted, onErrorInDeletingComment);
     } else {
       this.commentsService.deleteAnswerComment(this.id, this.comment.id)
-        .subscribe(successCb, errorCb);
+        .subscribe(afterCommentDeleted, onErrorInDeletingComment);
     }
   }
 

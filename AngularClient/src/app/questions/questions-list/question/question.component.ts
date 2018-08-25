@@ -35,9 +35,4 @@ export class QuestionComponent implements OnInit {
           sameElse: 'dddd, MMMM Do YYYY, h:mm a'
       });
   }
-
-  onQuestionLinkClick(event: any, id: number) {
-    event.preventDefault();
-    this.router.navigate(['/questions', id], {queryParams: {pageNo: 1}});
-  }
 }

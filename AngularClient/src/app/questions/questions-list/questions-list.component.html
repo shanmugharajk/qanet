@@ -1,7 +1,7 @@
-<app-loader [show]="isLoading">
+<app-loader [show]="isFetching">
 </app-loader>
 
-<div *ngIf="(!questionsList || questionsList.count === 0) && !isLoading" class="ui warning message">
+<div *ngIf="(!questionsList || questionsList.count === 0) && !isFetching" class="ui warning message">
   <div class="header">
     No records
   </div>
@@ -13,4 +13,26 @@
     *ngFor="let question of questionsList.items"
     [question]="question"
   ></app-question>
+</div>
+
+<div *ngIf="!!questionsList && questionsList.pages > 1" class="pagination-row">
+  <div class="ui mini basic buttons">
+    <a
+      (click)="onPreviousClick()" 
+      [ngClass]="{'disabled': !questionsList.hasPrevious}" 
+      class="ui button"
+      [routerLink]="[ '/questions']" 
+      [queryParams]="{'page': previousPageNo}">
+        Prev
+    </a>
+
+    <a
+      (click)="onNextClick()" 
+      [ngClass]="{'disabled': !questionsList.hasNext}" 
+      class="ui button"
+      [routerLink]="[ '/questions' ]"
+      [queryParams]="{'page': nextPageNo}">
+        Next
+    </a>
+  </div>
 </div>

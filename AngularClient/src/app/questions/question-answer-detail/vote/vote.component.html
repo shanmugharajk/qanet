@@ -13,7 +13,7 @@
   <!--Bookmark-->
   <div 
     *ngIf="showBookMark" 
-    class="light bookmark"
+    [ngClass]="{'bookmark-self': selfBookmarked, 'light bookmark': !selfBookmarked}"
     (click)="onBookmarkClick()"
   >
     <i class="big star icon"></i>

@@ -7,12 +7,15 @@ import { handleError } from '../shared/errorhandler';
 import { NewQuestion } from './new-question/new-question.model';
 import { Question } from './questions-list/question.model';
 import { AnswersList } from './question-answer-detail/answers/answers-list.model';
+import { Answer } from './question-answer-detail/answers/answer/answer.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PostsService {
   notifyAnswerAdded$ = new Subject();
+  questionToEdit: Question;
+  answerToEdit: Answer;
 
   constructor(private http: HttpClient) {}
 
@@ -31,10 +34,19 @@ export class PostsService {
         observe: 'body',
         responseType: 'json'
       })
-      .pipe(catchError(handleError));
+      .pipe<Question>(catchError(handleError));
   }
 
-  public createNewQuestion(newQuestion: NewQuestion): Observable<{id: number}> {
+  public getAnswerDetail(questionId: number, answerId: number): Observable<Question> {
+    return this.http
+      .get<Question>(`/api/questions/${questionId}/answers/${answerId}`, {
+        observe: 'body',
+        responseType: 'json'
+      })
+      .pipe<Question>(catchError(handleError));
+  }
+
+  public addNewQuestion(newQuestion: NewQuestion): Observable<{id: number}> {
     return this.http
       .post<NewQuestion>('/api/questions', newQuestion, {
         observe: 'body'
@@ -42,12 +54,41 @@ export class PostsService {
       .pipe<{id: number}>(catchError(handleError));
   }
 
-  public postAnswer(questionId: number, answer: string): Observable<{id: number}> {
+  public updateQuestion(question: NewQuestion, questionId: number): Observable<{id: number}> {
+    return this.http
+      .put<NewQuestion>(`/api/questions/${questionId}`, question, {
+        observe: 'body'
+      })
+      .pipe<{id: number}>(catchError(handleError));
+  }
+
+  public deleteQuestion(questionId: number): Observable<any> {
+    return this.http
+      .delete(`api/questions/${questionId}`)
+      .pipe(catchError(handleError));
+  }
+
+  public addNewAnswer(questionId: number, answer: string): Observable<{id: number}> {
     return this.http
       .post<string>(`/api/questions/${questionId}/answers`, {answer}, {
         observe: 'body'
       })
       .pipe<{id: number}>(catchError(handleError));
+  }
+
+  public updateAnswer(questionId: number, answerId: number, answer: string)
+  : Observable<{id: number}> {
+    return this.http
+      .put<string>(`/api/questions/${questionId}/answers/${answerId}`, {answer}, {
+        observe: 'body'
+      })
+      .pipe<{id: number}>(catchError(handleError));
+  }
+
+  public deleteAnswer(questionId: number, answerId: number): Observable<any> {
+    return this.http
+      .delete(`api/questions/${questionId}/answers/${answerId}`)
+      .pipe(catchError(handleError));
   }
 
   public fetchAnswers(questionId: number, pageNo: number = 0): Observable<AnswersList> {

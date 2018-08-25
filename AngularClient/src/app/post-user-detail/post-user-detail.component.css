@@ -6,7 +6,8 @@
 }
 
 .user-details > span {
-  font-size: 12px;
+  font-size: 11px;
+  font-weight: 300;
   color: #7d7b7b;
   padding-right: 5px;
 }

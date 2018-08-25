@@ -1,7 +1,7 @@
-<app-loader>
+<app-loader [show]="isFetching">
 </app-loader>
 
-<div class="answers" *ngIf="answers && answers.count > 0">
+<div class="answers" *ngIf="answers && answers.count > 0 && !isFetching">
   <h3 class="ui dividing header">{{title()}}</h3>
 
   <div  *ngIf="answers.pages > 1" class="pagination-buttons ui basic mini buttons">
@@ -24,6 +24,17 @@
   <app-answer 
     *ngFor="let answer of answers.items" 
     [answer]="answer" 
-    [questionId]="questionId">
+    [questionId]="questionId"
+    (deleteAnswer)="deleteAnswer($event)">
   </app-answer>
+
+   <!--Yes no dialog - DELETE answer-->
+  <app-confirm-dialog
+    [id]="dialogId" 
+    headerText="Please confirm!"
+    mainContent="Are you sure want to delete the post?"
+    yesText="Yes"
+    cancelText="Cancel"
+    (yesClick)="onConfirmDeleteClick()">
+  </app-confirm-dialog>
 </div>

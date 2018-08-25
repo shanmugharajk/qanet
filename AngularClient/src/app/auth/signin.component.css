@@ -3,3 +3,9 @@
   margin: auto;
   width: 700px !important;
 }
+
+.error-message {
+  width: 410px;
+  margin: auto;
+  margin-bottom: 20px;
+}

@@ -50,29 +50,16 @@ namespace QaNet.Services
 			this.httpContext.CheckArgumentIsNull(nameof(BookmarkService.httpContext));
 		}
 
-		public async Task<IPaginate<BookmarkViewModel>> GetBookmarkedQuestionListAsync(
-			int index = 1,
-			int size = 20
-		)
+		public async Task<int> AddToBookMarkAsync(int questionId)
 		{
-			var result = from bookmark in this.bookmark
-									 join question in this.question on bookmark.QuestionId equals question.Id
-									 where bookmark.UserId == this.currentUser
-									 select new BookmarkViewModel
-									 {
-										 Id = bookmark.Id,
-										 Title = question.Title,
-										 QuestionId = question.Id,
-										 HasAcceptedAnswer = this.questionRepository.HasAcceptedAnswer(bookmark.QuestionId),
-										 NoOfAnswers = this.questionRepository.GetAnswersCount(bookmark.QuestionId),
-										 Votes = question.Votes
-									 };
+			var count = await this.bookmarkRepository.CountAsync(
+				o => o.QuestionId == questionId && o.UserId == this.currentUser);
 
-			return await result.ToPaginateAsync(index, size);
-		}
+			if (count > 0)
+			{
+				throw new QaException("You have already bookmarked this question");
+			}
 
-		public async Task AddToBookMarkAsync(int questionId)
-		{
 			var bookmark = new Bookmark();
 			bookmark.QuestionId = questionId;
 			bookmark.UserId = this.currentUser;
@@ -81,15 +68,21 @@ namespace QaNet.Services
 
 			await this.bookmarkRepository.AddAsync(bookmark);
 			await this.uow.SaveChangesAsync();
+
+			return await this.bookmarkRepository.CountAsync(
+				o => o.QuestionId == questionId);
 		}
 
-		public async Task DeleteBookmarkAsync(int questionId)
+		public async Task<int> DeleteBookmarkAsync(int questionId)
 		{
 			var bookmark = await this.bookmarkRepository
 				.FirstAsync(x => x.UserId == this.currentUser && x.QuestionId == questionId);
 
 			this.bookmarkRepository.Delete(bookmark);
 			await this.uow.SaveChangesAsync();
+
+			return await this.bookmarkRepository.CountAsync(
+				o => o.QuestionId == questionId);
 		}
 	}
 }

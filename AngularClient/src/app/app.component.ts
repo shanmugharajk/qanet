@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { MessageService } from './messages/message.service';
@@ -10,7 +10,7 @@ declare const $: any;
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'app';
   isAuthenticated: boolean;
   userId: string;
@@ -26,7 +26,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.initialize();
 
     this.authService.notifyLoggedIn$.subscribe(() => {
-      console.log('after login');
       this.initialize();
        // After landing questions page again user sgined in, then we need this to
       // initialize here. This won't be available at ngOnInit().
@@ -38,8 +37,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log('init');
     $('#menu').dropdown();
+  }
+
+  ngOnDestroy() {
+    this.messageService.clearError();
   }
 
   initialize() {
@@ -48,7 +50,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onQaNetClick() {
-    this.router.navigate(['']);
+    this.router.navigate(['questions']);
   }
 
   onSignInClick() {
@@ -56,7 +58,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onSignOutClick() {
-    this.messageService.hideError();
+    this.messageService.clearError();
 
     this.authService.logout()
       .subscribe((response: boolean) => {
@@ -72,7 +74,10 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   onAskQuestionClick() {
-    // TODO Include auth check.
     this.router.navigate(['/questions/ask']);
+  }
+
+  onPostsClick() {
+    this.router.navigate([`/${this.userId}/profile`], {queryParams: {'tab': 'profile-info'}});
   }
 }

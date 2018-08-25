@@ -29,7 +29,7 @@ namespace QaNet.Controllers
         return BadRequest(ModelState);
       }
 
-      var user = await this.usersService.GetCurrentUser();
+      var user = await this.usersService.GetCurrentUserAsync();
       if (user == null)
       {
         return BadRequest("NotFound");

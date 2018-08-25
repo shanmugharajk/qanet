@@ -1,0 +1,43 @@
+.posts-container {
+  padding: 0px 10px 10px 10px;
+}
+
+.posts {
+  padding-top: 20px;
+}
+
+.answer-accepted {
+  background: #3e8a57eb;
+  color: white;
+}
+
+.post {
+  border-bottom: 1px solid #0000000d;
+  font-weight: 400;
+  padding: 5px;
+  font-size: 13px;
+}
+
+.post .points {
+  border: 1px solid #8080803b;
+  border-radius: 2px;
+  text-align: center;
+  line-height: 1.8;
+  width: 35px;
+  margin-right: 12px;
+  font-size: 10px;
+}
+
+.posts .has-answers {
+  border: 1px solid #3e8a57eb;
+}
+
+.posts .has-accepted-answer {
+  border: 1px solid #3e8a57eb;
+  color: white;
+  background: #3e8a57eb;
+}
+
+.pagination-buttons {
+  padding: 10px 0px 10px 0px;
+}

@@ -8,7 +8,6 @@ namespace QaNet.Entities.ViewModels
 	{
 		public string Question { get; set; }
 
-
 		public int TotalBookmarks { get; set; }
 
 		public bool SelfBookmarked { get; set; }

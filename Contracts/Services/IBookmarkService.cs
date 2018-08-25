@@ -5,15 +5,10 @@ using QaNet.Entities.ViewModels;
 
 namespace QaNet.Contracts.Services
 {
-  public interface IBookmarkService
-  {
-    Task<IPaginate<BookmarkViewModel>> GetBookmarkedQuestionListAsync(
-      int index = 1,
-      int size = 20
-    );
+	public interface IBookmarkService
+	{
+		Task<int> AddToBookMarkAsync(int questionId);
 
-    Task AddToBookMarkAsync(int questionId);
-
-    Task DeleteBookmarkAsync(int questionId);
-  }
+		Task<int> DeleteBookmarkAsync(int questionId);
+	}
 }

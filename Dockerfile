@@ -19,3 +19,15 @@ EXPOSE 80
 # ENTRYPOINT ["dotnet", "QaNet.dll"]
 CMD ASPNETCORE_URLS=http://*:$PORT dotnet QaNet.dll
 
+# dklist
+#  dkl='docker image ls'
+#  dkp='docker image prune'
+#  dkb-qanet='docker build -t qanet .'
+#  dkth='docker tag qanet registry.heroku.com/qanet/web'
+#  dkph='docker push registry.heroku.com/qanet/web'
+#  dkrm='docker rmi -f'
+#  hc='heroku create qanet'
+#  hcl='heroku container:login'
+#  dkphc='heroku container:push web --app qanet'
+#  dkhr='heroku container:release web --app qanet'
+#  dkho='heroku open --app qanet

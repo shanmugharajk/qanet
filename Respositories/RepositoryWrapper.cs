@@ -5,7 +5,7 @@ namespace QaNet.Respositories
 {
 	public class RepositoryWrapper : IRepositoryWrapper
 	{
-		private QaContext qaContext;
+		private readonly QaContext qaContext;
 
 		private IRolesRepository roles;
 

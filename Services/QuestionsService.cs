@@ -22,15 +22,16 @@ namespace QaNet.Services
 
 		private IUnitOfWork uow;
 
-		private IHttpContextAccessor httpContext;
+		private IHttpContextAccessor contextAccessor;
 
-		private string currentUser => this.httpContext?.HttpContext?.GetCurrentUserId();
+		private string currentUser => this.contextAccessor?.HttpContext?.GetCurrentUserId();
 
 		private IQuestionRepository questionsRepository => this.repository.Question;
 
 		private IQuestionCommentRepository commentsRepository => this.repository.QuestionComment;
 
-		private IQuestionVotersListRepository questionVoteRepository => this.repository.QuestionVotersList;
+		private IQuestionVotersListRepository questionVoteRepository =>
+			this.repository.QuestionVotersList;
 
 		private IBookmarkRepository bookmarksRepository => this.repository.Bookmark;
 
@@ -51,8 +52,8 @@ namespace QaNet.Services
 			this.uow = uow;
 			this.uow.CheckArgumentIsNull(nameof(QuestionsService.uow));
 
-			this.httpContext = httpContext;
-			this.httpContext.CheckArgumentIsNull(nameof(QuestionsService.httpContext));
+			this.contextAccessor = httpContext;
+			this.contextAccessor.CheckArgumentIsNull(nameof(QuestionsService.contextAccessor));
 		}
 
 		public async Task<QuestionsListResponseViewModel> FetchQuestionListAsync(
@@ -142,7 +143,7 @@ namespace QaNet.Services
 			questionViewModel.TotalBookmarks =
 				await this.bookmarksRepository.TotalBookmarksAsync(question.Id);
 			questionViewModel.SelfBookmarked =
-				await this.bookmarksRepository.IsBookmarkedAsync(question.Id, question.Author);
+				await this.bookmarksRepository.IsBookmarkedAsync(question.Id, this.currentUser);
 			questionViewModel.SelfVoted =
 				await this.questionVoteRepository.HasVotedAsync(question.Id, this.currentUser);
 			questionViewModel.SelfVote =

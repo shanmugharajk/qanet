@@ -13,7 +13,8 @@ import { NgForm } from '@angular/forms';
 export class SigninComponent implements OnInit {
   @ViewChild('signinForm') signinForm: NgForm;
 
-  loading = false;
+  errorMessage: string;
+  isFetching = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -25,24 +26,34 @@ export class SigninComponent implements OnInit {
   ngOnInit() {}
 
   public login() {
-    this.loading = true;
+    this.errorMessage = '';
+    this.isFetching = true;
 
     const { userid, password } = this.signinForm.value;
 
     const successCb = (res: TokenResponse) => {
-      const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/';
+      const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/questions';
 
-      this.loading = false;
+      this.isFetching = false;
       this.storageService.saveToken(res.accessToken);
 
       this.storageService.save('userId', userid);
 
       this.authService.notifyLoggedIn();
-      this.router.navigate([returnUrl]);
+      this.router.navigateByUrl(returnUrl);
+    };
+
+    const errorCb = error => {
+      this.errorMessage = error;
+      this.isFetching = false;
     };
 
     this.authService
       .login({ userid, password })
-      .subscribe(successCb);
+      .subscribe(successCb, errorCb);
+  }
+
+  onChange() {
+    this.errorMessage = '';
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { combineLatest } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { PostsService } from '../../posts.service';
@@ -10,10 +10,13 @@ import { MessageService } from '../../../messages/message.service';
   templateUrl: './answers.component.html',
   styleUrls: ['./answers.component.css']
 })
-export class AnswersComponent implements OnInit {
+export class AnswersComponent implements OnInit, OnDestroy {
   answers: AnswersList;
   currentPageNo: (number | any);
-  isLoading: boolean;
+  isFetching: boolean;
+  answerIdToDelete: number;
+
+  dialogId = 'deleteAnswer';
 
   @Input() questionId: number;
 
@@ -37,8 +40,8 @@ export class AnswersComponent implements OnInit {
     // Subscribe to the single observable, giving us both
     urlParams.subscribe(routeParams => {
       // routeParams containing both the query and route params
-      // console.log(routeParams.id, routeParams.pageNo);
-      this.currentPageNo = routeParams.pageNo;
+      // console.log(routeParams.id, routeParams.page);
+      this.currentPageNo = routeParams.page;
       this.fetchAnswers(this.currentPageNo);
     });
 
@@ -46,45 +49,77 @@ export class AnswersComponent implements OnInit {
       subscribe(() => this.fetchAnswers());
   }
 
+  ngOnDestroy() {
+    this.messageService.clearError();
+  }
+
   onPreviousClick() {
     this.router.navigate(['/questions', this.questionId], {
-      queryParams: { pageNo: this.answers.index - 1 }
+      queryParams: { page: this.answers.index - 1 }
     });
   }
 
   onNextClick() {
     this.router.navigate(['/questions', this.questionId], {
-      queryParams: { pageNo: this.answers.index + 1 }
+      queryParams: { page: this.answers.index + 1 }
     });
   }
 
+  // GET answers
   fetchAnswers(pageNo: number = 0) {
-    this.isLoading = true;
-    this.messageService.hideError();
+    this.isFetching = true;
+    this.messageService.clearError();
 
-    const errorCb = error => {
-      console.log(error);
+    const onErrorInFetchingAnswers = error => {
       this.messageService.notifyError(
         'Error in fetching',
         'Unable to fetch answers at the moment. Please try again later'
       );
+      this.isFetching = false;
     };
 
-    const successCb = (answers: AnswersList) => {
+    const afterAnswerFetched = (answers: AnswersList) => {
       this.answers = answers;
-    };
-
-    const done = () => {
-      this.isLoading = false;
+      this.isFetching = false;
     };
 
     this.postsService
       .fetchAnswers(this.questionId, pageNo)
-      .subscribe(successCb, errorCb, done);
+      .subscribe(afterAnswerFetched, onErrorInFetchingAnswers);
   }
 
   title() {
     const count = this.answers.count;
     return count === 1 ? `${count} Answer` : `${count} Answers`;
+  }
+
+  // DELETE answer
+  deleteAnswer(answerId: number) {
+    this.answerIdToDelete = answerId;
+    this.messageService.promptYesNoModal(true, this.dialogId);
+  }
+
+  onConfirmDeleteClick() {
+    this.isFetching = true;
+
+    const doneCb = () => {
+      this.isFetching = false;
+      this.messageService.promptYesNoModal(false, this.dialogId);
+    };
+
+    const afterDeleted = () => {
+      this.messageService.clearError();
+      // TODO Handle better way than loading the first page.
+      this.fetchAnswers();
+    };
+
+    const onErrorInDeletion = error => {
+      doneCb();
+      this.messageService.notifyError('Error in deletion', error);
+      window.scrollTo(0, 0);
+    };
+
+    this.postsService.deleteAnswer(this.questionId, this.answerIdToDelete)
+      .subscribe(afterDeleted, onErrorInDeletion, doneCb);
   }
 }

@@ -11,7 +11,7 @@ using QaNet.Extensions;
 
 namespace QaNet.Controllers
 {
-	[Route("api")]
+	[Route("api/[controller]")]
 	[Authorize(Roles = CustomRoles.AllUsers)]
 	public class AnswersController : Controller
 	{
@@ -36,65 +36,8 @@ namespace QaNet.Controllers
 			this.answerVotingService.CheckArgumentIsNull(nameof(AnswersController.answerVotingService));
 		}
 
-		// ANSWERS ========
-		[AllowAnonymous]
-		[HttpGet("questions/{questionId}/answers")]
-		public async Task<IActionResult> FetchAnswers(int questionId, [FromQuery(Name = "index")] int indexParam)
-		{
-			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;
-			var result = await this.answersService.FetchAnswers(questionId, index);
-			return Ok(result);
-		}
-
-		[HttpPost("questions/{questionId}/answers")]
-		public async Task<IActionResult> AddAnswer(
-					int questionId,
-					[FromBody]PostAnswerRequestViewModel avm)
-		{
-			if (ModelState.IsValid == false)
-			{
-				return BadRequest(ModelState);
-			}
-
-			var result = await this.answersService.AddAnswerAsync(questionId, avm.Answer);
-			return Ok(result);
-		}
-
-
-		[HttpPut("questions/{questionId}/answers/{answerId}")]
-		public async Task<IActionResult> UpdateAnswer(
-			int questionId,
-			int answerId,
-			[FromBody]PostAnswerRequestViewModel avm)
-		{
-			if (ModelState.IsValid == false)
-			{
-				return BadRequest(ModelState);
-			}
-
-			await this.answersService.UpdateAnswerAsync(questionId, answerId, avm.Answer);
-			return NoContent();
-		}
-
-		[HttpDelete("questions/{questionId}/answers/{answerId}")]
-		public async Task<IActionResult> DeleteAnswer(
-			int questionId,
-			int answerId
-		)
-		{
-			await this.answersService.DeleteAnswerAsync(questionId, answerId);
-			return NoContent();
-		}
-
-		[HttpPost("questions/{questionId}/answers/{answerId}/accept")]
-		public async Task<IActionResult> AcceptAnswer(int questionId, int answerId)
-		{
-			await this.answersService.AcceptAnswerAsync(questionId, answerId);
-			return NoContent();
-		}
-
 		// ANSWER VOTE ============
-		[HttpPost("answers/{answerId}/vote/{vote}")]
+		[HttpPost("{answerId}/vote/{vote}")]
 		public async Task<IActionResult> SaveVote(int answerId, int vote)
 		{
 			var newVote = await this.answerVotingService.SaveVoteAsync(answerId, vote);
@@ -103,7 +46,7 @@ namespace QaNet.Controllers
 
 		// ANSWER COMMENT ========
 		[AllowAnonymous]
-		[HttpGet("answers/{answerId}/comments")]
+		[HttpGet("{answerId}/comments")]
 		public async Task<IActionResult> GetAnswerComments(int answerId, [FromQuery(Name = "index")] int indexParam)
 		{
 			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;
@@ -112,14 +55,14 @@ namespace QaNet.Controllers
 		}
 
 		[AllowAnonymous]
-		[HttpGet("answers/{answerId}/comments/all")]
+		[HttpGet("{answerId}/comments/all")]
 		public async Task<IActionResult> GetAllAnswerComments(int answerId)
 		{
 			var result = await this.answerCommentService.FetchAllComments(answerId);
 			return Ok(result);
 		}
 
-		[HttpPost("answers/{answerId}/comments")]
+		[HttpPost("{answerId}/comments")]
 		public async Task<IActionResult> AddComment(int answerId, [FromBody]CommentsRequestViewModel qcvm)
 		{
 			if (ModelState.IsValid == false)
@@ -132,7 +75,7 @@ namespace QaNet.Controllers
 		}
 
 
-		[HttpPut("answers/{answerId}/comments/{commentId}")]
+		[HttpPut("{answerId}/comments/{commentId}")]
 		public async Task<IActionResult> UpdateComment(
 			int answerId,
 			int commentId,
@@ -147,8 +90,7 @@ namespace QaNet.Controllers
 			return NoContent();
 		}
 
-		// TODO : Change this route in code cleanup.
-		[HttpDelete("answers/{answerId}/comments/{commentId}")]
+		[HttpDelete("{answerId}/comments/{commentId}")]
 		public async Task<IActionResult> DeleteComment(int answerId, int commentId)
 		{
 			if (ModelState.IsValid == false)

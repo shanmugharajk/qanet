@@ -18,8 +18,8 @@
   <div class="summary">
     <h5>
       <a 
-        (click)="onQuestionLinkClick($event, question.id)" 
-        href="/questions/1002?pageNo=1" 
+        [routerLink]="['/questions', question.id]"
+        [queryParams]="{page: 1}"
         class="question-hyperlink">
           {{question.title}}
       </a>

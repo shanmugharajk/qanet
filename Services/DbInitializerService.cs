@@ -67,7 +67,10 @@ namespace QaNet.Services
 							IsActive = true,
 							LastLoggedIn = null,
 							Password = this.securityService.GetSha256Hash("mozzie"),
-							SerialNumber = Guid.NewGuid().ToString("N")
+							SerialNumber = Guid.NewGuid().ToString("N"),
+							Points = 200,
+							CreatedAt = DateTime.Now,
+							UpdatedAt = DateTime.Now,
 						};
 						context.Add(adminUser);
 						context.SaveChanges();
@@ -82,7 +85,10 @@ namespace QaNet.Services
 							IsActive = true,
 							LastLoggedIn = null,
 							Password = this.securityService.GetSha256Hash("mozzie"),
-							SerialNumber = Guid.NewGuid().ToString("N")
+							SerialNumber = Guid.NewGuid().ToString("N"),
+							Points = 200,
+							CreatedAt = DateTime.Now,
+							UpdatedAt = DateTime.Now,
 						};
 						context.Add(raj);
 						context.SaveChanges();
@@ -97,7 +103,10 @@ namespace QaNet.Services
 							IsActive = true,
 							LastLoggedIn = null,
 							Password = this.securityService.GetSha256Hash("mozzie"),
-							SerialNumber = Guid.NewGuid().ToString("N")
+							SerialNumber = Guid.NewGuid().ToString("N"),
+							Points = 200,
+							CreatedAt = DateTime.Now,
+							UpdatedAt = DateTime.Now,
 						};
 						context.Add(sherlock);
 						context.SaveChanges();
@@ -106,27 +115,27 @@ namespace QaNet.Services
 						context.SaveChanges();
 					}
 
-					if (!context.Tags.Any()) 
+					if (!context.Tags.Any())
 					{
 						var csharp = new Tag
 						{
 							Id = "csharp",
 							Description = "csharp is an awesome language",
-							CreatedBy= "shan",
-							UpdatedBy="shan",
-							CreatedAt=DateTime.Now,
-							UpdatedAt= DateTime.Now
+							CreatedBy = "shan",
+							UpdatedBy = "shan",
+							CreatedAt = DateTime.Now,
+							UpdatedAt = DateTime.Now
 						};
 						context.Add(csharp);
-							
+
 						var fsharp = new Tag
 						{
 							Id = "fsharp",
 							Description = "fsharp is an awesome language",
-							CreatedBy= "shan",
-							UpdatedBy="shan",
-							CreatedAt=DateTime.Now,
-							UpdatedAt= DateTime.Now
+							CreatedBy = "shan",
+							UpdatedBy = "shan",
+							CreatedAt = DateTime.Now,
+							UpdatedAt = DateTime.Now
 						};
 						context.Add(fsharp);
 						context.SaveChanges();

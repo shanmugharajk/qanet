@@ -1,7 +1,7 @@
-<app-loader [show]="isLoading">
+<app-loader [show]="isFetching">
 </app-loader>
 
-<div *ngIf="!isLoading" class="ui container">
+<div *ngIf="!!question" class="ui container">
   <h3 class="ui dividing header">{{question.title}}</h3>
 
   <!-- Question -->
@@ -9,7 +9,7 @@
     <div class="flex-container">
       <!--Vote-->
       <app-vote
-        [loading]="isVoteLoading"
+        [loading]="showThreeDotLoader"
         [selfVote]="question.selfVote"
         [selfVoted]="question.selfVoted" 
         [selfBookmarked]="question.selfBookmarked" 
@@ -38,7 +38,8 @@
   
           <!--Menus-->
           <div class="post-menu">
-            <a *ngIf="isOwner" href="#">delete</a>
+            <a *ngIf="isOwner" (click)="onDeleteQuestion()">delete</a>
+            <a *ngIf="isOwner" [routerLink]="[ '/questions', question.id, 'edit' ]" (click)="onEditQuestion()">edit</a>
           </div>
   
           <!--Question Author details-->
@@ -82,4 +83,14 @@
   <!--Prompt shows user to login to answer question if not logged in.-->
   <app-prompt-login-modal-component>
   </app-prompt-login-modal-component>
+
+  <!--Yes no dialog - DELETE question -->
+  <app-confirm-dialog
+    [id]="dialogId" 
+    headerText="Please confirm!"
+    mainContent="Are you sure want to delete the post?"
+    yesText="Yes"
+    cancelText="Cancel"
+    (yesClick)="onConfirmDeleteClick()">
+  </app-confirm-dialog>
 </div>

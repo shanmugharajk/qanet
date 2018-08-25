@@ -3,13 +3,16 @@ import {
   OnInit,
   ElementRef,
   ViewChild,
-  AfterViewInit,
-  Input
+  Input,
+  Output,
+  EventEmitter,
+  OnDestroy
 } from '@angular/core';
 import { Answer } from './answer.model';
 import { MessageService } from '../../../../messages/message.service';
 import { AuthService } from '../../../../auth/auth.service';
 import { VoteService } from '../../../vote.service';
+import { PostsService } from '../../../posts.service';
 
 declare var require: any;
 const Quill = require('quill');
@@ -23,28 +26,38 @@ const Zero = 0;
   templateUrl: './answer.component.html',
   styleUrls: ['./answer.component.css']
 })
-export class AnswerComponent implements OnInit, AfterViewInit {
+export class AnswerComponent implements OnInit, OnDestroy {
+  isFetching: boolean;
   quillEditor: any;
   isOwner: boolean;
-  isVoteLoading: boolean;
+  showThreeDotLoader: boolean;
 
-  @Input()
-  answer: Answer;
-  @Input()
-  questionId: number;
+  @Input() answer: Answer;
+  @Input() questionId: number;
 
-  @ViewChild('answerEditor')
-  answerEditor: ElementRef;
+  @Output() deleteAnswer = new EventEmitter<number>();
+
+  @ViewChild('answerEditor') answerEditor: ElementRef;
 
   constructor(
     private voteService: VoteService,
+    private postsService: PostsService,
     private messageService: MessageService,
     private authService: AuthService
   ) {}
 
   ngOnInit() {
     this.isOwner = this.authService.getUserId() === this.answer.author;
+    this.subscribeToNotifyAnswerAccepted();
+    this.initializeQuilEditor();
+  }
 
+  ngOnDestroy() {
+    this.messageService.clearError();
+  }
+
+  // Subscriptions
+  subscribeToNotifyAnswerAccepted() {
     // This is to undo the previous accepted answer.
     this.voteService.notifyAnswerAccepted$
       .subscribe((answerId: number) => {
@@ -54,10 +67,7 @@ export class AnswerComponent implements OnInit, AfterViewInit {
       });
   }
 
-  ngAfterViewInit(): void {
-    this.initializeQuilEditor();
-  }
-
+  // Initializations
   initializeQuilEditor() {
     if (!this.answerEditor) {
       return;
@@ -73,6 +83,17 @@ export class AnswerComponent implements OnInit, AfterViewInit {
     });
 
     this.quillEditor.setContents(JSON.parse(this.answer.answer));
+  }
+
+  // Menu actions
+  // Answer DEL
+  onDeleteAnswer() {
+    this.deleteAnswer.emit(this.answer.id);
+  }
+
+  // Answer EDIT
+  onEditAnswer() {
+    this.postsService.answerToEdit = this.answer;
   }
 
   // VOTE
@@ -97,58 +118,56 @@ export class AnswerComponent implements OnInit, AfterViewInit {
   }
 
   onAcceptAnswerClick() {
-    this.messageService.hideError();
+    this.messageService.clearError();
 
-    console.log(this.questionId);
+    this.showThreeDotLoader = true;
 
-    this.isVoteLoading = true;
-
-    const successCb = () => {
+    const afterAnswerAccepted = () => {
       this.answer.isAccepted = !this.answer.isAccepted;
       this.voteService.notifyAnswerAccepted(this.answer.id);
-    };
-
-    const doneCb = () => {
       this.hideMiniLoader();
     };
 
-    const errorCb = error => {
+    const onErrorInAcceptingAnswer = error => {
       this.messageService.notifyError('Error in updation', error);
       this.hideMiniLoader();
     };
 
     this.voteService
       .acceptAnswer(this.questionId, this.answer.id)
-      .subscribe(successCb, errorCb, doneCb);
+      .subscribe(afterAnswerAccepted, onErrorInAcceptingAnswer);
   }
 
   vote(vote: number) {
-    this.messageService.hideError();
-    this.isVoteLoading = true;
+    // Block the user if he tries to vote the same vote again before
+    // the previous request sent to server and get the response.
+    if (this.showThreeDotLoader === true) {
+      return;
+    }
 
-    const successCb = newVote => {
+    this.messageService.clearError();
+    this.showThreeDotLoader = true;
+
+    const afterVoteUpdated = newVote => {
       this.answer.votes = newVote;
       this.answer.selfVoted = true;
       this.answer.selfVote = vote;
-    };
-
-    const doneCb = () => {
       this.hideMiniLoader();
     };
 
-    const errorCb = error => {
+    const onErrorInUpdatingVote = error => {
       this.messageService.notifyError('Error in voting', error);
       this.hideMiniLoader();
     };
 
     this.voteService
       .upvoteAnswer(this.answer.id, vote)
-      .subscribe(successCb, errorCb, doneCb);
+      .subscribe(afterVoteUpdated, onErrorInUpdatingVote);
   }
 
   hideMiniLoader() {
     setTimeout(() => {
-      this.isVoteLoading = false;
-    }, 500);
+      this.showThreeDotLoader = false;
+    }, 200);
   }
 }

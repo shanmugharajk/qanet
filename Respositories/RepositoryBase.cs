@@ -21,10 +21,10 @@ namespace QaNet.Respositories
 
 		protected readonly DbSet<T> dbSet;
 
-		public RepositoryBase(QaContext QaContext)
+		public RepositoryBase(QaContext qaContext)
 		{
-			this.QaContext = QaContext;
-			this.dbSet = QaContext.Set<T>();
+			this.QaContext = qaContext;
+			this.dbSet = qaContext.Set<T>();
 		}
 
 		public DbSet<T> GetEntity()

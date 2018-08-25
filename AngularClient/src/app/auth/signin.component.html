@@ -1,6 +1,6 @@
 <div class="login-container">
   <form
-    [ngClass]="{'loading': loading}" 
+    [ngClass]="{'loading': isFetching}" 
     (ngSubmit)="login()" 
     class="ui form" 
     #signinForm="ngForm">
@@ -9,11 +9,21 @@
     </h4>
 
     <div class="ui attached segment">
+      
+      <!--Error node-->
+      <div *ngIf="errorMessage" class="ui negative message error-message">
+          <div class="header">
+            Invalid Credentials!
+          </div>
+          <p>{{errorMessage}}</p>
+      </div>
+
       <div 
         class="required inline field" 
         [ngClass]="{'error': !userid.valid && userid.touched}">
           <label for="userid">User Id</label>
             <input
+              (input)="onChange()"
               autocomplete="username"
               ngModel 
               id="userid" 
@@ -28,6 +38,7 @@
         [ngClass]="{'error': !password.valid && password.touched}">
           <label for="password">Password</label>
             <input
+              (input)="onChange()"
               ngModel 
               id="password" 
               name="password" 

@@ -43,6 +43,12 @@ namespace QaNet.Extensions
 		public static void ConfigureSqliteContext(this IServiceCollection services, IConfiguration config)
 		{
 			var connectionString = config["ConnectionStrings:SqliteConnection"];
+			// ServiceLifetime.Transient => makes the auth failure
+			// TODO : Must have a look at this soon.
+			// https://stackoverflow.com/questions/41923804/configuring-dbcontext-as-transient
+
+			// services.AddDbContext<QaContext>(
+			// 	o => o.UseSqlite(connectionString), ServiceLifetime.Transient);
 			services.AddDbContext<QaContext>(o => o.UseSqlite(connectionString));
 		}
 

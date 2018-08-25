@@ -2940,3 +2940,11 @@
 .ui.dividing.header {
   padding: 10px
 }
+
+.pagination-row {
+  padding: 15px 0px 20px 0px;
+}
+
+.custom-modal {
+  position: fixed !important;
+}

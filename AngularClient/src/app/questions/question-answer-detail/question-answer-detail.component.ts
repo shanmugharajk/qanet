@@ -3,7 +3,6 @@ import {
   OnInit,
   ViewChild,
   ElementRef,
-  AfterViewInit,
   OnDestroy
 } from '@angular/core';
 import { PostsService } from '../posts.service';
@@ -25,15 +24,16 @@ const Zero = 0;
   templateUrl: './question-answer-detail.component.html',
   styleUrls: ['./question-answer-detail.component.css']
 })
-export class QuestionAnswerDetailComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
   quillEditor: any;
   question: Question;
   isAuthenticated: boolean;
   isOwner: boolean;
-  isLoading: boolean;
-  // TODO Change the variable name :) this is not good.
-  isVoteLoading: boolean;
+  isFetching: boolean;
+  showThreeDotLoader: boolean;
+
+
+  dialogId = 'deleteQuestion';
 
   @ViewChild('questionEditor')
   questionEditor: ElementRef;
@@ -49,16 +49,14 @@ export class QuestionAnswerDetailComponent
 
   // NG Events
   ngOnInit(): void {
+    this.initializeQuilEditor();
     this.loadQuestion();
     this.isAuthenticated = this.authService.isAuthenticated();
   }
 
-  ngAfterViewInit(): void {
-    this.initializeQuilEditor();
-  }
-
   ngOnDestroy(): void {
-    this.messageService.promptLoginModal(false);
+    this.messageService.promptYesNoModal(false, this.dialogId);
+    this.messageService.clearError();
   }
 
   loadQuestion() {
@@ -88,7 +86,7 @@ export class QuestionAnswerDetailComponent
 
   // Data fetching
   fetchQuestion(id: number) {
-    this.isLoading = true;
+    this.isFetching = true;
 
     this.postsService.getQuestionDetail(id).subscribe(
       (question: Question) => {
@@ -98,9 +96,36 @@ export class QuestionAnswerDetailComponent
       error => console.log(error),
       () => {
         setTimeout(() => this.initializeQuilEditor());
-        this.isLoading = false;
+        this.isFetching = false;
       }
     );
+  }
+
+  // Menus actions
+  onDeleteQuestion() {
+    this.messageService.clearError();
+    this.messageService.promptYesNoModal(true, this.dialogId);
+  }
+
+  // Delete question.
+  onConfirmDeleteClick() {
+    this.isFetching = true;
+
+    this.postsService.deleteQuestion(this.question.id)
+      .subscribe(() => {
+        this.isFetching = false;
+        this.router.navigate(['/questions']);
+      },
+      error => {
+        this.messageService.notifyError('Error in deletion', error);
+        this.isFetching = false;
+        window.scrollTo(0, 0);
+      });
+  }
+
+  // Edit question
+  onEditQuestion() {
+    this.postsService.questionToEdit =  this.question;
   }
 
   // VOTE
@@ -121,38 +146,59 @@ export class QuestionAnswerDetailComponent
   }
 
   onBookmarkClick() {
-    //
+    this.showThreeDotLoader = true;
+
+    const afterBookmarked = totalBookmarkCount => {
+      this.question.totalBookmarks = totalBookmarkCount;
+      this.question.selfBookmarked = !this.question.selfBookmarked;
+      this.hideThreeDotLoader();
+    };
+
+    const onErrorInAddingToBookmark = error => {
+      this.messageService.notifyError('Unable to bookmark', error);
+      this.hideThreeDotLoader();
+    };
+
+   if (this.question.selfBookmarked === true) {
+      this.voteService.DeleteBookmark(this.question.id)
+      .subscribe(afterBookmarked, onErrorInAddingToBookmark);
+   } else {
+      this.voteService.AddToBookmark(this.question.id)
+      .subscribe(afterBookmarked, onErrorInAddingToBookmark);
+   }
   }
 
   vote(vote: number) {
-    this.messageService.hideError();
-    this.isVoteLoading = true;
+    // Block the user if he tries to vote the same vote again before
+    // the previous request sent to server and get the response.
+    if (this.showThreeDotLoader === true) {
+      return;
+    }
 
-    const successCb = newVote => {
+    this.messageService.clearError();
+    this.showThreeDotLoader = true;
+
+    const afterVoteAdded = newVote => {
       this.question.votes = newVote;
       this.question.selfVoted = true;
-      this.question.selfVote = vote;
+      this.question.selfVote = newVote;
+      this.hideThreeDotLoader();
     };
 
-    const doneCb = () => {
-      this.hideMiniLoader();
-    };
-
-    const errorCb = error => {
+    const onErrorInVoteUpdate = error => {
       this.messageService.notifyError('Error in voting', error);
-      this.hideMiniLoader();
+      this.hideThreeDotLoader();
     };
-
 
     this.voteService
       .voteQuestion(this.question.id, vote)
-      .subscribe(successCb, errorCb, doneCb);
+      .subscribe(afterVoteAdded, onErrorInVoteUpdate);
   }
 
   // Listeners on nofification
   onNewAnswerAdded() {
-    this.isLoading = true;
-    this.messageService.hideError();
+    this.isFetching = true;
+    this.messageService.clearError();
 
     this.postsService.fetchAnswers(this.question.id).subscribe(
       res => console.log(res),
@@ -163,7 +209,7 @@ export class QuestionAnswerDetailComponent
           error.message || 'Error in fetching answers.'
         );
       },
-      () => this.isLoading = false
+      () => this.isFetching = false
     );
   }
 
@@ -171,9 +217,9 @@ export class QuestionAnswerDetailComponent
     this.router.navigate(['/signin']);
   }
 
-  hideMiniLoader() {
+  hideThreeDotLoader() {
     setTimeout(() => {
-      this.isVoteLoading = false;
-    }, 500);
+      this.showThreeDotLoader = false;
+    }, 200);
   }
 }

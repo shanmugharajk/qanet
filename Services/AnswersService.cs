@@ -62,6 +62,7 @@ namespace QaNet.Services
 			this.httpContext.CheckArgumentIsNull(nameof(AnswersService.httpContext));
 		}
 
+
 		// Gets the list of answers available for the question.
 		public async Task<AnswersListResponseViewModel> FetchAnswers(
 			int questionId,
@@ -79,7 +80,7 @@ namespace QaNet.Services
 			var answersList = new List<AnswerDetailViewModel>();
 			foreach (var answer in answers.Items)
 			{
-				answersList.Add(await this.GetAnswerDetailResponseReponse(answer));
+				answersList.Add(await this.GetAnswerDetailResponseReponseAsync(answer));
 			}
 
 			var result = new AnswersListResponseViewModel();
@@ -92,6 +93,14 @@ namespace QaNet.Services
 			result.HasNext = answers.HasNext;
 
 			return result;
+		}
+
+		public async Task<AnswerDetailViewModel> FetchAnswer(int questionId, int answerId)
+		{
+			var answer = await this.answersRepository
+				.FirstOrDefaultAsync(predicate: x => x.QuestionId == questionId && x.Id == answerId);
+
+			return await this.GetAnswerDetailResponseReponseAsync(answer);
 		}
 
 		// Adds new answer.
@@ -286,7 +295,7 @@ namespace QaNet.Services
 		}
 
 		// Forms the response object needs to sent.
-		private async Task<AnswerDetailViewModel> GetAnswerDetailResponseReponse(Answer answer)
+		private async Task<AnswerDetailViewModel> GetAnswerDetailResponseReponseAsync(Answer answer)
 		{
 			var answerDetailViewModel = new AnswerDetailViewModel();
 			answerDetailViewModel.Id = answer.Id;
@@ -349,6 +358,11 @@ namespace QaNet.Services
 			if (answer.Author != this.currentUser)
 			{
 				throw new QaException(Messages.NoRightsToModifyAnswer);
+			}
+
+			if (answer.IsAccepted == true)
+			{
+				throw new QaException(Messages.CantDeleteSinceItsAcceptedAnswer);
 			}
 
 			return answer;

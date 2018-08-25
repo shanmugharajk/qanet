@@ -19,8 +19,10 @@
       <i class="user icon"></i> 
       &nbsp; {{userId}} !! 
       <i class="dropdown icon"></i>
+      
       <div class="menu">
-        <a *ngIf="isAuthenticated" (click)="onSignOutClick()" class="item">Sign out</a>
+        <a (click)="onPostsClick()" class="item">Your profile</a>
+        <a (click)="onSignOutClick()" class="item">Sign out</a>
       </div>
     </div>
 

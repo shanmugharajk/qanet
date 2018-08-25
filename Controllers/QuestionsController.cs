@@ -15,6 +15,8 @@ namespace QaNet.Controllers
 	[Authorize(Roles = CustomRoles.AllUsers)]
 	public class QuestionsController : Controller
 	{
+		private IAnswersService answersService;
+
 		private IQuestionsService questionsService;
 
 		private IQuestionCommentService questionCommentService;
@@ -22,6 +24,7 @@ namespace QaNet.Controllers
 		private IQuestionVotingService questionVotingService;
 
 		public QuestionsController(
+			IAnswersService answersService,
 			IQuestionsService questionsService,
 			IQuestionCommentService questionCommentService,
 			IQuestionVotingService questionVotingService)
@@ -34,6 +37,9 @@ namespace QaNet.Controllers
 
 			this.questionVotingService = questionVotingService;
 			this.questionVotingService.CheckArgumentIsNull(nameof(QuestionsController.questionVotingService));
+
+			this.answersService = answersService;
+			this.answersService.CheckArgumentIsNull(nameof(QuestionsController.answersService));
 		}
 
 		// QUESTION ============
@@ -153,6 +159,75 @@ namespace QaNet.Controllers
 			}
 
 			await this.questionCommentService.DeleteCommentAsync(commentId, questionId);
+			return NoContent();
+		}
+
+		// ANSWERS ========
+		[AllowAnonymous]
+		[HttpGet("{questionId}/answers")]
+		public async Task<IActionResult> FetchAnswers(int questionId, [FromQuery(Name = "index")] int indexParam)
+		{
+			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;
+			var result = await this.answersService.FetchAnswers(questionId, index);
+			return Ok(result);
+		}
+	
+		[AllowAnonymous]
+		[HttpGet("{questionId}/answers/{answerId}")]
+		public async Task<IActionResult> FetchAnswerById(
+			int questionId, 
+			int answerId, 
+			[FromQuery(Name = "index")] int indexParam)
+		{
+			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;
+			var result = await this.answersService.FetchAnswer(questionId, answerId);
+			return Ok(result);
+		}
+
+		[HttpPost("{questionId}/answers")]
+		public async Task<IActionResult> AddAnswer(
+					int questionId,
+					[FromBody]PostAnswerRequestViewModel avm)
+		{
+			if (ModelState.IsValid == false)
+			{
+				return BadRequest(ModelState);
+			}
+
+			var result = await this.answersService.AddAnswerAsync(questionId, avm.Answer);
+			return Ok(result);
+		}
+
+
+		[HttpPut("{questionId}/answers/{answerId}")]
+		public async Task<IActionResult> UpdateAnswer(
+			int questionId,
+			int answerId,
+			[FromBody]PostAnswerRequestViewModel avm)
+		{
+			if (ModelState.IsValid == false)
+			{
+				return BadRequest(ModelState);
+			}
+
+			await this.answersService.UpdateAnswerAsync(questionId, answerId, avm.Answer);
+			return NoContent();
+		}
+
+		[HttpDelete("{questionId}/answers/{answerId}")]
+		public async Task<IActionResult> DeleteAnswer(
+			int questionId,
+			int answerId
+		)
+		{
+			await this.answersService.DeleteAnswerAsync(questionId, answerId);
+			return NoContent();
+		}
+
+		[HttpPost("{questionId}/answers/{answerId}/accept")]
+		public async Task<IActionResult> AcceptAnswer(int questionId, int answerId)
+		{
+			await this.answersService.AcceptAnswerAsync(questionId, answerId);
 			return NoContent();
 		}
 	}

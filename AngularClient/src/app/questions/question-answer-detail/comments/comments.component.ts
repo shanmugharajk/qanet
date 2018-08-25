@@ -33,6 +33,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.messageService.promptLoginModal(false);
+    this.messageService.clearError();
   }
 
   onAddCommentClick() {
@@ -44,15 +45,18 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   onShowMoreClick() {
+    this.messageService.clearError();
     this.showMoreComments = !this.showMoreComments;
     this.fetchAllComments();
   }
 
   onCommentDeleted() {
+    this.messageService.clearError();
     this.fetchAllComments();
   }
 
   onNewCommentSaved() {
+    this.messageService.clearError();
     this.hideActionsSection = !this.hideActionsSection;
     this.fetchAllComments();
   }
@@ -66,8 +70,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   fetchAllAnswerComments() {
-    this.messageService.hideError();
-
     this.commentsService.getAnswerComments(this.id)
       .subscribe(
         comments => this.comments = comments,
@@ -75,8 +77,6 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   fetchAllQuestionComments() {
-    this.messageService.hideError();
-
     this.commentsService.getQuestionComments(this.id)
       .subscribe(
         comments => this.comments = comments,

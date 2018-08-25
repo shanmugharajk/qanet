@@ -29,7 +29,8 @@
   width: 50px;
 }
 
-.bookmark i {
+.bookmark i,
+.bookmark-self i {
   font-size: 20px;
 }
 

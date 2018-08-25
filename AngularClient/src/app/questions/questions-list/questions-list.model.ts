@@ -1,11 +1,6 @@
 import { Question } from './question.model';
+import Paginate from '../../paginate.model';
 
-export interface QuestionsList {
-  index: number;
-  size: number;
-  count: number;
-  pages: number;
-  hasPrevious: boolean;
-  hasNext: boolean;
+export interface QuestionsList extends Paginate {
   items: Array<Question>;
 }

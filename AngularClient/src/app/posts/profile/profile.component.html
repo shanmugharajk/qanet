@@ -1,0 +1,40 @@
+<div class="profile">
+  <!--Profile display-->
+  <div *ngIf="!showEdit && !!profile">
+    <div class="title">
+      <h3>{{profile.userId}}</h3>
+      <span class="yellow-dot">&bull;</span>
+      <span>{{profile.points}}</span>
+    </div>
+    <span class="joined">{{getJoinedDate()}}</span>
+    <br>
+    <h4>About</h4>
+    <p>
+      {{getAbout()}}
+      <br>
+      <br>
+    </p>
+    <button *ngIf="canEdit" class="mini ui button" (click)="onEditClick()">
+      Edit
+    </button>
+  </div>
+
+  <!--Edit profile-->
+  <div *ngIf="showEdit">
+    <h4>Edit Profile</h4>
+    <div class="ui form">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" [(ngModel)]="profileToEdit.displayName">
+      </div>
+      <div class="field">
+        <label>About</label>
+        <textarea rows="4" [(ngModel)]="profileToEdit.about"></textarea>
+      </div>
+
+      <button class="mini ui button" (click)="onUpdateProfileClick()">
+        Update Profile
+      </button>
+    </div>
+  </div>
+</div>
