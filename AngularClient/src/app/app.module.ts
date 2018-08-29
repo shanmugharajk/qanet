@@ -28,6 +28,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { PostsComponent } from './posts/posts.component';
 import { ConfirmDialogComponent } from './controls/confirm-dialog/confirm-dialog.component';
 import { ProfileComponent } from './posts/profile/profile.component';
+import { SearchComponent } from './search/search.component';
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ProfileComponent } from './posts/profile/profile.component';
     LoaderComponent,
     PostsComponent,
     ConfirmDialogComponent,
-    ProfileComponent
+    ProfileComponent,
+    SearchComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
   providers: [

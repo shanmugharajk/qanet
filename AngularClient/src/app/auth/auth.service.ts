@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { StorageService } from '../storage.service';
-import { Login } from './login.model';
+import { Signin } from './login.model';
 import { catchError, map } from 'rxjs/operators';
 import { handleError } from '../shared/errorhandler';
 import { Observable, Subject } from 'rxjs';
 import { TokenResponse } from './token-response.model';
+import { Signup } from './signup/signup.model';
 
 @Injectable({
   providedIn: 'root'
@@ -34,9 +35,17 @@ export class AuthService {
     return this.storageService.fetch('userId');
   }
 
-  public login(loginData: Login): Observable<TokenResponse> {
+  public signin(signinData: Signin): Observable<TokenResponse> {
     return this.http
-      .post<Login>('/api/Account/Login', loginData, {
+      .post<Signin>('/api/account/signin', signinData, {
+        observe: 'body'
+      })
+      .pipe<TokenResponse>(catchError(handleError));
+  }
+
+  public signUp(signupData: Signup): Observable<any> {
+    return this.http
+      .post<Signin>('/api/account/signup', signupData, {
         observe: 'body'
       })
       .pipe<TokenResponse>(catchError(handleError));

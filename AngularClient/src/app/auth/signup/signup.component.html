@@ -1,39 +1,101 @@
 <div class="signup-container">
-  <form class="ui form">
-    <h4 class="ui top attached header">
-      Sign Up
-    </h4>
+  
+  <h4 class="ui top attached header">
+      Create a new account
+  </h4>
 
-    <div class="ui attached segment">
-      <div class="required inline field">
-        <label for="user_name">Username</label>
-        <input id="user_name" name="user_name" value="" autofocus="" required="">
-      </div>
-
-      <div class="required inline field">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" value="" required="">
-      </div>
-
-      <div class="required inline field">
-        <label for="password">Password</label>
-        <input id="password" name="password" type="password" value="" required="">
-      </div>
-
-      <div class="required inline field">
-        <label for="retype">Re-Type</label>
-        <input id="retype" name="retype" type="password" value="" required="">
-      </div>
-
-      <div class="inline field">
-        <label></label>
-        <button class="ui green button">Create New Account</button>
-      </div>
-
-      <div class="inline field">
-        <label></label>
-        <a href="/user/login">Already have an account? Sign in now!</a>
-      </div>
+  <div class="ui attached segment">
+    <!--Error node-->
+    <div
+      *ngIf="errorMessage" 
+      class="ui message error-message"
+      [ngClass]="{'positive': !isError, 'negative': isError}">
+        <div class="header">
+          {{title}}
+        </div>
+        <p>{{errorMessage}}</p>
     </div>
-  </form>
+
+    <form
+      [hidden]="hideForm"
+      autocomplete="off" 
+      [ngClass]="{'loading': isFetching}" 
+      (ngSubmit)="signup()" 
+      class="ui form"
+      #signupForm="ngForm">
+      
+      <div 
+        [ngClass]="{'error': !userId.valid && userId.touched}"
+        class="required inline field">
+          <label for="userId">User Id</label>
+          <input
+              (input)="onChange()"
+              autocomplete="off"
+              ngModel 
+              id="userId" 
+              name="userId"
+              type="text"  
+              required
+              #userId="ngModel">
+      </div>
+
+      <div
+        class="inline field">
+          <label for="displayName">Display Name</label>
+          <input
+              (input)="onChange()"
+              autocomplete="off"
+              ngModel 
+              id="displayName" 
+              name="displayName"
+              type="text"  
+              #displayName="ngModel">
+      </div>
+
+      <div 
+        class="required inline field"
+        [ngClass]="{'error': !password.valid && password.touched}">
+          <label for="password">Password</label>
+            <input
+              (input)="onChange()"
+              ngModel 
+              id="password" 
+              name="password" 
+              type="password"
+              autocomplete="new-password" 
+              required
+              #password="ngModel">
+      </div>
+
+      <div 
+        class="required inline field"
+        [ngClass]="{'error': !retypePassword.valid && retypePassword.touched}">
+          <label for="retypePassword">Re-Type</label>
+            <input
+              (input)="onChange()"
+              ngModel 
+              id="retypePassword" 
+              name="retypePassword" 
+              type="password"
+              autocomplete="new-password" 
+              required
+              #retypePassword="ngModel">
+      </div>
+
+      <div class="inline field">
+        <label></label>
+        <input
+          type="submit"
+          value="Create New Account"
+          [disabled]="!signupForm.valid"  
+          class="ui green button">
+      </div>
+
+      <div class="inline field">
+        <label></label>
+        <a [routerLink]="['/user', 'signin']">Already have an account? Sign in now!</a>
+      </div>
+    </form>
+
+  </div>
 </div>

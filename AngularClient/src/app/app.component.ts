@@ -14,6 +14,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   title = 'app';
   isAuthenticated: boolean;
   userId: string;
+  searchText: string;
 
   constructor(
     private router: Router,
@@ -49,14 +50,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.userId = this.authService.getUserId();
   }
 
-  onQaNetClick() {
-    this.router.navigate(['questions']);
-  }
-
-  onSignInClick() {
-    this.router.navigate(['/signin']);
-  }
-
   onSignOutClick() {
     this.messageService.clearError();
 
@@ -73,8 +66,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  onAskQuestionClick() {
-    this.router.navigate(['/questions/ask']);
+  onSearchClick() {
+    this.router.navigate([`/questions/search`], {queryParams: {'q': this.searchText}});
+    this.searchText = '';
   }
 
   onPostsClick() {

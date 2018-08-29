@@ -9,12 +9,14 @@ import { QuestionAnswerDetailComponent } from './questions/question-answer-detai
 import { AuthGuard } from './guards/auth.guard';
 import { PostsComponent } from './posts/posts.component';
 import { NewAnswerComponent } from './questions/question-answer-detail/new-answer/new-answer.component';
+import { SearchComponent } from './search/search.component';
 
 const appRoutes: Routes = [
   { path: 'questions', component: HomeComponent },
+  { path: 'questions/search', component: SearchComponent },
   { path: '', component: HomeComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'signin', component: SigninComponent },
+  { path: 'user/signup', component: SignupComponent },
+  { path: 'user/signin', component: SigninComponent },
   { path: 'questions/ask', component: NewQuestionComponent, canActivate: [AuthGuard]},
   { path: 'questions/:id/edit', component: NewQuestionComponent, canActivate: [AuthGuard]},
   {
@@ -24,7 +26,6 @@ const appRoutes: Routes = [
     data: {isEdit: true}
   },
   { path: 'questions/:id', component: QuestionAnswerDetailComponent },
-  // { path: ':userId/posts', component: PostsComponent },
   { path: ':userId/profile', component: PostsComponent },
   { path: '404', component: NotFoundComponent },
   { path: '**', redirectTo: '404' }

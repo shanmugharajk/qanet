@@ -53,6 +53,17 @@ namespace QaNet.Controllers
 		}
 
 		[AllowAnonymous]
+		[HttpGet("search")]
+		public async Task<IActionResult> SearchQuestions(
+			[FromQuery(Name = "q")] string searchText,
+			[FromQuery(Name = "index")] int indexParam)
+		{
+			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;
+			var result = await this.questionsService.SearchQuestions(searchText, index);
+			return Ok(result);
+		}
+
+		[AllowAnonymous]
 		[HttpGet("{questionId}")]
 		public async Task<IActionResult> GetQuestion(int questionId)
 		{
@@ -171,12 +182,12 @@ namespace QaNet.Controllers
 			var result = await this.answersService.FetchAnswers(questionId, index);
 			return Ok(result);
 		}
-	
+
 		[AllowAnonymous]
 		[HttpGet("{questionId}/answers/{answerId}")]
 		public async Task<IActionResult> FetchAnswerById(
-			int questionId, 
-			int answerId, 
+			int questionId,
+			int answerId,
 			[FromQuery(Name = "index")] int indexParam)
 		{
 			var index = indexParam - 1 <= 0 ? 0 : indexParam - 1;

@@ -21,6 +21,8 @@ namespace QaNet.Entities
     public virtual DbSet<UserToken> UserTokens { get; set; }
 
     public virtual DbSet<Question> Questions { get; set; }
+    
+		public virtual DbSet<QuestionsSearch> QuestionsSearch { get; set; }
 
     public virtual DbSet<Answer> Answers { get; set; }
 

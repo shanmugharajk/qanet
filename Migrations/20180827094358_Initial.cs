@@ -24,9 +24,12 @@ namespace QaNet.Migrations
                 name: "Users",
                 columns: table => new
                 {
+                    CreatedAt = table.Column<DateTime>(nullable: false),
+                    UpdatedAt = table.Column<DateTime>(nullable: false),
                     UserId = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
                     DisplayName = table.Column<string>(nullable: true),
+                    About = table.Column<string>(nullable: true),
                     IsActive = table.Column<bool>(nullable: false),
                     Points = table.Column<int>(nullable: false),
                     LastLoggedIn = table.Column<DateTimeOffset>(nullable: true),
@@ -69,6 +72,9 @@ namespace QaNet.Migrations
                         principalColumn: "UserId",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+						// FTS table - for questions search
+						migrationBuilder.Sql(@"CREATE VIRTUAL TABLE QuestionsSearch USING fts4(Title, QuestionId);");
 
             migrationBuilder.CreateTable(
                 name: "Tags",

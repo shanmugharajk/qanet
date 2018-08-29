@@ -1,15 +1,23 @@
 <div class="ui menu">
-  <a (click)="onQaNetClick()" class="header item">QaNet</a>
+  <a [routerLink]="['questions']" class="header item">QaNet</a>
 
   <div class="item">
-    <div class="ui transparent icon input">
-      <input class="prompt" type="text" placeholder="Search questions...">
-      <i class="search link icon"></i>
-    </div>
+    <form (ngSubmit)="onSearchClick()">
+      <div class="ui transparent icon input">
+        <input
+          [(ngModel)]="searchText"
+          name="q"
+          class="prompt" 
+          type="text" 
+          autocomplete="off"
+          placeholder="Search questions...">
+        <i class="search link icon" (click)="onSearchClick()"></i>
+        </div>
+    </form>
   </div>
 
   <div class="right menu">
-    <a (click)="onAskQuestionClick()" class="item">
+    <a [routerLink]="['questions', 'ask']" class="item">
       <i class="question circle icon"></i>
       Ask Question
     </a>
@@ -26,7 +34,12 @@
       </div>
     </div>
 
-    <a *ngIf="!isAuthenticated" (click)="onSignInClick()" class="item">Sign in</a>    
+    <a 
+      *ngIf="!isAuthenticated" 
+      [routerLink]="[ '/user', 'signin' ]"
+      class="item">
+        Sign in
+    </a>
   </div>
 </div>
 

@@ -25,13 +25,13 @@ export class SigninComponent implements OnInit {
 
   ngOnInit() {}
 
-  public login() {
+  signin() {
     this.errorMessage = '';
     this.isFetching = true;
 
     const { userid, password } = this.signinForm.value;
 
-    const successCb = (res: TokenResponse) => {
+    const afterSignedIn = (res: TokenResponse) => {
       const returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/questions';
 
       this.isFetching = false;
@@ -43,14 +43,14 @@ export class SigninComponent implements OnInit {
       this.router.navigateByUrl(returnUrl);
     };
 
-    const errorCb = error => {
+    const onErrorInSigningIn = error => {
       this.errorMessage = error;
       this.isFetching = false;
     };
 
     this.authService
-      .login({ userid, password })
-      .subscribe(successCb, errorCb);
+      .signin({ userid, password })
+      .subscribe(afterSignedIn, onErrorInSigningIn);
   }
 
   onChange() {

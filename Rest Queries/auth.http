@@ -1,5 +1,5 @@
-# @name login
-POST {{host}}/Account/Login HTTP/1.1
+# @name signin
+POST {{host}}/account/signin HTTP/1.1
 Content-Type: {{contentType}}
 
 {
@@ -8,8 +8,8 @@ Content-Type: {{contentType}}
 }
 ###
 
-# @name login
-POST {{host}}/Account/Login HTTP/1.1
+# @name signin
+POST {{host}}/account/signin HTTP/1.1
 Content-Type: {{contentType}}
 
 {
@@ -18,8 +18,8 @@ Content-Type: {{contentType}}
 }
 ###
 
-# @name login
-POST {{host}}/Account/Login HTTP/1.1
+# @name signin
+POST {{host}}/account/signin HTTP/1.1
 Content-Type: {{contentType}}
 
 {

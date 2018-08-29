@@ -4,6 +4,8 @@ namespace QaNet.Contracts.Repository
 	{
 		IRolesRepository Roles { get; }
 
+		IUserRoleRepository UserRole { get; }
+
 		IUserTokenRepository UserToken { get; }
 
 		IUserRepository User { get; }

@@ -20,7 +20,7 @@
       class="ui tab" 
       [ngClass]="{'active': selectedTab === 'allQuestion'}"
       data-tab="first">
-      <app-questions-list>
+      <app-questions-list [isSearch]="false">
       </app-questions-list>
     </div>
 

@@ -7,6 +7,8 @@ namespace QaNet.Contracts.Services
 {
 	public interface IUsersService
 	{
+		Task SignUp(UserSignUpRequestViewModel userSignUpVm);
+
 		Task<IPaginate<PostsViewModel>> FetchQuestionListAsync(string userId, int index, int size = 20);
 
 		Task<IPaginate<PostsViewModel>> FetchAnswersListAsync(string userId, int index, int size = 20);

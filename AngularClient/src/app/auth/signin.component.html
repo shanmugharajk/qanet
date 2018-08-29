@@ -1,7 +1,7 @@
 <div class="login-container">
   <form
     [ngClass]="{'loading': isFetching}" 
-    (ngSubmit)="login()" 
+    (ngSubmit)="signin()" 
     class="ui form" 
     #signinForm="ngForm">
     <h4 class="ui top attached header">
@@ -54,12 +54,12 @@
           [disabled]="!signinForm.valid" 
           type="submit" 
           class="ui green button">Sign In</button>
-        <a href="/user/forget_password">Forgot password?</a>
+        <a [routerLink]="['/user', 'forget-password']">Forgot password?</a>
       </div>
 
       <div class="inline field">
         <label></label>
-        <a href="/user/sign_up">Need an account? Sign up now.</a>
+        <a [routerLink]="['/user', 'signup']">Need an account? Sign up now.</a>
       </div>
     </div>
   </form>

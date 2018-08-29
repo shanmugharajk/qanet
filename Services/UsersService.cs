@@ -18,9 +18,13 @@ namespace QaNet.Services
 	{
 		private readonly IUnitOfWork uow;
 
+		private IRepositoryWrapper repository;
+
 		private IUserRepository usersRepository => this.repository.User;
 
-		private IRepositoryWrapper repository;
+		private IRolesRepository rolesRepository => this.repository.Roles;
+
+		private IUserRoleRepository userRoleRepository => this.repository.UserRole;
 
 		private IQuestionRepository questionsRepository => this.repository.Question;
 
@@ -53,7 +57,38 @@ namespace QaNet.Services
 			this.contextAccessor.CheckArgumentIsNull(nameof(UsersService.contextAccessor));
 		}
 
-		public async Task<UserProfileViewModelResponse> FetchUserProfileAsync(string userId) 
+		public async Task SignUp(UserSignUpRequestViewModel userSignUpVm)
+		{
+			var existing = await this.usersRepository.FirstOrDefaultAsync(x => x.UserId == userSignUpVm.UserId);
+
+			if (existing != null)
+			{
+				throw new QaException(Messages.UserIdAlreadyExists);
+			}
+
+			var newUser = new User
+			{
+				UserId = userSignUpVm.UserId,
+				DisplayName = userSignUpVm.DisplayName,
+				IsActive = true,
+				LastLoggedIn = null,
+				Password = this.securityService.GetSha256Hash(userSignUpVm.Password),
+				SerialNumber = Guid.NewGuid().ToString("N"),
+				Points = 1,
+				CreatedAt = DateTime.Now,
+				UpdatedAt = DateTime.Now,
+			};
+
+			await this.usersRepository.AddAsync(newUser);
+
+			var userRole = await this.rolesRepository.FirstAsync(x => x.Name == "User");
+
+			await this.userRoleRepository.AddAsync(new UserRole { RoleId = userRole.Id, UserId = newUser.UserId });
+
+			await this.uow.SaveChangesAsync();
+		}
+
+		public async Task<UserProfileViewModelResponse> FetchUserProfileAsync(string userId)
 		{
 			var profile = await this.usersRepository.FirstAsync(x => x.UserId == userId);
 
@@ -63,11 +98,11 @@ namespace QaNet.Services
 			profileViewModel.JoinedAt = profile.CreatedAt;
 			profileViewModel.Points = profile.Points;
 			profileViewModel.About = profile.About;
-			
+
 			return profileViewModel;
 		}
 
-		public async Task UpdateUserProfileAsync(string userId, UserProfileUpdateRequestViewModel profileVm) 
+		public async Task UpdateUserProfileAsync(string userId, UserProfileUpdateRequestViewModel profileVm)
 		{
 			var profile = await this.usersRepository.FirstAsync(x => x.UserId == userId);
 

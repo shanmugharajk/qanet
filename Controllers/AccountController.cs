@@ -50,7 +50,7 @@ namespace QaNet.Controllers
 
 		[AllowAnonymous]
 		[IgnoreAntiforgeryToken]
-		[HttpPost("[action]")]
+		[HttpPost("signin")]
 		public async Task<IActionResult> Login([FromBody]LoginViewModel loginViewModel)
 		{
 			if (ModelState.IsValid == false)
@@ -69,6 +69,15 @@ namespace QaNet.Controllers
 			regenerateAntiForgeryCookie(claims);
 
 			return Ok(new { accessToken = accessToken, refreshToken = refreshToken });
+		}
+
+
+		[AllowAnonymous]
+		[HttpPost("signup")]
+		public async Task<IActionResult> UserSignUp([FromBody]UserSignUpRequestViewModel userSignUpVm)
+		{
+			await this.usersService.SignUp(userSignUpVm);
+			return NoContent();
 		}
 
 		[AllowAnonymous]

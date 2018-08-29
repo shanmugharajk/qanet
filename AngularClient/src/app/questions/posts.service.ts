@@ -28,6 +28,15 @@ export class PostsService {
       .pipe(catchError(handleError));
   }
 
+  public searchQuestions(index: number = 0, searchText: string): Observable<QuestionsList> {
+    return this.http
+    .get(`/api/questions/search?q=${searchText}&index=${index}`, {
+      observe: 'body',
+      responseType: 'json'
+    })
+    .pipe<QuestionsList>(catchError(handleError));
+  }
+
   public getQuestionDetail(id: number): Observable<Question> {
     return this.http
       .get<Question>(`/api/questions/${id}`, {
@@ -91,9 +100,9 @@ export class PostsService {
       .pipe(catchError(handleError));
   }
 
-  public fetchAnswers(questionId: number, pageNo: number = 0): Observable<AnswersList> {
+  public fetchAnswers(questionId: number, index: number = 0): Observable<AnswersList> {
     return this.http
-      .get(`/api/questions/${questionId}/answers?index=${pageNo}`, {
+      .get(`/api/questions/${questionId}/answers?index=${index}`, {
         observe: 'body',
         responseType: 'json'
       })

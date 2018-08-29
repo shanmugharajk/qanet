@@ -1,3 +1,4 @@
+using AutoMapper;
 using QaNet.Contracts.Repository;
 using QaNet.Entities;
 
@@ -6,6 +7,8 @@ namespace QaNet.Respositories
 	public class RepositoryWrapper : IRepositoryWrapper
 	{
 		private readonly QaContext qaContext;
+
+		private readonly IMapper mapper;
 
 		private IRolesRepository roles;
 
@@ -30,6 +33,8 @@ namespace QaNet.Respositories
 		private IAnswerVotersListRepository answerVotersList;
 
 		private IAnswerCommentRepository answerComment;
+
+		private IUserRoleRepository userRoles;
 
 		public IAnswerCommentRepository AnswerComment
 		{
@@ -127,7 +132,7 @@ namespace QaNet.Respositories
 			{
 				if (this.question == null)
 				{
-					this.question = new QuestionRepository(this.qaContext);
+					this.question = new QuestionRepository(this.mapper, this.qaContext);
 				}
 
 				return this.question;
@@ -185,10 +190,23 @@ namespace QaNet.Respositories
 				return this.roles;
 			}
 		}
+		public IUserRoleRepository UserRole
+		{
+			get
+			{
+				if (this.userRoles == null)
+				{
+					this.userRoles = new UserRoleRepository(this.qaContext);
+				}
 
-		public RepositoryWrapper(QaContext dbContext)
+				return this.userRoles;
+			}
+		}
+
+		public RepositoryWrapper(IMapper mapper, QaContext dbContext)
 		{
 			this.qaContext = dbContext;
+			this.mapper = mapper;
 		}
 	}
 }

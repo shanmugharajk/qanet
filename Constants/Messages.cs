@@ -37,5 +37,7 @@ namespace QaNet.Constants
 		public const string NoRightsToModifyComment = "You can't update others comments";
 
 		public const string CantAcceptAnswerForOthersQuestion = "Can't accept answer for the questions which you didn't ask";
+
+		public const string UserIdAlreadyExists = "This user id is already taken. Please signup with new user Id";
 	}
 }

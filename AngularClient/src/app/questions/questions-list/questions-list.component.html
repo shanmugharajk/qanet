@@ -1,11 +1,16 @@
 <app-loader [show]="isFetching">
 </app-loader>
 
-<div *ngIf="(!questionsList || questionsList.count === 0) && !isFetching" class="ui warning message">
-  <div class="header">
-    No records
-  </div>
-  <p>There are not active questions posted at the moment.</p>
+<div *ngIf="(!questionsList || questionsList.count === 0) && !isFetching && showNoRecords" 
+  class="ui warning message">
+    <div class="header">
+      No records
+    </div>
+    <p *ngIf="!isSearch">There are not active questions posted at the moment.</p>
+    <p *ngIf="isSearch">
+      There are no matching records for the search key entered.
+      Pleae try with different combinations.
+    </p>
 </div>
 
 <div *ngIf="!!questionsList && questionsList.count > 0">

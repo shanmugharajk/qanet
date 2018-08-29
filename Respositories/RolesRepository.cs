@@ -8,47 +8,48 @@ using QaNet.Entities.Models;
 
 namespace QaNet.Respositories
 {
-  public class RolesRepository : IRolesRepository
-  {
-    private readonly DbSet<Role> roles;
+	public class RolesRepository : RepositoryBase<Role>, IRolesRepository
+	{
+		private readonly DbSet<Role> roles;
 
-    private readonly DbSet<User> users;
+		private readonly DbSet<User> users;
 
-    public RolesRepository(QaContext dbContext)
-    {
-      this.roles = dbContext.Set<Role>();
-      this.users = dbContext.Set<User>();
-    }
+		public RolesRepository(QaContext qaContext)
+			: base(qaContext)
+		{
+			this.roles = qaContext.Set<Role>();
+			this.users = qaContext.Set<User>();
+		}
 
-    public Task<List<Role>> FindUserRolesAsync(string userId)
-    {
-      var userRolesQuery = from role in this.roles
-                           from userRoles in role.UserRoles
-                           where userRoles.UserId == userId
-                           select role;
+		public Task<List<Role>> FindUserRolesAsync(string userId)
+		{
+			var userRolesQuery = from role in this.roles
+													 from userRoles in role.UserRoles
+													 where userRoles.UserId == userId
+													 select role;
 
-      return userRolesQuery.OrderBy(x => x.Name).ToListAsync();
-    }
+			return userRolesQuery.OrderBy(x => x.Name).ToListAsync();
+		}
 
-    public async Task<bool> IsUserInRoleAsync(string userId, string roleName)
-    {
-      var userRolesQuery = from role in this.roles
-                           where role.Name == roleName
-                           from user in role.UserRoles
-                           where user.UserId == userId
-                           select role;
-      var userRole = await userRolesQuery.FirstOrDefaultAsync();
-      return userRole != null;
-    }
+		public async Task<bool> IsUserInRoleAsync(string userId, string roleName)
+		{
+			var userRolesQuery = from role in this.roles
+													 where role.Name == roleName
+													 from user in role.UserRoles
+													 where user.UserId == userId
+													 select role;
+			var userRole = await userRolesQuery.FirstOrDefaultAsync();
+			return userRole != null;
+		}
 
-    public Task<List<User>> FindUsersInRoleAsync(string roleName)
-    {
-      var roleUserIdsQuery = from role in this.roles
-                             where role.Name == roleName
-                             from user in role.UserRoles
-                             select user.UserId;
-      return this.users.Where(user => roleUserIdsQuery.Contains(user.UserId))
-                   .ToListAsync();
-    }
-  }
+		public Task<List<User>> FindUsersInRoleAsync(string roleName)
+		{
+			var roleUserIdsQuery = from role in this.roles
+														 where role.Name == roleName
+														 from user in role.UserRoles
+														 select user.UserId;
+			return this.users.Where(user => roleUserIdsQuery.Contains(user.UserId))
+									 .ToListAsync();
+		}
+	}
 }

@@ -13,6 +13,7 @@ using QaNet.Entities.Models;
 using QaNet.Entities.ViewModels;
 using QaNet.Extensions;
 using QaNet.Respositories;
+using System.Linq.Expressions;
 
 namespace QaNet.Services
 {
@@ -56,13 +57,27 @@ namespace QaNet.Services
 			this.contextAccessor.CheckArgumentIsNull(nameof(QuestionsService.contextAccessor));
 		}
 
+		public async Task<QuestionsListResponseViewModel> SearchQuestions(
+			string searchText,
+			int index = 0)
+		{
+			var searchResult = await this.questionsRepository.SearchQuestion(searchText, index);
+
+			return await this.FetchQuestionListAsync(
+				index,
+				20,
+				(x) => searchResult.Items.Select(q => q.QuestionId).Contains(x.Id.ToString()));
+		}
+
 		public async Task<QuestionsListResponseViewModel> FetchQuestionListAsync(
 			int index,
-			int size = 20)
+			int size = 20,
+			Expression<Func<Question, bool>> predicate = null)
 		{
 			// TODO : This needs to changed to single query. For now this is fine.
 			var questions = await this.questionsRepository
-				.GetListAsync(orderBy: order => order.OrderByDescending(x => x.Id),
+				.GetListAsync(predicate: predicate,
+					orderBy: order => order.OrderByDescending(x => x.Id),
 					include: source => source.Include(x => x.QuestionTags)
 						.ThenInclude(t => t.Question),
 					index: index,
@@ -221,6 +236,18 @@ namespace QaNet.Services
 
 			await this.uow.SaveChangesAsync();
 
+			// Not required to catch this. Since this storing is only for search purpose now.
+			// TODO Find a different way to generate and get the questionId or find it 
+			// before calling uow save changes. So that calling it two times can eb avoided.
+			try
+			{
+				await this.questionsRepository.InsertIntoSearchTableAsync(question.Id, question.Title);
+				await this.uow.SaveChangesAsync();
+			}
+			catch
+			{
+			}
+
 			return new BaseResponseViewModel() { Id = question.Id };
 		}
 
@@ -245,6 +272,8 @@ namespace QaNet.Services
 			await this.questionTagRepository.AddTagsToAQuestion(questionRequestViewModel.Tags, question.Id);
 
 			this.questionsRepository.Update(question);
+
+			await this.questionsRepository.UpdateSearchTableAsync(question.Id, question.Title);
 
 			await this.uow.SaveChangesAsync();
 		}

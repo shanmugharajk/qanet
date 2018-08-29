@@ -9,8 +9,8 @@ using QaNet.Entities;
 namespace QaNet.Migrations
 {
     [DbContext(typeof(QaContext))]
-    [Migration("20180823154636_Added_About_Column_In_User")]
-    partial class Added_About_Column_In_User
+    [Migration("20180827094358_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -266,6 +266,8 @@ namespace QaNet.Migrations
 
                     b.Property<string>("About");
 
+                    b.Property<DateTime>("CreatedAt");
+
                     b.Property<string>("DisplayName");
 
                     b.Property<bool>("IsActive");
@@ -279,6 +281,8 @@ namespace QaNet.Migrations
 
                     b.Property<string>("SerialNumber")
                         .HasMaxLength(450);
+
+                    b.Property<DateTime>("UpdatedAt");
 
                     b.HasKey("UserId");
 
