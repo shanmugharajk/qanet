@@ -27,6 +27,7 @@ const Zero = 0;
   styleUrls: ['./answer.component.css']
 })
 export class AnswerComponent implements OnInit, OnDestroy {
+  isAuthenticated: boolean;
   isFetching: boolean;
   quillEditor: any;
   isOwner: boolean;
@@ -47,6 +48,7 @@ export class AnswerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.isAuthenticated = this.authService.isAuthenticated();
     this.isOwner = this.authService.getUserId() === this.answer.author;
     this.subscribeToNotifyAnswerAccepted();
     this.initializeQuilEditor();
@@ -88,11 +90,21 @@ export class AnswerComponent implements OnInit, OnDestroy {
   // Menu actions
   // Answer DEL
   onDeleteAnswer() {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     this.deleteAnswer.emit(this.answer.id);
   }
 
   // Answer EDIT
   onEditAnswer() {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     this.postsService.answerToEdit = this.answer;
   }
 
@@ -113,11 +125,12 @@ export class AnswerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onBookmarkClick() {
-    console.log('upvoted');
-  }
-
   onAcceptAnswerClick() {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     this.messageService.clearError();
 
     this.showThreeDotLoader = true;
@@ -139,6 +152,11 @@ export class AnswerComponent implements OnInit, OnDestroy {
   }
 
   vote(vote: number) {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     // Block the user if he tries to vote the same vote again before
     // the previous request sent to server and get the response.
     if (this.showThreeDotLoader === true) {

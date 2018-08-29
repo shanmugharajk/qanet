@@ -56,6 +56,7 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.messageService.promptYesNoModal(false, this.dialogId);
+    this.messageService.promptLoginModal(false);
     this.messageService.clearError();
   }
 
@@ -103,6 +104,11 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
 
   // Menus actions
   onDeleteQuestion() {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     this.messageService.clearError();
     this.messageService.promptYesNoModal(true, this.dialogId);
   }
@@ -125,6 +131,11 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
 
   // Edit question
   onEditQuestion() {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     this.postsService.questionToEdit =  this.question;
   }
 
@@ -146,6 +157,11 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
   }
 
   onBookmarkClick() {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     this.showThreeDotLoader = true;
 
     const afterBookmarked = totalBookmarkCount => {
@@ -169,6 +185,11 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
   }
 
   vote(vote: number) {
+    if (this.isAuthenticated === false) {
+      this.messageService.promptLoginModal(true);
+      return;
+    }
+
     // Block the user if he tries to vote the same vote again before
     // the previous request sent to server and get the response.
     if (this.showThreeDotLoader === true) {
@@ -186,7 +207,7 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
     };
 
     const onErrorInVoteUpdate = error => {
-      this.messageService.notifyError('Error in voting', error);
+      this.messageService.notifyError('Unable to do this operation', error);
       this.hideThreeDotLoader();
     };
 
@@ -214,7 +235,7 @@ export class QuestionAnswerDetailComponent implements OnInit, OnDestroy {
   }
 
   onLoginPromptClick() {
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/user/signin']);
   }
 
   hideThreeDotLoader() {

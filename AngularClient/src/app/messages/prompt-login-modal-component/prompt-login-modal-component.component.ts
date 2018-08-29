@@ -32,7 +32,7 @@ export class PromptLoginModalComponentComponent implements OnInit {
   }
 
   onLoginClick() {
-    this.router.navigate(['/signin']);
+    this.router.navigate(['/user/signin']);
   }
 
 }
