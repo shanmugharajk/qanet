@@ -7,7 +7,7 @@ https://qanet.herokuapp.com/
 ### Workflow
 - Any user can view, search all the questions posted.
 - Signed user's can ask new question, answer to the question's asked, add comments.
-- The voting follows this way
+- Good questions and answers will be rewarded with votes.
     
       Question
         Upvote   - The user who posted the question will get 2 points.
@@ -17,6 +17,8 @@ https://qanet.herokuapp.com/
         Upvote           - The user who answered the question will get 5 points.
         Downvote         - The user who answered the question will get 5 negative points.
         Accepting answer - The user who answered the question will get 10 points.
+        
+- User should have minimum reputation of 25 points to perform upvote and 125 points to perform down vote.
       
 - Signed-up users can bookmark the questions and the list of bookmarks can be accessed from their profile menu.
 
