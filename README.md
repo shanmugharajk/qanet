@@ -1,4 +1,4 @@
-# QaNet
+# dotnet-core-stackoverflow-clone
 Question answer site with minimal features like stack overflow built with dotnet core web-api and angular6.
 
 ### Demo
