@@ -1,0 +1,36 @@
+<div class="ui menu">
+    <a href="/" class="header item">QaNet</a>
+
+    <div class="item">
+        <form method="POST" action="/search">
+            <div class="ui transparent icon input">
+                <input type="text" class="prompt" placeholder="Enter text to search....">
+                <button class="ui icon button pd-0 b-white">
+                    <i class="search link icon"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="right menu">
+        <a href="/questions/ask" class="item">
+            <i class="question circle icon"></i>
+            Ask Question
+        </a>
+        <%= if (currentUser) { %>
+            <div id="menu" class="ui dropdown item">
+                <i class="user icon"></i>
+                &nbsp; <%= currentUser.DisplayName %>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <a href="/profile" class="item">Your profile</a>
+                    <a href="/logout" class="item">Logout</a>
+                </div>
+            </div>
+        <% } else { %>
+            <a href="/login" class="item">
+                Login
+            </a>
+        <% } %>
+    </div>
+</div>

@@ -1,0 +1,8 @@
+create_table("bookmarks") {
+    t.Column("user_id", "string", {"size": 50})
+    t.Column("question_id", "int", {})
+    t.PrimaryKey("user_id", "question_id")
+
+    t.ForeignKey("user_id", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("question_id", {"questions": ["id"]}, {"on_delete": "cascade"})
+}

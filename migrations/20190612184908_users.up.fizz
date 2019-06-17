@@ -1,0 +1,19 @@
+create_table("users") {
+    t.Column("id", "string", {"primary": true, "size": 50})
+	t.Column("display_name", "string", {"size": 200})
+	t.Column("about", "string", {"size": 1000})
+	t.Column("points", "bigint", {"size": 1000})
+	t.Column("email", "string", {})
+	t.Column("password_hash", "string", {})
+
+    t.Column("role_id", "string", {"size": 50})
+	t.ForeignKey("role_id", {"user_roles": ["id"]}, {"on_delete": "restrict"})
+
+	t.Column("is_active", "bool", {"default": true})
+	t.Column("last_logged_in", "timestamp", {"default_raw": "now()"})
+
+	t.Column("created_at", "timestamp", {"default_raw": "now()"})
+	t.Column("updated_at", "timestamp", {"default_raw": "now()"})
+}
+
+add_index("users", "email", {"unique": true})

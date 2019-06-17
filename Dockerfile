@@ -1,33 +1,34 @@
-FROM microsoft/dotnet:2.1-sdk AS builder
-WORKDIR /app
+# This is a multi-stage Dockerfile and requires >= Docker 17.05
+# https://docs.docker.com/engine/userguide/eng-image/multistage-build/
+FROM gobuffalo/buffalo:v0.14.4 as builder
 
-RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
-RUN apt-get install -y nodejs
+RUN mkdir -p $GOPATH/src/github.com/shanmugharajk/qanet
+WORKDIR $GOPATH/src/github.com/shanmugharajk/qanet
 
-COPY . .
-RUN dotnet restore
+# this will cache the npm install step, unless package.json changes
+ADD package.json .
+ADD yarn.lock .
+RUN yarn install --no-progress
+ADD . .
+RUN go get ./...
+RUN buffalo build --static -o /bin/app
 
-RUN dotnet publish -o out -c Release
+FROM alpine
+RUN apk add --no-cache bash
+RUN apk add --no-cache ca-certificates
 
-FROM microsoft/dotnet:2.1-aspnetcore-runtime
-WORKDIR /app
-COPY --from=builder /app/database ./database
-COPY --from=builder /app/out .
-COPY --from=builder /app/AngularClient/dist .
-EXPOSE 80
+WORKDIR /bin/
 
-# ENTRYPOINT ["dotnet", "QaNet.dll"]
-CMD ASPNETCORE_URLS=http://*:$PORT dotnet QaNet.dll
+COPY --from=builder /bin/app .
 
-# dklist
-#  dkl='docker image ls'
-#  dkp='docker image prune'
-#  dkb-qanet='docker build -t qanet .'
-#  dkth='docker tag qanet registry.heroku.com/qanet/web'
-#  dkph='docker push registry.heroku.com/qanet/web'
-#  dkrm='docker rmi -f'
-#  hc='heroku create qanet'
-#  hcl='heroku container:login'
-#  dkphc='heroku container:push web --app qanet'
-#  dkhr='heroku container:release web --app qanet'
-#  dkho='heroku open --app qanet
+# Uncomment to run the binary in "production" mode:
+# ENV GO_ENV=production
+
+# Bind the app to 0.0.0.0 so it can be seen from outside the container
+ENV ADDR=0.0.0.0
+
+EXPOSE 3000
+
+# Uncomment to run the migrations before running the binary:
+# CMD /bin/app migrate; /bin/app
+CMD exec /bin/app

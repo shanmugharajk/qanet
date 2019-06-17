@@ -1,0 +1,13 @@
+<%= if (verrors) { %>
+    <div class="ui yellow message">
+        <%= for (key) in verrors.Keys() { %>
+            <p><%= verrors.Get(key) %></p>
+        <% } %>
+    </div>
+<% } %>
+
+<%= if (error) { %>
+    <div class="ui yellow message">
+        <p><%= error %></p>
+    </div>
+<% } %>

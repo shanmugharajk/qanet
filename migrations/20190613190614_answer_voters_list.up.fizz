@@ -1,0 +1,12 @@
+create_table("answer_voters_list") {
+    t.Column("answer_id", "int", {})
+    t.Column("voter_id", "string", {"size": 50})
+    t.PrimaryKey("answer_id", "voter_id")
+    t.Column("vote", "int", {})
+
+    t.Column("created_at", "timestamp", {"default_raw": "now()"})
+    t.Column("updated_at", "timestamp", {"default_raw": "now()"})
+
+    t.ForeignKey("answer_id", {"answers": ["id"]}, {"on_delete": "cascade"})
+    t.ForeignKey("voter_id", {"users": ["id"]}, {"on_delete": "restrict"})
+}

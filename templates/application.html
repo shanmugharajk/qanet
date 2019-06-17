@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <title>Qanet</title>
+  <%= stylesheetTag("vendors/semantic.min.css") %>
+  <%= stylesheetTag("application.css") %>
+  <meta name="csrf-param" content="authenticity_token" />
+  <meta name="csrf-token" content="<%= authenticity_token %>" />
+  <link rel="icon" href="<%= assetPath("images/favicon.ico") %>">
+</head>
+
+<body>
+
+  <div class="w-100 pd-0">
+    <%= partial("header.html") %>
+    <%= yield %>
+  </div>
+
+  <%= javascriptTag("vendors/jquery.min.js") %>
+  <%= javascriptTag("vendors/semantic.min.js") %>
+  <%= javascriptTag("application.js") %>
+</body>
+
+</html>

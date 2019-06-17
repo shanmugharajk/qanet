@@ -1,0 +1,1 @@
+drop_table("answer_voters_list")

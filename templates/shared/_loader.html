@@ -1,0 +1,9 @@
+<%= let cls = "show" %>
+
+<%= if (!show) { %>
+    cls = "hide"
+<% } %>
+
+<div class="ui inverted dimmer modals custom-modal" class="<%= cls %>">
+    <div class="ui tiny text loader">Please wait!</div>
+</div>

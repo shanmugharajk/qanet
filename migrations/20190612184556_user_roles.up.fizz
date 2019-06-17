@@ -1,0 +1,4 @@
+create_table("user_roles") {
+    t.Column("id", "string", {"primary": true, "size": 50})
+    t.Column("name", "string", {})
+}

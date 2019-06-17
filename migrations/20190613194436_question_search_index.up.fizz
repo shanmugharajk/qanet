@@ -1,0 +1,1 @@
+sql("CREATE INDEX idx_fts_search ON questions USING gin(title_search);")
