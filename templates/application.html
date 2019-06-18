@@ -7,6 +7,8 @@
   <title>Qanet</title>
   <%= stylesheetTag("vendors/semantic.min.css") %>
   <%= stylesheetTag("application.css") %>
+  <%= stylesheetTag("vendors/quill.snow.css") %>
+  <%= stylesheetTag("vendors/three-dots.min.css") %>
   <meta name="csrf-param" content="authenticity_token" />
   <meta name="csrf-token" content="<%= authenticity_token %>" />
   <link rel="icon" href="<%= assetPath("images/favicon.ico") %>">
@@ -21,6 +23,7 @@
 
   <%= javascriptTag("vendors/jquery.min.js") %>
   <%= javascriptTag("vendors/semantic.min.js") %>
+  <%= javascriptTag("vendors/quill.min.js") %>
   <%= javascriptTag("application.js") %>
 </body>
 

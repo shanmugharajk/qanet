@@ -1,6 +1,14 @@
 <div class="login-container">
-    <form id="signup" class="ui form" novalidate method="POST" action="">
-        <input name="authenticity_token" type="hidden" value="<%= authenticity_token %>">
+    <form
+        id="signup"
+        class="ui form"
+        novalidate
+        method="POST"
+        action="">
+        <input
+            name="authenticity_token"
+            type="hidden"
+            value="<%= authenticity_token %>">
 
         <h4 class="ui top attached header">
             Create a new account
@@ -13,25 +21,49 @@
                 <!-- Form fields -->
                 <div class="required field">
                     <label for="userid">User Id</label>
-                    <input placeholder="UserId minimum 6 letters" autocomplete="id" type="text" id="userid" name="ID"
-                        required value="<%= user.ID %>">
+                    <input
+                        placeholder="UserId minimum 6 letters"
+                        autocomplete="id"
+                        type="text"
+                        id="userid"
+                        name="ID"
+                        required
+                        value="<%= user.ID %>">
                 </div>
 
                 <div class="required field">
                     <label for="userid">Display name</label>
-                    <input placeholder="Display name minimum 6 letters" autocomplete="name" type="text" id="displayName"
-                        name="DisplayName" required value="<%= user.DisplayName %>">
+                    <input
+                        placeholder="Display name minimum 6 letters"
+                        autocomplete="name"
+                        type="text"
+                        id="displayName"
+                        name="DisplayName"
+                        required
+                        value="<%= user.DisplayName %>">
                 </div>
 
                 <div class="required field">
                     <label for="password">Password</label>
-                    <input placeholder="Password minimum 6 letters" autocomplete="password" type="password"
-                        id="password" name="Password" required value="<%= user.Password %>">
+                    <input
+                        placeholder="Password minimum 6 letters"
+                        autocomplete="password"
+                        type="password"
+                        id="password"
+                        name="Password"
+                        required
+                        value="<%= user.Password %>">
                 </div>
 
                 <div class="required field">
                     <label for="email">Email</label>
-                    <input placeholder="Email" autocomplete="email" type="text" id="email" name="Email" required
+                    <input
+                        placeholder="Email"
+                        autocomplete="email"
+                        type="text"
+                        id="email"
+                        name="Email"
+                        required
                         value="<%= user.Email %>">
                 </div>
 

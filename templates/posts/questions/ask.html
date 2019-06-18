@@ -1,1 +1,46 @@
-<div>new question</div>
+<div class="ui container">
+    <br>
+
+    <div class="ui form">
+        <!-- Question title -->
+        <div class="required field">
+            <label for="title">Title</label>
+            <input
+                placeholder="enter question title"
+                autocomplete="id"
+                type="text"
+                id="title"
+                name="Title">
+        </div>
+
+        <!-- Question body - Quill editor -->
+        <div class="required field">
+            <% let cls = "" %>
+            <%= if (errors && errors.questionContent) { %>
+                cls = "editor-container-error"
+            <% } %>
+            <label for="questionContent">Body</label>
+            <div class="<%= cls %>">
+                <div class="editor" id="editor"></div>
+                <span class="helper-text">Please explain your answer in minimum 100 characters</span>
+            </div>
+        </div>
+
+        <!-- Question tags -->
+        <div class="required field">
+            <div class="ui fluid multiple search selection dropdown multidd">
+                <input name="tags" type="hidden">
+                <i class="dropdown icon"></i>
+                <div class="default text">Tags</div>
+
+                <div class="menu">
+                    <!-- TODO: Change this to dynamic fetching. -->
+                    <div class="item" data-value="angular">Angular</div>
+                    <div class="item" data-value="css">CSS</div>
+                    <div class="item" data-value="ember">Ember</div>
+                    <div class="item" data-value="html">HTML</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
