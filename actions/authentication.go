@@ -23,10 +23,7 @@ func LoginNew(c buffalo.Context) error {
 	}
 
 	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*gorm.DB)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
+	tx, _ := c.Value("tx").(*gorm.DB)
 
 	user, err := services.LoginUser(tx, *u)
 	if err != nil {
@@ -61,11 +58,7 @@ func SignupNew(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	// Get the DB connection from the context
-	tx, ok := c.Value("tx").(*gorm.DB)
-	if !ok {
-		return errors.WithStack(errors.New("no transaction found"))
-	}
+	tx, _ := c.Value("tx").(*gorm.DB)
 
 	verrors, err := services.CreateUser(tx, u)
 	if err != nil {
@@ -89,7 +82,7 @@ func SetCurrentUser(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
 		if id := c.Session().Get("currentUserId"); id != nil {
 			u := &models.User{}
-			tx := c.Value("tx").(*gorm.DB)
+			tx, _ := c.Value("tx").(*gorm.DB)
 			res := tx.Where("id = ?", id).Find(&u)
 			if res.Error != nil {
 				return errors.WithStack(res.Error)

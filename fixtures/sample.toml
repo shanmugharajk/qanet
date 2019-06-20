@@ -5,7 +5,7 @@ name = "lots of widgets"
     name = "widgets"
 
     [[scenario.table.row]]
-      id = "<%= uuidNamed("widget") %>"
+      id = "<%= uuidNamed('widget) %>"
       name = "This is widget #1"
       body = "some widget body"
       created_at = "<%= now() %>"
@@ -26,7 +26,6 @@ name = "lots of widgets"
       name = "Mark Bates"
       admin = true
       age = 41
-      widget_id = "<%= uuidNamed("widget") %>"
+      widget_id = "<%= uuidNamed('widget) %>"
       created_at = "<%= now() %>"
       updated_at = "<%= now() %>"
-

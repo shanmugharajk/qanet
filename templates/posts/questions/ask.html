@@ -1,5 +1,7 @@
 <div class="ui container">
-    <br>
+    <h3 class="ui header m-b20">
+        Ask a question
+    </h3>
 
     <div class="ui form">
         <!-- Question title -->
@@ -28,19 +30,24 @@
 
         <!-- Question tags -->
         <div class="required field">
+            <label for="tags">Tags</label>
             <div class="ui fluid multiple search selection dropdown multidd">
                 <input name="tags" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Tags</div>
 
                 <div class="menu">
-                    <!-- TODO: Change this to dynamic fetching. -->
-                    <div class="item" data-value="angular">Angular</div>
-                    <div class="item" data-value="css">CSS</div>
-                    <div class="item" data-value="ember">Ember</div>
-                    <div class="item" data-value="html">HTML</div>
+                    <%= for (tag) in tags { %>
+                        <div class="item" data-value="<%= tag.ID %>">
+                            <%= tag.ID %>
+                        </div>
+                    <% } %>
                 </div>
             </div>
+        </div>
+
+        <div class="field m-t30 m-b30">
+            <button class="ui green button" type="button">Post Your Question</button>
         </div>
     </div>
 </div>
