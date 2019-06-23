@@ -1,4 +1,4 @@
-create_table("question_tag") {
+create_table("question_tags") {
     t.Column("question_id", "int", {})
     t.Column("tag_id", "string", {"size": 50})
     t.PrimaryKey("question_id", "tag_id")

@@ -7,10 +7,10 @@ import (
 
 // Tag is the model for tags table.
 type Tag struct {
-	ID         string `json:"id"`
-	Name       string `json:"name"`
-	CreatedBy  string `json:"createdBy"`
-	ModifiedBy string `json:"modifiedBy"`
+	ID          string `json:"id"`
+	Description string `json:"description"`
+	CreatedBy   string `json:"createdBy"`
+	UpdatedBy   string `json:"updatedBy"`
 
 	Base
 }
@@ -19,6 +19,6 @@ type Tag struct {
 func (t *Tag) Validate() *validate.Errors {
 	return validate.Validate(
 		&validators.StringIsPresent{Field: t.ID, Name: "Id"},
-		&validators.StringIsPresent{Field: t.Name, Name: "Name"},
+		&validators.StringIsPresent{Field: t.Description, Name: "Description"},
 	)
 }

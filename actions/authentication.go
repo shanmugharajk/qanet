@@ -81,13 +81,15 @@ func SignupNew(c buffalo.Context) error {
 func SetCurrentUser(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
 		if id := c.Session().Get("currentUserId"); id != nil {
-			u := &models.User{}
+			u := models.User{}
 			tx, _ := c.Value("tx").(*gorm.DB)
 			res := tx.Where("id = ?", id).Find(&u)
 			if res.Error != nil {
 				return errors.WithStack(res.Error)
 			}
 			c.Set("currentUser", u)
+			c.Set("userId", u.ID)
+			c.Set("userRole", u.RoleID)
 		}
 		return next(c)
 	}

@@ -1,1 +1,1 @@
-drop_table("question_tag")
+drop_table("question_tags")

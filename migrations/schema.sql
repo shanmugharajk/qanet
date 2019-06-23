@@ -188,16 +188,16 @@ ALTER SEQUENCE public.question_comments_id_seq OWNED BY public.question_comments
 
 
 --
--- Name: question_tag; Type: TABLE; Schema: public; Owner: postgres
+-- Name: question_tags; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.question_tag (
+CREATE TABLE public.question_tags (
     question_id integer NOT NULL,
     tag_id character varying(50) NOT NULL
 );
 
 
-ALTER TABLE public.question_tag OWNER TO postgres;
+ALTER TABLE public.question_tags OWNER TO postgres;
 
 --
 -- Name: question_voters_list; Type: TABLE; Schema: public; Owner: postgres
@@ -230,7 +230,7 @@ CREATE TABLE public.questions (
     is_active boolean DEFAULT true NOT NULL,
     is_closed boolean DEFAULT false NOT NULL,
     is_reopen_requested boolean DEFAULT false NOT NULL,
-    deactivated_by character varying(50),
+    deactivated_by character varying(50) DEFAULT NULL::character varying,
     author character varying(50) NOT NULL,
     updated_by character varying(50) NOT NULL,
     created_by character varying(50) NOT NULL,
@@ -394,11 +394,11 @@ ALTER TABLE ONLY public.question_comments
 
 
 --
--- Name: question_tag question_tag_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: question_tags question_tags_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.question_tag
-    ADD CONSTRAINT question_tag_pkey PRIMARY KEY (question_id, tag_id);
+ALTER TABLE ONLY public.question_tags
+    ADD CONSTRAINT question_tags_pkey PRIMARY KEY (question_id, tag_id);
 
 
 --
@@ -583,19 +583,19 @@ ALTER TABLE ONLY public.question_comments
 
 
 --
--- Name: question_tag question_tag_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: question_tags question_tags_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.question_tag
-    ADD CONSTRAINT question_tag_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.questions(id) ON DELETE CASCADE;
+ALTER TABLE ONLY public.question_tags
+    ADD CONSTRAINT question_tags_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.questions(id) ON DELETE CASCADE;
 
 
 --
--- Name: question_tag question_tag_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: question_tags question_tags_tag_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.question_tag
-    ADD CONSTRAINT question_tag_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(id) ON DELETE RESTRICT;
+ALTER TABLE ONLY public.question_tags
+    ADD CONSTRAINT question_tags_tag_id_fkey FOREIGN KEY (tag_id) REFERENCES public.tags(id) ON DELETE RESTRICT;
 
 
 --

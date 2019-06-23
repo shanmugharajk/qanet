@@ -3,9 +3,20 @@
         Ask a question
     </h3>
 
-    <div class="ui form" id="ask-question">
+    <form
+        class="ui form"
+        id="ask-question"
+        method="POST"
+        action="/questions/ask">
+
+        <!-- csrf token -->
+        <input
+            name="authenticity_token"
+            type="hidden"
+            value="<%= authenticity_token %>">
+
         <!-- Question title -->
-        <div class="required field">
+        <div class="required field" id="title-container">
             <label for="title">Title</label>
             <input
                 placeholder="enter question title"
@@ -16,23 +27,30 @@
         </div>
 
         <!-- Question body - Quill editor -->
-        <div class="required field">
+        <div class="required field" id="ask-question-editor-container">
             <% let cls = "" %>
             <%= if (errors && errors.questionContent) { %>
                 cls = "editor-container-error"
             <% } %>
             <label for="questionContent">Body</label>
-            <div class="<%= cls %>">
+            <input
+                id="questionContent"
+                name="QuestionContent"
+                type="hidden">
+            <div id="ask-question-editor-wrapper" class="<%= cls %>">
                 <div class="editor" id="ask-question-editor"></div>
                 <span class="helper-text">Please explain your answer in minimum 100 characters</span>
             </div>
         </div>
 
         <!-- Question tags -->
-        <div class="required field">
+        <div class="required field" id="tags-container">
             <label for="tags">Tags</label>
             <div class="ui fluid multiple search selection dropdown multidd">
-                <input name="tags" type="hidden">
+                <input
+                    id="tags"
+                    name="Tags"
+                    type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Tags</div>
 
@@ -50,10 +68,9 @@
             <button
                 id="postYourQuestion"
                 class="ui blue button"
-                onclick="QaNet.ask.onPostYourQuestion()"
-                type="button">
+                type="submit">
                     Post Your Question
             </button>
         </div>
-    </div>
+    </form>
 </div>

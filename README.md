@@ -4,4 +4,11 @@
 
 ## Commands
 
-To connect a database `\c {db_name}`
+`\?` list all the commands
+`\l` list databases
+`\conninfo` display information about current connection
+`\c [DBNAME]` connect to new database, e.g., \c template1
+`\dt` list tables of the public schema
+`\dt <schema-name>.*` list tables of certain schema
+`\q` quit psql
+`\d` details of a table

@@ -1,6 +1,11 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"github.com/gobuffalo/validate"
+	"github.com/gobuffalo/validate/validators"
+)
 
 // Question is the model for questions table.
 type Question struct {
@@ -15,10 +20,21 @@ type Question struct {
 	IsActive          bool      `json:"isActive"`
 	IsClosed          bool      `json:"isClosed"`
 	IsReopenRequested bool      `json:"isReopenRequested"`
-	DeactivatedBy     string    `json:"deactivated_by"`
+	DeactivatedBy     string    `json:"deactivated_by" gorm:"default:'NULL'" sql:"default:null"`
 	Author            string    `json:"author"`
 	CreatedBy         string    `json:"createdBy"`
 	UpdatedBy         string    `json:"updatedBy"`
 
 	Base
+
+	Tags string `json:"tags" gorm:"-"`
+}
+
+// Validate - validates the question details.
+func (q *Question) Validate() *validate.Errors {
+	return validate.Validate(
+		&validators.StringIsPresent{Field: q.Title, Name: "Title"},
+		&validators.StringIsPresent{Field: q.QuestionContent, Name: "QuestionContent"},
+		&validators.StringIsPresent{Field: q.Tags, Name: "Tags"},
+	)
 }

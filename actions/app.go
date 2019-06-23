@@ -79,10 +79,12 @@ func App() *buffalo.App {
 	app.POST("/signup", SignupNew)
 
 	questions := app.Group("/questions")
-	questions.GET("/", QuestionsIndex)
-	questions.GET("/{questionID}", QuestionsIndex)
 	questions.GET("/ask", QuestionsAskIndex)
 	questions.POST("/ask", QuestionsAskNew)
+
+	posts := app.Group("/posts")
+	posts.GET("/{questionID}", PostsIndex)
+	posts.GET("/", PostsIndex)
 
 	app.ServeFiles("/", assetsBox) // serve files from the public directory
 

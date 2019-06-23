@@ -2,8 +2,12 @@ package grifts
 
 import (
 	"github.com/markbates/grift/grift"
+	"github.com/pkg/errors"
 	"github.com/shanmugharajk/qanet/models"
+	"golang.org/x/crypto/bcrypt"
 )
+
+var adminUserID = "admin@123"
 
 func addUsers() error {
 	// normal user details
@@ -23,6 +27,11 @@ func addUsers() error {
 	user.Password = "user@123"
 	user.RoleID = normalUserRole.ID
 	user.IsActive = true
+	ph, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	user.PasswordHash = string(ph)
 
 	if res := models.GormDB.Create(&user); res.Error != nil {
 		return res.Error
@@ -39,14 +48,43 @@ func addUsers() error {
 
 	// admin user
 	adminUser := models.User{}
-	adminUser.ID = "admin@123"
+	adminUser.ID = adminUserID
 	adminUser.DisplayName = "admin user"
 	adminUser.Email = "admin@email.com"
 	adminUser.Password = "admin@123"
 	adminUser.RoleID = adminUserRole.ID
 	adminUser.IsActive = true
+	aph, err := bcrypt.GenerateFromPassword([]byte(adminUser.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	adminUser.PasswordHash = string(aph)
 
 	if res := models.GormDB.Create(&adminUser); res.Error != nil {
+		return res.Error
+	}
+
+	return nil
+}
+
+func addTags() error {
+	csharp := models.Tag{}
+	csharp.ID = "charp"
+	csharp.Description = "csharp"
+	csharp.CreatedBy = adminUserID
+	csharp.UpdatedBy = adminUserID
+
+	if res := models.GormDB.Create(&csharp); res.Error != nil {
+		return res.Error
+	}
+
+	golang := models.Tag{}
+	golang.ID = "golang"
+	golang.Description = "golang"
+	golang.CreatedBy = adminUserID
+	golang.UpdatedBy = adminUserID
+
+	if res := models.GormDB.Create(&golang); res.Error != nil {
 		return res.Error
 	}
 
@@ -57,6 +95,14 @@ var _ = grift.Namespace("db", func() {
 
 	grift.Desc("seed", "Seeds a database")
 	grift.Add("seed", func(c *grift.Context) error {
-		return addUsers()
+		if err := addUsers(); err != nil {
+			return errors.WithStack(err)
+		}
+
+		if err := addTags(); err != nil {
+			return errors.WithStack(err)
+		}
+
+		return nil
 	})
 })
