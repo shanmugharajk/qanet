@@ -1,4 +1,4 @@
-import utils from "./utils";
+import editor from "./_editor";
 
 // Quill editor initialization for ask question page.
 let askQuestionEditor;
@@ -65,7 +65,7 @@ const initAskQuestionEditor = () => {
     return;
   }
 
-  askQuestionEditor = utils.getQuilInstance(id);
+  askQuestionEditor = editor.getQuilInstance(id);
   askQuestionEditor.on("text-change", () => {
     $("#ask-question-editor-container").removeClass("error");
     $("#ask-question-editor-wrapper").removeClass("editor-container-error");

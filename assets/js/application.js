@@ -1,6 +1,6 @@
-import initControls from "./controls";
-import initAuth from "./authentication";
-import initAskQuestion from "./askquestion";
+import initControls from "./_controls";
+import initAuth from "./_authentication";
+import initAskQuestion from "./_askquestion";
 
 $(document).ready(function() {
   initControls();

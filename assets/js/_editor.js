@@ -16,6 +16,10 @@ const quillInstance = elementId => {
   });
 };
 
+window.QaNet.Editor = {
+  getQuilInstance: quillInstance
+};
+
 export default {
   getQuilInstance: quillInstance
 };
