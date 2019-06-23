@@ -1,4 +1,4 @@
-const quillInstance = elementId => {
+const quillInstance = (elementId, readOnly = false) => {
   const toolbarOptions = [
     "bold",
     "italic",
@@ -7,13 +7,16 @@ const quillInstance = elementId => {
     "code-block"
   ];
 
-  return new Quill(elementId, {
+  const options = {
     theme: "snow",
     modules: {
-      toolbar: toolbarOptions
+      toolbar: readOnly ? false : toolbarOptions
     },
-    languages: ["javascript", "ruby", "python"]
-  });
+    languages: ["javascript", "ruby", "python"],
+    readOnly
+  };
+
+  return new Quill(elementId, options);
 };
 
 window.QaNet.Editor = {
