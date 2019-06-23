@@ -297,8 +297,8 @@ ALTER TABLE public.tags OWNER TO postgres;
 CREATE TABLE public.user_roles (
     id character varying(50) NOT NULL,
     name character varying(255) NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
 
 

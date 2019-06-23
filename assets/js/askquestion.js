@@ -13,8 +13,12 @@ const initAskQuestionEditor = () => {
   }
 };
 
+const fetchAskQuestionData = () => {
+  const title = $("#ask-question #title");
+};
+
 QaNet.ask.onPostYourQuestion = () => {
-  console.log("hey shan");
+  fetchAskQuestionData();
 };
 
 // Init of various functions after document ready.

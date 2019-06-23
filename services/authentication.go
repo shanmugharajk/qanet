@@ -32,6 +32,7 @@ func CreateUser(tx *gorm.DB, u *models.User) (*validate.Errors, error) {
 	}
 
 	u.RoleID = userRole.ID
+	u.IsActive = true
 	e := tx.Create(u)
 
 	return validate.NewErrors(), e.Error

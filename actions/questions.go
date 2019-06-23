@@ -8,11 +8,11 @@ import (
 
 // QuestionsIndex returns all posts.
 func QuestionsIndex(c buffalo.Context) error {
-	return c.Render(200, r.HTML("posts/login.html"))
+	return c.Render(200, r.HTML("posts/index.html"))
 }
 
-// QuestionsAsk returns the form for creating new post.
-func QuestionsAsk(c buffalo.Context) error {
+// QuestionsAskIndex returns the form for creating new post.
+func QuestionsAskIndex(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
 
 	tags, err := services.FetchAllTags(tx)
@@ -23,4 +23,11 @@ func QuestionsAsk(c buffalo.Context) error {
 	c.Set("tags", tags)
 
 	return c.Render(200, r.HTML("posts/questions/ask.html"))
+}
+
+// QuestionsAskNew returns the form for creating new post.
+func QuestionsAskNew(c buffalo.Context) error {
+	// tx, _ := c.Value("tx").(*gorm.DB)
+
+	return c.Render(200, r.HTML("posts/index.html"))
 }
