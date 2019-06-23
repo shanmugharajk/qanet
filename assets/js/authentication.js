@@ -1,5 +1,3 @@
-$ = window.$;
-
 const loginValidations = () => {
   // Login form validations
   $("#login.ui.form").form({
@@ -35,7 +33,7 @@ const loginValidations = () => {
 };
 
 const signupValidations = () => {
-  // Login form validations
+  // Signup form validations
   $("#signup.ui.form").form({
     fields: {
       userid: {
@@ -90,7 +88,7 @@ const signupValidations = () => {
   });
 };
 
-$(document).ready(function() {
+export default function init() {
   loginValidations();
   signupValidations();
-});
+}

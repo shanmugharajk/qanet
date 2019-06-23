@@ -5,7 +5,7 @@ create_table("answer_comments") {
     t.Column("answer_id", "int", {})
     t.Column("close_votes",  "int", {"default": 0})
     t.Column("is_active", "bool", {"default": true})
-    t.Column("deactivated_by", "string", {"size": 50})
+    t.Column("deactivated_by", "string", {"size": 50, "null": true})
     t.Column("created_at", "timestamp", {"default_raw": "now()"})
 	t.Column("updated_at", "timestamp", {"default_raw": "now()"})
 

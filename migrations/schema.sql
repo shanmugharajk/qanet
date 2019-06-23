@@ -44,7 +44,7 @@ CREATE TABLE public.answer_comments (
     answer_id integer NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
-    deactivated_by character varying(50) NOT NULL,
+    deactivated_by character varying(50),
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -102,7 +102,7 @@ CREATE TABLE public.answers (
     is_accepted boolean DEFAULT false NOT NULL,
     author character varying(50) NOT NULL,
     created_by character varying(50) NOT NULL,
-    deactivated_by character varying(50) NOT NULL,
+    deactivated_by character varying(50),
     updated_by character varying(50) NOT NULL,
     question_id integer NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
@@ -158,7 +158,7 @@ CREATE TABLE public.question_comments (
     question_id integer NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
-    deactivated_by character varying(50) NOT NULL,
+    deactivated_by character varying(50),
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -225,12 +225,12 @@ CREATE TABLE public.questions (
     question_content text NOT NULL,
     votes integer DEFAULT 0 NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
-    bounty_points integer NOT NULL,
+    bounty_points integer DEFAULT 0 NOT NULL,
     bounty_expiry_date date NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
     is_closed boolean DEFAULT false NOT NULL,
     is_reopen_requested boolean DEFAULT false NOT NULL,
-    deactivated_by character varying(50) NOT NULL,
+    deactivated_by character varying(50),
     author character varying(50) NOT NULL,
     updated_by character varying(50) NOT NULL,
     created_by character varying(50) NOT NULL,

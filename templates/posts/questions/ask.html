@@ -3,7 +3,7 @@
         Ask a question
     </h3>
 
-    <div class="ui form">
+    <div class="ui form" id="ask-question">
         <!-- Question title -->
         <div class="required field">
             <label for="title">Title</label>
@@ -23,7 +23,7 @@
             <% } %>
             <label for="questionContent">Body</label>
             <div class="<%= cls %>">
-                <div class="editor" id="editor"></div>
+                <div class="editor" id="ask-question-editor"></div>
                 <span class="helper-text">Please explain your answer in minimum 100 characters</span>
             </div>
         </div>
@@ -47,7 +47,13 @@
         </div>
 
         <div class="field m-t30 m-b30">
-            <button class="ui green button" type="button">Post Your Question</button>
+            <button
+                id="postYourQuestion"
+                class="ui blue button"
+                onclick="QaNet.ask.onPostYourQuestion()"
+                type="button">
+                    Post Your Question
+            </button>
         </div>
     </div>
 </div>

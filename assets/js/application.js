@@ -1,16 +1,9 @@
-import "./authentication";
-import "./editor";
+import initControls from "./controls";
+import initAuth from "./authentication";
+import initAskQuestion from "./askquestion";
 
-$ = window.$;
-
-const initDropdown = () => {
-  $("#menu").dropdown();
-
-  $(".multidd").dropdown({
-    allowAdditions: true
-  });
-};
-
-$(document).ready(() => {
-  initDropdown();
+$(document).ready(function() {
+  initControls();
+  initAuth();
+  initAskQuestion();
 });
