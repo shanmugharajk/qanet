@@ -3,6 +3,7 @@ create_table("questions") {
     t.Column("title", "string", {})
     t.Column("title_search", "tsvector", {"null": true})
     t.Column("question_content", "text", {})
+    t.Column("bookmarks", "int", {"default": 0})
     t.Column("votes", "int", {"default": 0})
     t.Column("close_votes", "int", {"default": 0})
     t.Column("bounty_points", "int", {"default": 0})

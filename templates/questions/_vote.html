@@ -1,0 +1,30 @@
+<div class="ta-c w-50 c-gr">
+    <!-- Upvote/DownVote -->
+    <div>
+        <div class="cr-p" id="upvote" data-id="<%= Question.ID %>">
+            <i class="huge caret up icon"></i>
+        </div>
+        <span class="f-20">0</span>
+        <div class="cr-p" id="downvote" data-id="<%= Question.ID %>">
+            <i class="huge caret down icon"></i>
+        </div>
+    </div>
+
+    <!-- Bookmark -->
+    <div class="f-20 cr-p" data-id="<%= Question.ID %>">
+        <i class="big star icon c-lgr f-20"></i>
+        <div class="p-3">
+            <span class="f-11">2</span>
+        </div>
+    </div>
+
+    <!-- Accept answer -->
+    <%= if (!isQuestion) { %>
+        <div>
+            <i class="big check icon"></i>
+        </div>
+    <% } %>
+
+    <!-- Three dot loading -->
+    <div class="dot-elastic l-15 m-t20 d-n" id="mini-loader-<%= Question.ID %>"></div>
+</div>

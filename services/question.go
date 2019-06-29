@@ -31,3 +31,16 @@ func CreateQuestion(tx *gorm.DB, q *models.Question) (*validate.Errors, error) {
 
 	return validate.NewErrors(), nil
 }
+
+// GetQuestionDetails fetches the question by id.
+func GetQuestionDetails(tx *gorm.DB, userDetails interface{}, id int64) (models.Question, error) {
+	question := models.Question{}
+	e := tx.
+		Preload("Comments", func(tx *gorm.DB) *gorm.DB {
+			return tx.Offset(0).Limit(5)
+		}).
+		Preload("QuestionTags").
+		Where("id = ?", id).
+		Find(&question)
+	return question, e.Error
+}

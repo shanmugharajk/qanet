@@ -1,0 +1,33 @@
+<div id="questionDetail" class="ui container">
+    <h3 class="ui dividing header m-t30 m-b10">
+        <%= Question.Title %>
+    </h3>
+
+    <!-- Post content Question, Answer, Comments etc.. -->
+    <div>
+        <div id="post-content">
+            <!-- Question -->
+            <div class="d-f">
+                <!-- Votes/Bookmark -->
+                <%= partial("questions/vote", {isQuestion: true, id: Question.ID}) %>
+
+                <!-- Content/links -->
+                <div>
+                    <div  class="readonly" id="q-<%= Question.ID %>"></div>
+
+                    <!-- Tags -->
+                    <%= partial("questions/tags", {tags: Question.QuestionTags}) %>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function init() {
+            QaNet.questionDetail = {
+                id: "q-<%= Question.ID %>",
+                questionContent: "<%= getContent(Question.QuestionContent) %>"
+            }
+        }
+    </script>
+</div>

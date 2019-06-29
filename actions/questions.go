@@ -1,6 +1,7 @@
 package actions
 
 import (
+	"html/template"
 	"strconv"
 
 	"github.com/gobuffalo/buffalo"
@@ -10,8 +11,8 @@ import (
 	"github.com/shanmugharajk/qanet/services"
 )
 
-// QuestionsAskIndex returns the form for creating new post.
-func QuestionsAskIndex(c buffalo.Context) error {
+// AskQuestionIndex returns the form for creating new post.
+func AskQuestionIndex(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
 
 	tags, err := services.FetchAllTags(tx)
@@ -21,11 +22,11 @@ func QuestionsAskIndex(c buffalo.Context) error {
 
 	c.Set("tags", tags)
 
-	return c.Render(200, r.HTML("posts/questions/ask.html"))
+	return c.Render(200, r.HTML("questions/ask.html"))
 }
 
-// QuestionsAskNew returns the form for creating new post.
-func QuestionsAskNew(c buffalo.Context) error {
+// AskQuestion returns the form for creating new post.
+func AskQuestion(c buffalo.Context) error {
 	q := &models.Question{}
 	if err := c.Bind(q); err != nil {
 		return errors.WithStack(err)
@@ -45,8 +46,32 @@ func QuestionsAskNew(c buffalo.Context) error {
 	if verrors.HasAny() {
 		c.Set("question", q)
 		c.Set("verrors", verrors)
-		return c.Render(200, r.HTML("posts/questions/ask.html"))
+		return c.Render(200, r.HTML("questions/ask.html"))
 	}
 
-	return c.Redirect(302, "/posts/"+strconv.FormatInt(q.ID, 10))
+	return c.Redirect(302, "/questions/"+strconv.FormatInt(q.ID, 10))
+}
+
+// QuestionDetail returns the question with all its details.
+// 1st 5 comments for questions + answers and 1st 5 Answers.
+func QuestionDetail(c buffalo.Context) error {
+	// Get the DB connection from the context
+	tx, _ := c.Value("tx").(*gorm.DB)
+	questionID := c.Param("questionID")
+
+	qid, err := strconv.ParseInt(questionID, 10, 64)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	question, err := services.GetQuestionDetails(tx, c.Value("currentUser"), qid)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	c.Set("Question", question)
+	c.Set("getContent", func(content string) template.HTML {
+		return template.HTML(template.JSEscapeString(content))
+	})
+	return c.Render(200, r.HTML("questions/detail.html"))
 }

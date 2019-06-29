@@ -44,6 +44,7 @@ CREATE TABLE public.answer_comments (
     answer_id integer NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
+    is_closed boolean DEFAULT false NOT NULL,
     deactivated_by character varying(50),
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
@@ -223,6 +224,7 @@ CREATE TABLE public.questions (
     title character varying(255) NOT NULL,
     title_search tsvector,
     question_content text NOT NULL,
+    bookmarks integer DEFAULT 0 NOT NULL,
     votes integer DEFAULT 0 NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
     bounty_points integer DEFAULT 0 NOT NULL,
