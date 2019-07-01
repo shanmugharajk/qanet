@@ -4,19 +4,23 @@
     </h3>
 
     <!-- Post content Question, Answer, Comments etc.. -->
-    <div>
+    <div class="m-b30">
         <div id="post-content">
             <!-- Question -->
             <div class="d-f">
                 <!-- Votes/Bookmark -->
-                <%= partial("questions/vote", {isQuestion: true, id: Question.ID}) %>
-
-                <!-- Content/links -->
-                <div>
+                <%= partial("shared/vote", {isQuestion: true, id: Question.ID}) %>
+                <div class="mw-100">
+                    <!-- Question content (editor) -->
                     <div  class="readonly" id="q-<%= Question.ID %>"></div>
-
                     <!-- Tags -->
                     <%= partial("questions/tags", {tags: Question.QuestionTags}) %>
+                    <!-- Menus -->
+                    <%= partial("shared/menus") %>
+                    <!-- Information -->
+                    <%= partial("shared/userinfo") %>
+                    <!-- Comments -->
+                    <%= partial("shared/comments") %>
                 </div>
             </div>
         </div>

@@ -1,133 +1,293 @@
-.w-100 {
-	width: 100%;
+.w-100p {
+  width: 100%;
 }
 
 /* DISPLAY */
 .d-f {
-	display: flex;
+  display: flex;
 }
 
 .d-n {
-	display: none;
+  display: none;
 }
 
 .d-b {
-	display: block;
+  display: block;
+}
+
+.f-r {
+  float: right;
+}
+
+.f-l {
+  float: left;
+}
+
+.fc:after {
+  clear: both !important;
+  content: "";
+  display: block !important;
 }
 
 /* PADDING */
 .pd-0 {
-	padding: 0 !important;
+  padding: 0 !important;
+}
+
+.pd-2 {
+  padding: 2 !important;
 }
 
 .pd-3 {
-	padding: 3px !important;
+  padding: 3px !important;
+}
+
+.pd-5 {
+  padding: 5px !important;
+}
+
+.pd-10 {
+  padding: 10px !important;
 }
 
 .pd-l15 {
-	padding-left: 15px !important;
+  padding-left: 15px !important;
 }
+
+.pd-l10 {
+  padding-left: 10px !important;
+}
+
+/* BACKGROUND */
 
 .b-white {
-	background: white !important;
+  background: white !important;
 }
 
+.b-lblue {
+  background: #e1ecf4 !important;
+}
+
+.b-lgrey {
+  background: #f5f5f5 !important;
+}
+
+/* POSITION */
+
 .p-fixed {
-	position: fixed !important;
+  position: fixed !important;
 }
 
 /* MARGINS */
 .m-b20 {
-	margin-bottom: 20px !important;
+  margin-bottom: 20px !important;
 }
 
 .m-t10 {
-	margin-top: 10px !important;
+  margin-top: 10px !important;
 }
 
 .m-t20 {
-	margin-top: 20px !important;
+  margin-top: 20px !important;
 }
 
 .m-t30 {
-	margin-top: 30px !important;
+  margin-top: 30px !important;
 }
 
 .m-b30 {
-	margin-bottom: 30px !important;
+  margin-bottom: 30px !important;
+}
+
+.m-b5 {
+  margin-bottom: 5px !important;
 }
 
 .m-l20 {
-	margin-left: 20px !important;
+  margin-left: 20px !important;
+}
+
+.m-r5 {
+  margin-right: 5px;
+}
+
+.m-r10 {
+  margin-right: 10px;
 }
 
 .l-15 {
-	left: 15px !important;
+  left: 15px !important;
 }
 
 /* WIDTH */
+.w-32 {
+  width: 32px !important;
+}
+
 .w-50 {
-	width: 50px !important;
+  width: 50px !important;
+}
+
+.w-100 {
+  width: 100px !important;
+}
+
+.w-150 {
+  width: 150px !important;
+}
+
+.w-200 {
+  width: 200px !important;
+}
+
+.mw-100 {
+  min-width: 100px;
+}
+
+/* HEIGHT */
+
+.h-32 {
+  height: 32px !important;
 }
 
 /* FLEX */
 .fl-1a {
-	flex: 1 auto;
+  flex: 1 auto;
 }
 
 /* TEXT */
 .ta-c {
-	text-align: center !important;
+  text-align: center !important;
 }
 
 .f-20 {
-	font-size: 20px !important;
+  font-size: 20px !important;
 }
 
 .f-25 {
-	font-size: 25px !important;
+  font-size: 25px !important;
 }
 
 .f-11 {
-	font-size: 11px !important;
+  font-size: 11px !important;
+}
+
+.f-12 {
+  font-size: 12px !important;
 }
 
 .f-10 {
-	font-size: 10px !important;
+  font-size: 10px !important;
+}
+
+.fw-b {
+  font-weight: bold;
+}
+
+.ww-bw {
+  word-wrap: break-word;
 }
 
 /* CURSOR */
 .cr-p {
-	cursor: pointer !important;
+  cursor: pointer !important;
 }
 
 /* COLOR */
 .c-g {
-	color: green !important;
+  color: green !important;
 }
 
 .c-y {
-	color: #ffd83d78 !important;
+  color: #ffd83d78 !important;
 }
 
 .c-o {
-	color: #f57f24 !important;
+  color: #f57f24 !important;
 }
 
 .c-lgr {
-	color: #d3d3d363 !important;
+  color: #d3d3d363 !important;
+}
+
+.c-post {
+  color: #848d95 !important;
+}
+
+.c-post:hover {
+  color: #3b4045 !important;
 }
 
 .c-gr {
-	color: #0000005c !important;
+  color: #0000005c !important;
 }
 
 .c-dgr {
-	color: #0000008f !important;
+  color: #0000008f !important;
+}
+
+.c-dgr2 {
+  color: #696a6b !important;
+}
+
+/* BORDERS */
+
+.b-r2 {
+  border-radius: 2px;
+}
+
+.bt-lgrey-1 {
+  border-top: 1px solid #2224260f;
 }
 
 /* SPECIFIC STYLES */
 
 #post-content .ql-container.ql-snow {
-	border: none;
+  border: none;
+}
+
+/* DESKTOP SPECIFIC STYLES */
+
+@media only screen and (min-width: 768px) {
+  .d\:f-r {
+    float: right;
+  }
+}
+
+/* MOBILE STYLES */
+
+@media only screen and (max-width: 368px) {
+  .md\:d-n {
+    display: none !important;
+  }
+
+  i.huge.icon,
+  i.huge.icons {
+    font-size: 2.5em;
+  }
+
+  .m\:f-17 {
+    font-size: 17px !important;
+  }
+
+  .md\:m-t10 {
+    margin-top: 10px;
+  }
+}
+
+/* MEDIUM SCREENS */
+
+@media only screen and (max-width: 767px) {
+  .md\:m-t10 {
+    margin-top: 10px;
+  }
+
+  .md\:d-n {
+    display: none !important;
+  }
+
+  i.huge.icon,
+  i.huge.icons {
+    font-size: 2.5em;
+  }
 }
