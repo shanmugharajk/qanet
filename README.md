@@ -1,7 +1,7 @@
 # QaNet
 Question answer site with minimal features like stack overflow built with dotnet core web-api and angular6.
 
-### Update
+### ** Update **
 Currently I am updating the projecting to golang, postgres using web framework buffalo https://github.com/gobuffalo/buffalo
 and gorm orm http://gorm.io. The developement happens in develop branch.
 
