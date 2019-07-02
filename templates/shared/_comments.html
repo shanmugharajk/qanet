@@ -1,3 +1,24 @@
-<div class="m-t20 pd-2">
-    <a href="#">add comment</a>
+<div class="m-t20 pd-2" id="comment-<%= id %>">
+    <script id="comments-form-tmpl" type="text/template">
+        <form  id="add-comment-<%= id %>" class="ui form">
+            <div class="field">
+                <textarea
+                    name="comments"
+                    rows="2"
+                    placeholder="Please enter minimum of 15 characters and maximum of 250 characters."></textarea>
+                <span class="c-dgr2 f-11">15 characters to go</span>
+            </div>
+
+            <button type="submit" class="ui compact blue button">Add Comment</button>
+        </form>
+    </script>
+    <!-- List of comments -->
+    <div class="m-t20 m-b20">
+        <%= partial("shared/comment", {comment: "Ok, maybe X wasn't a good example.", id: id}) %>
+    </div>
+
+    <!-- Add comment link which shows the form-->
+    <a href="#" class="comments-link">add comment</a>
+    <!-- Add comment form -->
+    <div class="comments-add-form"></div>
 </div>
