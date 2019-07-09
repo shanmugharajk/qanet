@@ -75,21 +75,6 @@ ALTER SEQUENCE public.answer_comments_id_seq OWNED BY public.answer_comments.id;
 
 
 --
--- Name: answer_voters_list; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.answer_voters_list (
-    answer_id integer NOT NULL,
-    voter_id character varying(50) NOT NULL,
-    vote integer NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE public.answer_voters_list OWNER TO postgres;
-
---
 -- Name: answers; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -199,21 +184,6 @@ CREATE TABLE public.question_tags (
 
 
 ALTER TABLE public.question_tags OWNER TO postgres;
-
---
--- Name: question_voters_list; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.question_voters_list (
-    question_id integer NOT NULL,
-    voter_id character varying(50) NOT NULL,
-    vote integer NOT NULL,
-    created_at timestamp without time zone DEFAULT now() NOT NULL,
-    updated_at timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE public.question_voters_list OWNER TO postgres;
 
 --
 -- Name: questions; Type: TABLE; Schema: public; Owner: postgres
@@ -328,6 +298,21 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
+-- Name: voters_list; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.voters_list (
+    id integer NOT NULL,
+    voter_id character varying(50) NOT NULL,
+    vote integer NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE public.voters_list OWNER TO postgres;
+
+--
 -- Name: answer_comments id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
@@ -364,14 +349,6 @@ ALTER TABLE ONLY public.answer_comments
 
 
 --
--- Name: answer_voters_list answer_voters_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.answer_voters_list
-    ADD CONSTRAINT answer_voters_list_pkey PRIMARY KEY (answer_id, voter_id);
-
-
---
 -- Name: answers answers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -404,14 +381,6 @@ ALTER TABLE ONLY public.question_tags
 
 
 --
--- Name: question_voters_list question_voters_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.question_voters_list
-    ADD CONSTRAINT question_voters_list_pkey PRIMARY KEY (question_id, voter_id);
-
-
---
 -- Name: questions questions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -441,6 +410,14 @@ ALTER TABLE ONLY public.user_roles
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: voters_list voters_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.voters_list
+    ADD CONSTRAINT voters_list_pkey PRIMARY KEY (id, voter_id);
 
 
 --
@@ -486,22 +463,6 @@ ALTER TABLE ONLY public.answer_comments
 
 ALTER TABLE ONLY public.answer_comments
     ADD CONSTRAINT answer_comments_deactivated_by_fkey FOREIGN KEY (deactivated_by) REFERENCES public.users(id) ON DELETE RESTRICT;
-
-
---
--- Name: answer_voters_list answer_voters_list_answer_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.answer_voters_list
-    ADD CONSTRAINT answer_voters_list_answer_id_fkey FOREIGN KEY (answer_id) REFERENCES public.answers(id) ON DELETE CASCADE;
-
-
---
--- Name: answer_voters_list answer_voters_list_voter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.answer_voters_list
-    ADD CONSTRAINT answer_voters_list_voter_id_fkey FOREIGN KEY (voter_id) REFERENCES public.users(id) ON DELETE RESTRICT;
 
 
 --
@@ -601,22 +562,6 @@ ALTER TABLE ONLY public.question_tags
 
 
 --
--- Name: question_voters_list question_voters_list_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.question_voters_list
-    ADD CONSTRAINT question_voters_list_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.questions(id) ON DELETE CASCADE;
-
-
---
--- Name: question_voters_list question_voters_list_voter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.question_voters_list
-    ADD CONSTRAINT question_voters_list_voter_id_fkey FOREIGN KEY (voter_id) REFERENCES public.users(id) ON DELETE RESTRICT;
-
-
---
 -- Name: questions questions_author_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
@@ -670,6 +615,14 @@ ALTER TABLE ONLY public.tags
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.user_roles(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: voters_list voters_list_voter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.voters_list
+    ADD CONSTRAINT voters_list_voter_id_fkey FOREIGN KEY (voter_id) REFERENCES public.users(id) ON DELETE RESTRICT;
 
 
 --

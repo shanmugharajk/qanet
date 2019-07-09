@@ -1,0 +1,17 @@
+<!-- Question -->
+<div class="d-f">
+    <!-- Votes/Bookmark -->
+    <%= partial("shared/vote", {isQuestion: true, id: Question.ID}) %>
+    <div class="mw-100 fl-1">
+        <!-- Question content (editor) -->
+        <div class="readonly" id="q-<%= Question.ID %>"></div>
+        <!-- Tags -->
+        <%= partial("questions/tags", {tags: Question.QuestionTags}) %>
+        <!-- Menus -->
+        <%= partial("shared/menus") %>
+        <!-- Information -->
+        <%= partial("shared/userinfo") %>
+        <!-- Comments -->
+        <%= partial("shared/comments", {id: 1}) %>
+    </div>
+</div>

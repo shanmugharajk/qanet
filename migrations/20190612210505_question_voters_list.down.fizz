@@ -1,1 +1,0 @@
-drop_table("question_voters_list")

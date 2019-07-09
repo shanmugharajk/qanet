@@ -1170,12 +1170,12 @@
 
 
 /* Quill Overrides */
-.ql-editor {
-  padding: 0;
-}
-
 .readonly {
   height: unset !important;
+}
+
+.readonly .ql-editor {
+  padding: 10px 5px;
 }
 
 .editor {

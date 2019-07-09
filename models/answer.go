@@ -1,5 +1,11 @@
 package models
 
+import (
+	"github.com/gobuffalo/validate"
+	"github.com/gobuffalo/validate/validators"
+	customvalidators "github.com/shanmugharajk/qanet/models/validators"
+)
+
 // Answers is the model for answers table
 type Answers struct {
 	ID            int64  `json:"id"`
@@ -13,7 +19,15 @@ type Answers struct {
 	CreatedBy     string `json:"createdBy"`
 	UpdatedBy     string `json:"updatedBy"`
 	DeactivatedBy string `json:"deactivatedBy"`
-	QuestionID    string `json:"questionId"`
+	QuestionID    int64  `json:"questionId"`
 
 	Base
+}
+
+// Validate - validates the question details.
+func (a *Answers) Validate() *validate.Errors {
+	return validate.Validate(
+		&customvalidators.Int64IsPresent{Field: a.QuestionID, Name: "QuestionId"},
+		&validators.StringIsPresent{Field: a.AnswerContent, Name: "AnswerContent"},
+	)
 }

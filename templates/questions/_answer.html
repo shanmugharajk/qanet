@@ -1,0 +1,32 @@
+<div id="answer-question">
+    <form id="post-answer" action="/questions/<%= Question.ID %>/answer/submit" method="POST">
+        <!-- csrf token -->
+        <input name="authenticity_token" type="hidden" value="<%= authenticity_token %>">
+
+        <div class="editor" id="add-answer-editor"></div>
+        <input id="answerContent" name="AnswerContent" type="hidden">
+        <input id="questionId" name="QuestionID" type="hidden" value="<%= Question.ID %>">
+    </form>
+
+    <!-- Signup button when not loggedin -->
+    <div class="d-f">
+        <%= if (!currentUser) { %>
+            <a href="/login" class="ui primary mini button m-t30">Login | Signup to post you answer</a>
+        <% } else { %>
+            <button id="postYourAnswer" class="ui primary mini blue button m-t30" type="submit">
+                Post Your Answer
+            </button>
+            <!-- Loader -->
+            <div class="dot-elastic l-15 m-t40 d-n" id="mini-loader-post-answer"></div>
+        <% } %>
+    </div>
+
+    <!-- Error on post -->
+    <div id="error-post-answer" class="ui negative message hidden m-t30">
+        <i class="close icon"></i>
+        <div class="header">
+            Oops, something went wrong.
+        </div>
+        <p>Error in posting the answer.</p>
+    </div>
+</div>

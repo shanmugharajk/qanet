@@ -25,7 +25,7 @@ func AskQuestionIndex(c buffalo.Context) error {
 	return c.Render(200, r.HTML("questions/ask.html"))
 }
 
-// AskQuestion returns the form for creating new post.
+// AskQuestion accepts the posted data and creates a new question.
 func AskQuestion(c buffalo.Context) error {
 	q := &models.Question{}
 	if err := c.Bind(q); err != nil {
