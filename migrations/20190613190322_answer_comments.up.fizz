@@ -2,7 +2,7 @@ create_table("answer_comments") {
     t.Column("id", "bigint", {"primary": true})
     t.Column("comment", "text", {})
     t.Column("author_id", "string", {"size": 50})
-    t.Column("answer_id", "int", {})
+    t.Column("answer_id", "bigint", {})
     t.Column("close_votes",  "int", {"default": 0})
     t.Column("is_active", "bool", {"default": true})
     t.Column("is_closed", "bool", {"default": false})

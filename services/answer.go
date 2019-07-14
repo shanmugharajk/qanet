@@ -19,3 +19,8 @@ func AddAnswer(tx *gorm.DB, a *models.Answers) (*validate.Errors, error) {
 
 	return validate.NewErrors(), nil
 }
+
+// GetAnswers returns the answers for the question along with 5 comments in each
+func GetAnswers(tx *gorm.DB, pageNo int, noOfRecords int) {
+
+}

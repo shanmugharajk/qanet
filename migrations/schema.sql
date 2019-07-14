@@ -41,7 +41,7 @@ CREATE TABLE public.answer_comments (
     id bigint NOT NULL,
     comment text NOT NULL,
     author_id character varying(50) NOT NULL,
-    answer_id integer NOT NULL,
+    answer_id bigint NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
     is_closed boolean DEFAULT false NOT NULL,
@@ -88,9 +88,9 @@ CREATE TABLE public.answers (
     is_accepted boolean DEFAULT false NOT NULL,
     author character varying(50) NOT NULL,
     created_by character varying(50) NOT NULL,
-    deactivated_by character varying(50),
+    deactivated_by character varying(50) DEFAULT NULL::character varying,
     updated_by character varying(50) NOT NULL,
-    question_id integer NOT NULL,
+    question_id bigint NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -141,7 +141,7 @@ CREATE TABLE public.question_comments (
     id bigint NOT NULL,
     comment text NOT NULL,
     author_id character varying(50) NOT NULL,
-    question_id integer NOT NULL,
+    question_id bigint NOT NULL,
     close_votes integer DEFAULT 0 NOT NULL,
     is_active boolean DEFAULT true NOT NULL,
     deactivated_by character varying(50),
@@ -178,7 +178,7 @@ ALTER SEQUENCE public.question_comments_id_seq OWNED BY public.question_comments
 --
 
 CREATE TABLE public.question_tags (
-    question_id integer NOT NULL,
+    question_id bigint NOT NULL,
     tag_id character varying(50) NOT NULL
 );
 
@@ -190,7 +190,7 @@ ALTER TABLE public.question_tags OWNER TO postgres;
 --
 
 CREATE TABLE public.questions (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     title character varying(255) NOT NULL,
     title_search tsvector,
     question_content text NOT NULL,
@@ -218,7 +218,6 @@ ALTER TABLE public.questions OWNER TO postgres;
 --
 
 CREATE SEQUENCE public.questions_id_seq
-    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -284,7 +283,7 @@ CREATE TABLE public.users (
     id character varying(50) NOT NULL,
     display_name character varying(200) NOT NULL,
     about character varying(1000) NOT NULL,
-    points bigint NOT NULL,
+    points bigint DEFAULT '1'::bigint,
     email character varying(255) NOT NULL,
     password_hash character varying(255) NOT NULL,
     role_id character varying(50) NOT NULL,
@@ -302,9 +301,10 @@ ALTER TABLE public.users OWNER TO postgres;
 --
 
 CREATE TABLE public.voters_list (
-    id integer NOT NULL,
+    id bigint NOT NULL,
     voter_id character varying(50) NOT NULL,
     vote integer NOT NULL,
+    question_id bigint,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
@@ -615,6 +615,14 @@ ALTER TABLE ONLY public.tags
 
 ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_role_id_fkey FOREIGN KEY (role_id) REFERENCES public.user_roles(id) ON DELETE RESTRICT;
+
+
+--
+-- Name: voters_list voters_list_question_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.voters_list
+    ADD CONSTRAINT voters_list_question_id_fkey FOREIGN KEY (question_id) REFERENCES public.questions(id) ON DELETE CASCADE;
 
 
 --

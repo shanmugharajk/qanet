@@ -2,7 +2,7 @@ create_table("users") {
     t.Column("id", "string", {"primary": true, "size": 50})
 	t.Column("display_name", "string", {"size": 200})
 	t.Column("about", "string", {"size": 1000})
-	t.Column("points", "bigint", {"size": 1000})
+	t.Column("points", "bigint", {"null": true, "default": 1})
 	t.Column("email", "string", {})
 	t.Column("password_hash", "string", {})
 

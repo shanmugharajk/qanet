@@ -33,14 +33,24 @@ func CreateQuestion(tx *gorm.DB, q *models.Question) (*validate.Errors, error) {
 }
 
 // GetQuestionDetails fetches the question by id.
-func GetQuestionDetails(tx *gorm.DB, userDetails interface{}, id int64) (models.Question, error) {
+func GetQuestionDetails(tx *gorm.DB, userID string, id int64) (models.Question, error) {
 	question := models.Question{}
 	e := tx.
-		Preload("Comments", func(tx *gorm.DB) *gorm.DB {
+		Preload("QuestionComments", func(tx *gorm.DB) *gorm.DB {
 			return tx.Offset(0).Limit(5)
 		}).
 		Preload("QuestionTags").
 		Where("id = ?", id).
-		Find(&question)
+		Select(`*,
+			(select case when count(id) > 5 then 1 else 0 end from question_comments where question_id = questions.id) as has_more_comments,
+			(select case when count(id) > 0 then 1 else 0 end from answers where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
+			created_at as asked_at,
+			(select points from users where id = questions.author) as author_points,
+			(select vote from voters_list where id = questions.id AND voter_id = ?) as self_vote,
+			(select case when count(question_id) > 0 then 1 else 0 end from bookmarks where question_id = questions.id AND user_id = ?) as self_bookmarked,
+			(select count(question_id) from bookmarks where question_id = questions.id) as total_bookmarks
+		`, userID, userID).
+		Model(models.Question{}).
+		First(&question)
 	return question, e.Error
 }

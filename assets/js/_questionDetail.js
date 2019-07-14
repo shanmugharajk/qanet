@@ -1,20 +1,8 @@
-const editorInstances = {};
+let answerEditor;
 const answerEditorId = "#add-answer-editor";
 
 const initEditors = () => {
-  const { questionDetail } = QaNet;
-
-  editorInstances[questionDetail.id] = QaNet.Editor.getQuilInstance(
-    `#${questionDetail.id}`,
-    true
-  );
-
-  editorInstances[questionDetail.id].setContents(
-    JSON.parse(questionDetail.questionContent)
-  );
-
-  const answerEditor = QaNet.Editor.getQuilInstance(answerEditorId);
-  editorInstances[answerEditorId] = answerEditor;
+  answerEditor = QaNet.Editor.getQuilInstance(answerEditorId);
 };
 
 const addCommentClick = e => {
@@ -36,10 +24,11 @@ const showPostAnswerError = () => {
 };
 
 const postAnswer = e => {
-  const editor = editorInstances[answerEditorId];
-  const at = editor.getText();
-  const ac = editor.getContents();
-  const answerContent = JSON.stringify(ac);
+  const at = answerEditor.getText();
+
+  $(`${answerEditorId} > .ql-editor.ql-blank`).removeAttr("contenteditable");
+
+  const answerContent = $(answerEditorId).html();
 
   if (at == "\n") {
     showPostAnswerError();
@@ -48,7 +37,7 @@ const postAnswer = e => {
 
   // Setting the answer content to hidden field for form post.
   $("#answerContent").val(answerContent);
-  const elem = $("post-answer").removeClass("d-n");
+  const elem = $("#post-answer");
 
   // Show loader
   $("#mini-loader-post-answer").removeClass("d-n");
@@ -60,13 +49,19 @@ const postAnswer = e => {
     data: elem.serialize(),
     url: elem.attr("action"),
     success: function() {
-      // TODO: ?
+      // TODO: Do the animation and add at top if no accpeted answer or
+      // at one level below.
+      $(`${answerEditorId} > .ql-editor.ql-blank`).attr(
+        "contenteditable",
+        true
+      );
+      answerEditor.setText("");
     },
     error: function() {
-      // TODO: Show error.
+      $("#mini-loader-post-answer").removeClass("hidden");
     },
     complete: function() {
-      // Hide spinner
+      $("#mini-loader-post-answer").addClass("d-n");
     }
   });
 

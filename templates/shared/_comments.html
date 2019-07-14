@@ -1,6 +1,6 @@
 <div class="m-t20 pd-2" id="comment-<%= id %>">
     <script id="comments-form-tmpl" type="text/template">
-        <form  id="add-comment-<%= id %>" class="ui form">
+        <form data-id="<%= id %>" class="ui form">
             <div class="field">
                 <textarea
                     name="comments"
@@ -13,8 +13,16 @@
         </form>
     </script>
     <!-- List of comments -->
-    <div class="m-t20 m-b20">
-        <%= partial("shared/comment", {comment: "Ok, maybe X wasn't a good example.", id: id}) %>
+    <div class="m-t20 m-b20 last-child-bb-grey-1">
+        <%= for (c) in Question.QuestionComments { %>
+            <%= partial("shared/comment", {
+                comment: c.Comment,
+                id: c.ID,
+                closeVotes: c.CloseVotes,
+                author: c.AuthorID,
+                at: c.UpdatedAt
+            }) %>
+        <% } %>
     </div>
 
     <!-- Add comment link which shows the form-->

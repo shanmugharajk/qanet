@@ -1,10 +1,18 @@
 <!-- Question -->
 <div class="d-f">
     <!-- Votes/Bookmark -->
-    <%= partial("shared/vote", {isQuestion: true, id: Question.ID}) %>
+    <%= partial("shared/vote", {
+        isQuestion: true,
+        id: Question.ID,
+        selfBookmarked: Question.SelfBookmarked,
+        selfVote : Question.SelfVote
+    }) %>
+
     <div class="mw-100 fl-1">
         <!-- Question content (editor) -->
-        <div class="readonly" id="q-<%= Question.ID %>"></div>
+        <div class="ql-snow readonly" id="q-<%= Question.ID %>">
+            <%= getContent(Question.QuestionContent) %>
+        </div>
         <!-- Tags -->
         <%= partial("questions/tags", {tags: Question.QuestionTags}) %>
         <!-- Menus -->
@@ -12,6 +20,6 @@
         <!-- Information -->
         <%= partial("shared/userinfo") %>
         <!-- Comments -->
-        <%= partial("shared/comments", {id: 1}) %>
+        <%= partial("shared/comments", {id: Question.ID}) %>
     </div>
 </div>

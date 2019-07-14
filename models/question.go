@@ -29,8 +29,8 @@ type Question struct {
 	Base
 
 	// Association
-	Comments     []QuestionComment `json:"comments"`
-	QuestionTags []Tag             `json:"questionTags" gorm:"many2many:question_tags"`
+	QuestionComments []QuestionComment `json:"comments"`
+	QuestionTags     []Tag             `json:"questionTags" gorm:"many2many:question_tags"`
 
 	// Dto purpose.
 	Tags              string    `json:"tags" gorm:"-"`
@@ -39,10 +39,8 @@ type Question struct {
 	AuthorPoints      int       `json:"authorPoints" gorm:"-"`
 	HasAcceptedAnswer bool      `json:"hasAcceptedAnswer" gorm:"-"`
 	TotalBookmarks    int       `json:"totalBookmarks" gorm:"-"`
-
-	// This is notify the current logged user's activity
-	SelfVote       int  `json:"selfVote" gorm:"-"`
-	SelfBookmarked bool `json:"selfBookmarked" gorm:"-"`
+	SelfVote          int       `json:"selfVote" gorm:"-"`
+	SelfBookmarked    bool      `json:"selfBookmarked" gorm:"-"`
 }
 
 // Validate - validates the question details.

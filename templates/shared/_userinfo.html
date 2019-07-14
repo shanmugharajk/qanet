@@ -1,6 +1,6 @@
 <div class="fc">
     <div class="f-r w-200 bg-lgrey pd-5 md:m-t10 b-r2 f-12 pd-l10 c-dgr2">
-        <div class="m-b5"><span>asked 2 hours ago</span></div>
+        <div class="m-b5"><span>asked <%= Question.AskedAt.Format("Jan 02 '06 15:04") %></span></div>
         <div class="f-l w-32 h-32">
             <a href="#">
                 <img src="https://www.gravatar.com/avatar/2a6081fe81e9a7be2e0324d65203911f?s=32&amp;d=identicon&amp;r=PG"
@@ -11,8 +11,8 @@
         </div>
 
         <div class="f-l pd-l10 w-150">
-            <a href="#" class="ww-bw">@shan</a>
-            <div class="fw-b c-dgr3"><span>100</span></div>
+            <a href="#" class="ww-bw"><%= Question.Author %></a>
+            <div class="fw-b c-dgr3"><span><%= Question.AuthorPoints %></span></div>
         </div>
     </div>
 </div>

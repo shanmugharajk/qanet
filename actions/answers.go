@@ -1,8 +1,6 @@
 package actions
 
 import (
-	"strconv"
-
 	"github.com/jinzhu/gorm"
 	"github.com/shanmugharajk/qanet/services"
 
@@ -31,9 +29,8 @@ func SubmitAnswer(c buffalo.Context) error {
 	}
 
 	if verrors.HasAny() {
-		c.Set("Answer", a)
-		c.Set("verrors", verrors)
+		return c.Render(200, r.JSON(&Response{Code: ERROR, Data: verrors}))
 	}
 
-	return c.Redirect(302, "/questions/"+strconv.FormatInt(a.QuestionID, 10))
+	return c.Render(200, r.JSON(&Response{Code: SUCCESS, Data: "Saved successfully"}))
 }

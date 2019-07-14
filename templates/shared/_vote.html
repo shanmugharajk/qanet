@@ -2,20 +2,27 @@
     <!-- Upvote/DownVote -->
     <div>
         <div class="cr-p" id="upvote" data-id="<%= Question.ID %>">
-            <i class="huge caret up icon"></i>
+            <i class="huge caret up icon <%= if (selfVote == 1) { %> c-flagged <% } %>"></i>
         </div>
-        <span class="f-20 m:f-17">0</span>
+        <span class="f-20 m:f-17"><%= Question.Votes %></span>
         <div class="cr-p" id="downvote" data-id="<%= Question.ID %>">
-            <i class="huge caret down icon"></i>
+            <i class="huge caret down icon <%= if (selfVote < 0) { %> c-flagged <% } %>"></i>
         </div>
     </div>
 
     <!-- Bookmark -->
-    <div class="f-20 cr-p" data-id="<%= Question.ID %>">
-        <i class="big star icon c-lgr f-20"></i>
-        <div class="p-3">
-            <span class="f-11">2</span>
-        </div>
+    <div
+        class="f-20 cr-p
+            <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>"
+        data-id="<%= Question.ID %>">
+            <i class="big star icon f-15"></i>
+            <%= if (Question.TotalBookmarks > 0) { %>
+                <div class="pd-3">
+                    <span class="f-11">
+                        <%= Question.TotalBookmarks %>
+                    </span>
+                </div>
+            <% } %>
     </div>
 
     <!-- Accept answer -->

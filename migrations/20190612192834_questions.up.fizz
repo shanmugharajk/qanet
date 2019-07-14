@@ -1,5 +1,5 @@
 create_table("questions") {
-    t.Column("id", "int", {"primary": true})
+    t.Column("id", "bigint", {"primary": true})
     t.Column("title", "string", {})
     t.Column("title_search", "tsvector", {"null": true})
     t.Column("question_content", "text", {})

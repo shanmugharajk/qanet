@@ -18,7 +18,7 @@ type Answers struct {
 	Author        string `json:"author"`
 	CreatedBy     string `json:"createdBy"`
 	UpdatedBy     string `json:"updatedBy"`
-	DeactivatedBy string `json:"deactivatedBy"`
+	DeactivatedBy string `json:"deactivatedBy" gorm:"default:'NULL'" sql:"default:null"`
 	QuestionID    int64  `json:"questionId"`
 
 	Base

@@ -32,6 +32,7 @@ func AskQuestion(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
+	// TODO: Should add middleware to check auth for posting question.
 	q.CreatedBy = c.Value("userId").(string)
 	q.UpdatedBy = c.Value("userId").(string)
 	q.Author = c.Value("userId").(string)
@@ -64,14 +65,26 @@ func QuestionDetail(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	question, err := services.GetQuestionDetails(tx, c.Value("currentUser"), qid)
+	userID := c.Value("userId").(string)
+
+	// TODO: Record not found excpetion.
+	question, err := services.GetQuestionDetails(tx, userID, qid)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	selfVoteDetails, err := services.FetchVoteDetails(tx, userID, qid)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
 	c.Set("Question", question)
+	c.Set("SelfVoteDetails", selfVoteDetails)
 	c.Set("getContent", func(content string) template.HTML {
-		return template.HTML(template.JSEscapeString(content))
+		return template.HTML(content)
 	})
+	// c.Set("getContent", func(content string) template.HTML {
+	// 	return template.HTML(template.JSEscapeString(content))
+	// })
 	return c.Render(200, r.HTML("questions/detail.html"))
 }

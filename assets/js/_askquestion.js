@@ -1,5 +1,7 @@
 import editor from "./_editor";
 
+const id = "#ask-question-editor";
+
 // Quill editor initialization for ask question page.
 let askQuestionEditor;
 
@@ -7,8 +9,10 @@ const fetchAskQuestionData = () => {
   const title = $("#ask-question  #title").val();
 
   const qt = askQuestionEditor.getText();
-  const qc = askQuestionEditor.getContents();
-  const questionContent = JSON.stringify(qc);
+
+  $(`${id} > .ql-editor.ql-blank`).removeAttr("contenteditable");
+
+  const questionContent = $(id).html();
 
   const tags = $("#ask-question #tags").val();
 
@@ -60,7 +64,6 @@ const onPostYourQuestion = () => {
 
 // Initialization of events needs to be at document load.
 const initAskQuestionEditor = () => {
-  const id = "#ask-question-editor";
   if ($(id).length <= 0) {
     return;
   }

@@ -9,19 +9,14 @@
             <!-- Question section -->
             <%= partial("questions/question") %>
 
+            <!-- Answers list sesction -->
+            <%= partial("questions/answerslist") %>
+
+            <!-- Your answer section -->
             <div class="m-t50">
                 <h3 class="ui dividing header">Your Answer</h3>
-                <%= partial("questions/answer") %>
+                <%= partial("questions/youranswer") %>
             </div>
         </div>
     </div>
-
-    <script>
-        function init() {
-            QaNet.questionDetail = {
-                id: "q-<%= Question.ID %>",
-                questionContent: "<%= getContent(Question.QuestionContent) %>",
-            }
-        }
-    </script>
 </div>
