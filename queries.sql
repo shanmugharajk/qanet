@@ -15,3 +15,10 @@ insert into question_comments (comment, author_id, question_id) values ('test co
 insert into question_comments (comment, author_id, question_id) values ('test comment 4', 'admin@123', 1);
 insert into question_comments (comment, author_id, question_id) values ('test comment 5', 'admin@123', 1);
 insert into question_comments (comment, author_id, question_id) values ('test comment 6', 'admin@123', 1);
+
+insert into answer_comments (comment, author_id, answer_id) values ('test comment 1', 'admin@123', 1);
+insert into answer_comments (comment, author_id, answer_id) values ('test comment 2', 'admin@123', 1);
+insert into answer_comments (comment, author_id, answer_id) values ('test comment 3', 'admin@123', 1);
+insert into answer_comments (comment, author_id, answer_id) values ('test comment 4', 'admin@123', 1);
+insert into answer_comments (comment, author_id, answer_id) values ('test comment 5', 'admin@123', 1);
+insert into answer_comments (comment, author_id, answer_id) values ('test comment 6', 'admin@123', 1);

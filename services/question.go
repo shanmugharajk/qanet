@@ -50,7 +50,6 @@ func GetQuestionDetails(tx *gorm.DB, userID string, id int64) (models.Question, 
 			(select case when count(question_id) > 0 then 1 else 0 end from bookmarks where question_id = questions.id AND user_id = ?) as self_bookmarked,
 			(select count(question_id) from bookmarks where question_id = questions.id) as total_bookmarks
 		`, userID, userID).
-		Model(models.Question{}).
 		First(&question)
 	return question, e.Error
 }

@@ -3,6 +3,7 @@ package actions
 import (
 	"html/template"
 	"strconv"
+	"strings"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/jinzhu/gorm"
@@ -81,10 +82,12 @@ func QuestionDetail(c buffalo.Context) error {
 	c.Set("Question", question)
 	c.Set("SelfVoteDetails", selfVoteDetails)
 	c.Set("getContent", func(content string) template.HTML {
+		content = strings.ReplaceAll(content, "<script>", "&lt;script&gt;")
+		content = strings.ReplaceAll(content, "<a", "&lt;a")
+		content = strings.ReplaceAll(content, "<a>", "&lt;a&gt;")
+		content = strings.ReplaceAll(content, "</a>", "&lt;/a&gt;")
+		content = strings.ReplaceAll(content, "</script>", "&lt;/script&gt;")
 		return template.HTML(content)
 	})
-	// c.Set("getContent", func(content string) template.HTML {
-	// 	return template.HTML(template.JSEscapeString(content))
-	// })
 	return c.Render(200, r.HTML("questions/detail.html"))
 }

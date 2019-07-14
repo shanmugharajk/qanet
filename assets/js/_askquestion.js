@@ -10,7 +10,7 @@ const fetchAskQuestionData = () => {
 
   const qt = askQuestionEditor.getText();
 
-  $(`${id} > .ql-editor.ql-blank`).removeAttr("contenteditable");
+  $(`${id} > .ql-editor`).removeAttr("contenteditable");
 
   const questionContent = $(id).html();
 
