@@ -21,6 +21,10 @@ func AddAnswer(tx *gorm.DB, a *models.Answers) (*validate.Errors, error) {
 }
 
 // GetAnswers returns the answers for the question along with 5 comments in each
-func GetAnswers(tx *gorm.DB, pageNo int, noOfRecords int) {
-
+func GetAnswers(tx *gorm.DB, questionID int64, pageNo int, noOfRecords int) ([]models.Answers, error) {
+	answwers := []models.Answers{}
+	e := tx.
+		Where("question_id = ?", questionID).
+		Find(&answwers)
+	return answwers, e.Error
 }

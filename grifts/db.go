@@ -69,7 +69,7 @@ func addUsers() error {
 
 func addTags() error {
 	csharp := models.Tag{}
-	csharp.ID = "charp"
+	csharp.ID = "csharp"
 	csharp.Description = "csharp"
 	csharp.CreatedBy = adminUserID
 	csharp.UpdatedBy = adminUserID

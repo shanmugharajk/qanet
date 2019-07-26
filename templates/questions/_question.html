@@ -11,7 +11,7 @@
     <div class="mw-100 fl-1">
         <!-- Question content (editor) -->
         <div class="ql-snow readonly" id="q-<%= Question.ID %>">
-            <%= getContent(Question.QuestionContent) %>
+            <%= quil_for(Question.QuestionContent) %>
         </div>
         <!-- Tags -->
         <%= partial("questions/tags", {tags: Question.QuestionTags}) %>
