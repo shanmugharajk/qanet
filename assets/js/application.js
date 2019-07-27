@@ -3,7 +3,7 @@ import initAuth from "./_authentication";
 import initAskQuestion from "./_askquestion";
 import initQuestionDetail from "./_questionDetail";
 
-$(document).ready(function() {
+$(document).ready(() => {
   initControls();
   initAuth();
   initAskQuestion();

@@ -1,4 +1,4 @@
-const quillInstance = (elementId, readOnly = false) => {
+const quillInstance = function(elementId, readOnly = false) {
   const toolbarOptions = [
     "bold",
     "italic",

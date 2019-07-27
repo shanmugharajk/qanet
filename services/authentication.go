@@ -40,7 +40,7 @@ func CreateUser(tx *gorm.DB, u *models.User) (*validate.Errors, error) {
 
 // LoginUser checks the user credentails with database and returns if the
 // matching records are there or error.
-func LoginUser(tx *gorm.DB, u models.User) (models.User, error) {
+func LoginUser(tx *gorm.DB, u *models.User) (*models.User, error) {
 	existing := models.User{}
 
 	db := tx.Where("id = ?", u.ID).First(&existing)
@@ -54,7 +54,7 @@ func LoginUser(tx *gorm.DB, u models.User) (models.User, error) {
 		return u, errors.New("invalid credentials")
 	}
 
-	return existing, nil
+	return &existing, nil
 }
 
 // fetchNormalUserRole gets the details with role as 'NORMAL_USER'

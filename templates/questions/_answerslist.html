@@ -1,0 +1,7 @@
+<div id="answers" class="m-t50">
+    <h3 class="ui dividing header">Answers</h3>
+
+    <%= for (answer) in Answers { %>
+        <%= partial("questions/answer", {Answer: answer}) %>
+    <% } %>
+</div>

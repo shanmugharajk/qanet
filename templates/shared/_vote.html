@@ -1,29 +1,31 @@
-<div class="ta-c c-gr m-r10">
+<div class="ta-c c-gr m-r20">
     <!-- Upvote/DownVote -->
     <div>
-        <div class="cr-p" id="upvote" data-id="<%= Question.ID %>">
+        <div class="cr-p" id="upvote" data-id="<%= id %>">
             <i class="huge caret up icon <%= if (selfVote == 1) { %> c-flagged <% } %>"></i>
         </div>
-        <span class="f-20 m:f-17"><%= Question.Votes %></span>
-        <div class="cr-p" id="downvote" data-id="<%= Question.ID %>">
+        <span class="f-20 m:f-17"><%= votes %></span>
+        <div class="cr-p" id="downvote" data-id="<%= id %>">
             <i class="huge caret down icon <%= if (selfVote < 0) { %> c-flagged <% } %>"></i>
         </div>
     </div>
 
     <!-- Bookmark -->
-    <div
-        class="f-20 cr-p
-            <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>"
-        data-id="<%= Question.ID %>">
-            <i class="big star icon f-15"></i>
-            <%= if (Question.TotalBookmarks > 0) { %>
-                <div class="pd-3">
-                    <span class="f-11">
-                        <%= Question.TotalBookmarks %>
-                    </span>
-                </div>
-            <% } %>
-    </div>
+    <%= if (isQuestion) { %>
+        <div
+            class="f-20 cr-p
+                <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>"
+                data-id="<%= id %>">
+                <i class="big star icon f-15"></i>
+                <%= if (Question.TotalBookmarks > 0) { %>
+                    <div class="pd-3">
+                        <span class="f-11">
+                            <%= Question.TotalBookmarks %>
+                        </span>
+                    </div>
+                <% } %>
+        </div>
+    <% } %>
 
     <!-- Accept answer -->
     <%= if (!isQuestion) { %>
@@ -33,5 +35,5 @@
     <% } %>
 
     <!-- Three dot loading -->
-    <div class="dot-elastic l-15 m-t20 d-n" id="mini-loader-<%= Question.ID %>"></div>
+    <div class="dot-elastic l-15 m-t20 d-n" id="mini-loader-<%= id %>"></div>
 </div>

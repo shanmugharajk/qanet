@@ -1,0 +1,32 @@
+<div class="d-f pd-tb20 bb-lgrey-1">
+    <!-- Votes -->
+    <!-- TODO: Hardcoded for now. -->
+    <%= partial("shared/vote", {
+        isQuestion: false,
+        id: Answer.ID,
+        selfVote : Answer.SelfVote,
+        votes: 0
+    }) %>
+
+    <div class="mw-100 w-100p fl 1">
+        <!-- Answer content (editor) -->
+        <div class="ql-snow readonly" id="q-<%= Answer.ID %>">
+            <%= quil_for(Answer.AnswerContent) %>
+        </div>
+
+        <div class="d-f m-t10">
+            <!-- Menus -->
+            <%= partial("shared/menus") %>
+
+            <!-- Information -->
+            <%= partial("shared/userinfo", {
+                askedAt: Answer.CreatedAt,
+                author: Answer.Author,
+                authorPoints: Answer.AuthorPoints
+            }) %>
+        </div>
+
+        <!-- Comments -->
+        <%= partial("shared/comments", {id: Answer.ID, comments: Answer.AnswerComments}) %>
+    </div>
+</div>

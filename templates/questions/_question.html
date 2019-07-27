@@ -5,7 +5,8 @@
         isQuestion: true,
         id: Question.ID,
         selfBookmarked: Question.SelfBookmarked,
-        selfVote : Question.SelfVote
+        selfVote : Question.SelfVote,
+        votes: Question.Votes
     }) %>
 
     <div class="mw-100 fl-1">
@@ -15,11 +16,18 @@
         </div>
         <!-- Tags -->
         <%= partial("questions/tags", {tags: Question.QuestionTags}) %>
-        <!-- Menus -->
-        <%= partial("shared/menus") %>
-        <!-- Information -->
-        <%= partial("shared/userinfo") %>
+
+        <div class="d-f m-t10">
+            <!-- Menus -->
+            <%= partial("shared/menus") %>
+            <!-- Information -->
+            <%= partial("shared/userinfo", {
+                askedAt: Question.AskedAt,
+                author: Question.Author,
+                authorPoints: Question.AuthorPoints
+            }) %>
+        </div>
         <!-- Comments -->
-        <%= partial("shared/comments", {id: Question.ID}) %>
+        <%= partial("shared/comments", {id: Question.ID, comments: Question.QuestionComments}) %>
     </div>
 </div>

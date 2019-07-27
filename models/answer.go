@@ -22,6 +22,13 @@ type Answers struct {
 	QuestionID    int64  `json:"questionId"`
 
 	Base
+
+	// Associations
+	AnswerComments []AnswerComments `json:"comments"`
+
+	// Dto purpose
+	AuthorPoints int `json:"authorPoints" gorm:"-"`
+	SelfVote     int `json:"selfVote" gorm:"-"`
 }
 
 // Validate - validates the question details.

@@ -25,7 +25,7 @@ func LoginNew(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	user, err := services.LoginUser(tx, *u)
+	user, err := services.LoginUser(tx, u)
 	if err != nil {
 		c.Set("user", u)
 		c.Set("error", err.Error())

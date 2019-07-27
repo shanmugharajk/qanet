@@ -12,3 +12,11 @@ func FetchVoteDetails(tx *gorm.DB, userID string, questionID int64) ([]models.Vo
 		Find(&voteDetails)
 	return voteDetails, e.Error
 }
+
+// FetchUserDetails gets the user details based on the id.
+func FetchUserDetails(tx *gorm.DB, UserID string) ([]models.User, error) {
+	user := []models.User{}
+	e := tx.Where("id = ?", UserID).
+		Find(&user)
+	return user, e.Error
+}

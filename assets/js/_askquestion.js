@@ -5,7 +5,7 @@ const id = "#ask-question-editor";
 // Quill editor initialization for ask question page.
 let askQuestionEditor;
 
-const fetchAskQuestionData = () => {
+const fetchAskQuestionData = function() {
   const title = $("#ask-question  #title").val();
 
   const qt = askQuestionEditor.getText();
@@ -19,7 +19,7 @@ const fetchAskQuestionData = () => {
   return { title, questionContent, tags, qt };
 };
 
-const validate = ({ title, tags, qt }) => {
+const validate = function({ title, tags, qt }) {
   let hasError = false;
 
   if (!title) {
@@ -44,7 +44,7 @@ const validate = ({ title, tags, qt }) => {
 
 // To remove the errors when displayed when clicked
 // with the empty empty details.
-const onChange = e => {
+const onChange = function(e) {
   if (e.target.id == "title") {
     $("#title-container").removeClass("error");
   }
@@ -55,7 +55,7 @@ const onChange = e => {
 };
 
 // On submitting the question.
-const onPostYourQuestion = () => {
+const onPostYourQuestion = function() {
   const data = fetchAskQuestionData();
   // Setting the question content to hidden field for form post.
   $("#ask-question #questionContent").val(data.questionContent);
@@ -63,13 +63,13 @@ const onPostYourQuestion = () => {
 };
 
 // Initialization of events needs to be at document load.
-const initAskQuestionEditor = () => {
+const initAskQuestionEditor = function() {
   if ($(id).length <= 0) {
     return;
   }
 
   askQuestionEditor = editor.getQuilInstance(id);
-  askQuestionEditor.on("text-change", () => {
+  askQuestionEditor.on("text-change", function() {
     $("#ask-question-editor-container").removeClass("error");
     $("#ask-question-editor-wrapper").removeClass("editor-container-error");
   });

@@ -10,7 +10,7 @@
 window.QaNet = {};
 
 // Menu dropdown initialization.
-const initDropdown = () => {
+const initDropdown = function() {
   $("#menu").dropdown();
 
   $(".multidd").dropdown({
@@ -18,7 +18,7 @@ const initDropdown = () => {
   });
 };
 
-const closeMessage = () => {
+const closeMessage = function() {
   $(".message .close").on("click", function() {
     $(this)
       .closest(".message")

@@ -1,4 +1,4 @@
-const loginValidations = () => {
+const loginValidations = function() {
   // Login form validations
   $("#login.ui.form").form({
     fields: {
@@ -32,7 +32,7 @@ const loginValidations = () => {
   });
 };
 
-const signupValidations = () => {
+const signupValidations = function() {
   // Signup form validations
   $("#signup.ui.form").form({
     fields: {

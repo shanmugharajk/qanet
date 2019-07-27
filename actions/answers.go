@@ -29,8 +29,22 @@ func SubmitAnswer(c buffalo.Context) error {
 	}
 
 	if verrors.HasAny() {
-		return c.Render(200, r.JSON(&Response{Code: ERROR, Data: verrors}))
+		c.Set("errorMessage", "Invalid data has been entered. Please check and try again.")
+		return c.Render(400, r.Template("text/html", "shared/_error"))
 	}
 
-	return c.Render(200, r.JSON(&Response{Code: SUCCESS, Data: "Saved successfully"}))
+	authorDetail, err := services.FetchUserDetails(tx, a.CreatedBy)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	// This here always will be return one record.
+	// While inserting in answers table if the user is invalid it would
+	// have been thrown error and we are catching that above.
+	a.AuthorPoints = authorDetail[0].Points
+	a.SelfVote = 0
+	a.AnswerComments = []models.AnswerComments{}
+
+	c.Set("Answer", a)
+	return c.Render(200, r.Template("text/html", "questions/_answer"))
 }

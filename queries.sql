@@ -1,3 +1,7 @@
+SELECT *,
+    (select points from users where id = answers.author) as author_points
+FROM "answers"  WHERE (question_id = 1)
+
 SELECT
     "questions".*,
     string_agg("question_tags".tag_id, ', ') as tags,

@@ -74,6 +74,14 @@
   padding-right: 10px !important;
 }
 
+.pd-b20 {
+  padding-bottom: 20px !important;
+}
+
+.pd-tb20 {
+  padding: 20px 0 20px 0;
+}
+
 /* BACKGROUND */
 
 .bg-white {
@@ -143,6 +151,10 @@
   margin-right: 10px;
 }
 
+.m-r20 {
+  margin-right: 20px;
+}
+
 .l-15 {
   left: 15px !important;
 }
@@ -169,7 +181,11 @@
 }
 
 .mw-100 {
-  min-width: 100px;
+  min-width: 100px  !important;
+}
+
+.w-100p {
+  width: 100% !important;
 }
 
 /* HEIGHT */
@@ -295,6 +311,10 @@
 
 .b-r2 {
   border-radius: 2px;
+}
+
+.bb-lgrey-1 {
+  border-bottom: 1px solid #2224260f;
 }
 
 .bt-lgrey-1 {
