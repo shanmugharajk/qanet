@@ -12,7 +12,6 @@ create_table("questions") {
     t.Column("is_closed", "bool", {"default": false})
     t.Column("is_reopen_requested", "bool", {"default": false})
     t.Column("deactivated_by", "string", {"size": 50, "null": true, "default_raw": "null"})
-    t.Column("author", "string", {"size": 50})
     t.Column("updated_by", "string", {"size": 50})
     t.Column("created_by", "string", {"size": 50})
 
@@ -22,5 +21,4 @@ create_table("questions") {
     t.ForeignKey("created_by", {"users": ["id"]}, {"on_delete": "restrict"})
     t.ForeignKey("updated_by", {"users": ["id"]}, {"on_delete": "restrict"})
     t.ForeignKey("deactivated_by", {"users": ["id"]}, {"on_delete": "restrict"})
-	t.ForeignKey("author", {"users": ["id"]}, {"on_delete": "restrict"})
 }

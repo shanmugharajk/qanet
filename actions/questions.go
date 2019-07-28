@@ -34,7 +34,6 @@ func AskQuestion(c buffalo.Context) error {
 	// TODO: Should add middleware to check auth for posting question.
 	q.CreatedBy = c.Value("userId").(string)
 	q.UpdatedBy = c.Value("userId").(string)
-	q.Author = c.Value("userId").(string)
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 

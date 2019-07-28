@@ -21,12 +21,16 @@
             <!-- Information -->
             <%= partial("shared/userinfo", {
                 askedAt: Answer.CreatedAt,
-                author: Answer.Author,
+                author: Answer.CreatedBy,
                 authorPoints: Answer.AuthorPoints
             }) %>
         </div>
 
         <!-- Comments -->
-        <%= partial("shared/comments", {id: Answer.ID, comments: Answer.AnswerComments}) %>
+        <%= partial("shared/comments", {
+            id: Answer.ID,
+            comments: Answer.AnswerComments,
+            type: "answer"
+        }) %>
     </div>
 </div>

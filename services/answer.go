@@ -26,7 +26,7 @@ func GetAnswers(tx *gorm.DB, userID string, questionID int64, pageNo int, noOfRe
 	e := tx.
 		Where("question_id = ?", questionID).
 		Select(`*,
-			(select points from users where id = answers.author) as author_points,
+			(select points from users where id = answers.created_by) as author_points,
 			(select vote from voters_list where id = answers.question_id AND voter_id = ?) as self_vote
 		`, userID).
 		Find(&answwers)

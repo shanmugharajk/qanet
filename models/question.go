@@ -22,7 +22,6 @@ type Question struct {
 	IsClosed          bool      `json:"isClosed"`
 	IsReopenRequested bool      `json:"isReopenRequested"`
 	DeactivatedBy     string    `json:"deactivated_by" gorm:"default:'NULL'" sql:"default:null"`
-	Author            string    `json:"author"`
 	CreatedBy         string    `json:"createdBy"`
 	UpdatedBy         string    `json:"updatedBy"`
 

@@ -19,7 +19,6 @@ func SubmitAnswer(c buffalo.Context) error {
 
 	a.CreatedBy = c.Value("userId").(string)
 	a.UpdatedBy = c.Value("userId").(string)
-	a.Author = c.Value("userId").(string)
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 

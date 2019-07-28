@@ -1,26 +1,14 @@
-<div class="m-t10 pd-2" id="comment-<%= id %>">
-    <script id="comments-form-tmpl" type="text/template">
-        <form data-id="<%= id %>" class="ui form">
-            <div class="field">
-                <textarea
-                    name="comments"
-                    rows="2"
-                    placeholder="Please enter minimum of 15 characters and maximum of 250 characters."></textarea>
-                <span class="c-dgr2 f-11">15 characters to go</span>
-            </div>
-
-            <button type="submit" class="ui compact blue button">Add Comment</button>
-        </form>
-    </script>
+<div class="m-t10 pd-2" id="comments-<%= type %>-<%= id %>" data-post-id="<%= id %>">
     <!-- List of comments -->
     <div class="m-t10 m-b20">
         <%= for (c) in comments { %>
-            <%= partial("shared/comment", {
+        <%= partial("shared/comment", {
                 comment: c.Comment,
                 id: c.ID,
                 closeVotes: c.CloseVotes,
-                author: c.AuthorID,
-                at: c.UpdatedAt
+                author: c.CreatedBy,
+                at: c.UpdatedAt,
+                type: type
             }) %>
         <% } %>
     </div>
@@ -28,5 +16,28 @@
     <!-- Add comment link which shows the form-->
     <a href="#" class="comments-link">add comment</a>
     <!-- Add comment form -->
-    <div class="comments-add-form"></div>
+    <form id="add-comment-<%= id %>" data-post-id="<%= id %>" class="ui form add-comments-form d-n">
+        <!-- csrf token -->
+        <input name="authenticity_token" type="hidden" value="<%= authenticity_token %>">
+        <!-- To identify the comment type as it belongs  to question or answer -->
+        <input name="Type" type="hidden" value="<%= type %>">
+
+        <div class="field">
+            <textarea name="Comment" rows="2"
+                placeholder="Please enter minimum of 15 characters and maximum of 250 characters."></textarea>
+        </div>
+
+        <button type="submit" class="ui compact blue mini button">Add comment</button>
+        <button class="ui compact mini button cancel-btn">Cancel</button>
+
+        <!-- Loader -->
+        <div class="dot-elastic l-15 m-t10 d-n" id="loader"></div>
+        <div id="" class="m-t10 c-error f-12 d-n" id="form-error">
+            <span>Error in posting the comment.</span>
+        </div>
+        <div id="error-post-answer" class="ui negative message hidden m-t30">
+            <i class="close icon"></i>
+            <p>Error in posting the answer.</p>
+        </div>
+    </form>
 </div>

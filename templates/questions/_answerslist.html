@@ -1,4 +1,4 @@
-<div id="answers" class="m-t50">
+<div id="answers" class="m-t50 <%= if (len(Answers) == 0) { %>d-n<% } %>">
     <h3 class="ui dividing header">Answers</h3>
 
     <%= for (answer) in Answers { %>
