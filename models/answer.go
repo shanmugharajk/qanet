@@ -6,8 +6,8 @@ import (
 	customvalidators "github.com/shanmugharajk/qanet/models/validators"
 )
 
-// Answers is the model for answers table
-type Answers struct {
+// Answer is the model for answers table
+type Answer struct {
 	ID            int64  `json:"id"`
 	AnswerContent string `json:"answerContent"`
 	Votes         int    `json:"votes"`
@@ -23,7 +23,7 @@ type Answers struct {
 	Base
 
 	// Associations
-	AnswerComments []AnswerComments `json:"comments"`
+	AnswerComments []AnswerComment `json:"comments"`
 
 	// Dto purpose
 	AuthorPoints int `json:"authorPoints" gorm:"-"`
@@ -31,7 +31,7 @@ type Answers struct {
 }
 
 // Validate - validates the question details.
-func (a *Answers) Validate() *validate.Errors {
+func (a *Answer) Validate() *validate.Errors {
 	return validate.Validate(
 		&customvalidators.Int64IsPresent{Field: a.QuestionID, Name: "QuestionId"},
 		&validators.StringIsPresent{Field: a.AnswerContent, Name: "AnswerContent"},

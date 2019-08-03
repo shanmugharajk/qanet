@@ -15,9 +15,9 @@ const question = "question"
 const answer = "answer"
 
 type commentForm struct {
-	Type       string
-	Comment    string
-	QuestionID int64
+	Type    string
+	Comment string
+	ID      int64
 }
 
 // AddComment returns the response of comment HTML
@@ -35,23 +35,53 @@ func AddComment(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	commentForm.QuestionID = questionID
+	commentForm.ID = questionID
 
 	if commentForm.Type == question {
 		return saveAndRenderQuestionComment(c, commentForm)
 	}
 
 	if commentForm.Type == answer {
-		// TODO:
+		return saveAndRenderAnswerComment(c, commentForm)
 	}
 
+	// Should not reach here.
 	return errors.New("internal error occurred")
+}
+
+func saveAndRenderAnswerComment(c buffalo.Context, commentForm *commentForm) error {
+	comment := &models.AnswerComment{}
+	comment.Comment = commentForm.Comment
+	comment.AnswerID = commentForm.ID
+	comment.CreatedBy = c.Value("userId").(string)
+	comment.UpdatedBy = c.Value("userId").(string)
+
+	tx, _ := c.Value("tx").(*gorm.DB)
+
+	verrors, err := services.AddAnswerComment(tx, comment)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	if verrors.HasAny() {
+		c.Set("errorMessage", "Invalid data has been entered. Please check and try again.")
+		return c.Render(400, r.Template("text/html", "shared/_error"))
+	}
+
+	c.Set("id", comment.ID)
+	c.Set("type", question)
+	c.Set("closeVotes", comment.CloseVotes)
+	c.Set("comment", comment.Comment)
+	c.Set("author", comment.CreatedBy)
+	c.Set("at", comment.CreatedAt)
+
+	return c.Render(200, r.Template("text/html", "shared/_comment"))
 }
 
 func saveAndRenderQuestionComment(c buffalo.Context, commentForm *commentForm) error {
 	comment := &models.QuestionComment{}
 	comment.Comment = commentForm.Comment
-	comment.QuestionID = commentForm.QuestionID
+	comment.QuestionID = commentForm.ID
 	comment.CreatedBy = c.Value("userId").(string)
 	comment.UpdatedBy = c.Value("userId").(string)
 

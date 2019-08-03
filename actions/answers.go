@@ -12,7 +12,7 @@ import (
 // SubmitAnswer accepts the posted answer, validates and
 // adds the answer to the corresponding question.
 func SubmitAnswer(c buffalo.Context) error {
-	a := &models.Answers{}
+	a := &models.Answer{}
 	if err := c.Bind(a); err != nil {
 		return errors.WithStack(err)
 	}
@@ -42,7 +42,7 @@ func SubmitAnswer(c buffalo.Context) error {
 	// have been thrown error and we are catching that above.
 	a.AuthorPoints = authorDetail[0].Points
 	a.SelfVote = 0
-	a.AnswerComments = []models.AnswerComments{}
+	a.AnswerComments = []models.AnswerComment{}
 
 	c.Set("Answer", a)
 	return c.Render(200, r.Template("text/html", "questions/_answer"))
