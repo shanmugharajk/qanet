@@ -21,7 +21,7 @@ func AddAnswer(tx *gorm.DB, a *models.Answer) (*validate.Errors, error) {
 }
 
 // GetAnswers returns the answers for the question along with 5 comments in each
-func GetAnswers(tx *gorm.DB, userID string, questionID int64, pageNo int, noOfRecords int) ([]models.Answer, error) {
+func GetAnswers(tx *gorm.DB, userID interface{}, questionID int64, pageNo int, noOfRecords int) ([]models.Answer, error) {
 	answers := []models.Answer{}
 	e := tx.
 		Preload("AnswerComments", func(tx *gorm.DB) *gorm.DB {

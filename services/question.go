@@ -33,7 +33,7 @@ func CreateQuestion(tx *gorm.DB, q *models.Question) (*validate.Errors, error) {
 }
 
 // GetQuestionDetails fetches the question by id.
-func GetQuestionDetails(tx *gorm.DB, userID string, id int64) (models.Question, error) {
+func GetQuestionDetails(tx *gorm.DB, userID interface{}, id int64) (models.Question, error) {
 	question := models.Question{}
 	e := tx.
 		Preload("QuestionComments", func(tx *gorm.DB) *gorm.DB {

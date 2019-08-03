@@ -52,7 +52,7 @@ func AskQuestion(c buffalo.Context) error {
 }
 
 // QuestionDetail returns the question with all its details.
-// 1st 5 comments for questions + answers and 1st 5 Answers.
+// 1ast 5 comments for questions + answers and 1st 5 Answers.
 func QuestionDetail(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, _ := c.Value("tx").(*gorm.DB)
@@ -63,7 +63,7 @@ func QuestionDetail(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	userID := c.Value("userId").(string)
+	userID := c.Value("userId")
 
 	// TODO: Record not found excpetion.
 	question, err := services.GetQuestionDetails(tx, userID, qid)
