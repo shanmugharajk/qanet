@@ -1,12 +1,13 @@
 <div id="comment-<%= type %>-<%= id %>" class="bt-lgrey-1 pd-10 f-12 d-f">
     <!-- flag + votes -->
-    <span class="pd-r5 f-11">
-        <i class="flag icon c-lgr cr-p"></i>
-        <%= if (closeVotes > 0) { %>
-            <span class="c-dgr f-11 d-b"><%= closeVotes %></span>
-        <% } %>
-    </span>
-
+    <%= if (userId) { %>
+        <span class="pd-r5 f-11">
+            <i class="flag icon c-lgr cr-p"></i>
+            <%= if (closeVotes > 0) { %>
+                <span class="c-dgr f-11 d-b"><%= closeVotes %></span>
+            <% } %>
+        </span>
+    <% } %>
     <!-- Comments + userInfo -->
     <div>
         <span class="pd-r5"><%= comment %></span>

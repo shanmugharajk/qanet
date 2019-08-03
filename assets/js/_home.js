@@ -1,10 +1,21 @@
 const initMenus = function() {
-  $('#ask-question-menu').click(function(e) {
+  $('#ask-question-menu, #logout-menu, #login-menu').click(function(e) {
     e.preventDefault();
-    if (Cookies.get('QAID') === 'T') {
-      location.href = '/login';
+
+    const href = $(this).attr('href');
+
+    if (href === '/login' || href === '/logout') {
+      let url = `${location.origin}/${href}`;
+      if (location.pathname.length > 1) {
+        url += `?returnUrl=${location.pathname}`;
+      }
+      location.href = url;
     } else {
-      location.href = '/login?src=question&returnUrl=/questions/ask';
+      if (Cookies.get('QAID') === 'T') {
+        location.href = '/login';
+      } else {
+        location.href = '/login?src=question&returnUrl=/questions/ask';
+      }
     }
   });
 };

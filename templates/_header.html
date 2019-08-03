@@ -12,7 +12,7 @@
         </form>
     </div>
 
-    <div class="right menu">
+    <div class="right menu" id="header-right-menu">
         <a href="/questions/ask" class="item md:d-n" id="ask-question-menu">
             <i class="question circle icon"></i>
             Ask Question
@@ -24,11 +24,11 @@
                 <i class="dropdown icon"></i>
                 <div class="menu">
                     <a href="/profile" class="item">Your profile</a>
-                    <a href="/logout" class="item">Logout</a>
+                    <a href="/logout" class="item" id="logout-menu">Logout</a>
                 </div>
             </div>
         <% } else { %>
-            <a href="/login" class="item">
+            <a href="/login" class="item" id="login-menu">
                 Login
             </a>
         <% } %>

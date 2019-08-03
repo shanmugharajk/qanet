@@ -19,6 +19,8 @@ const quillInstance = function(elementId, readOnly = false) {
   return new Quill(elementId, options);
 };
 
+window.QaNet = window.QaNet || {};
+
 window.QaNet.Editor = {
   getQuilInstance: quillInstance
 };
