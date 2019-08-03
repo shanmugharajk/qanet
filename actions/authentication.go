@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"time"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
@@ -11,7 +13,24 @@ import (
 // LoginIndex - Handler for login index page.
 func LoginIndex(c buffalo.Context) error {
 	u := &models.User{}
+	url := "/login"
+
+	if c.Value("userId") != nil {
+		return c.Redirect(302, "/")
+	}
+
 	c.Set("user", u)
+
+	if c.Param("returnUrl") != "" {
+		url = url + "?&returnUrl=" + c.Param("returnUrl")
+	}
+
+	if c.Param("src") == "question" {
+		c.Set("AuthRedirect", "To ask question you need to login.")
+	}
+
+	c.Set("FormAction", url)
+
 	return c.Render(200, r.HTML("authentication/login.html"))
 }
 
@@ -33,6 +52,11 @@ func LoginNew(c buffalo.Context) error {
 	}
 
 	c.Session().Set("currentUserId", user.ID)
+	c.Cookies().SetWithExpirationTime("QAID", "T", time.Now().Add(30*24*time.Hour))
+
+	if c.Param("returnUrl") != "" {
+		return c.Redirect(302, c.Param("returnUrl"))
+	}
 
 	return c.Redirect(302, "/")
 }
@@ -40,6 +64,7 @@ func LoginNew(c buffalo.Context) error {
 // Logout clears the session and logs a user out
 func Logout(c buffalo.Context) error {
 	c.Session().Clear()
+	c.Cookies().Delete("QAID")
 	return c.Redirect(302, "/")
 }
 

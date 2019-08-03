@@ -1,5 +1,10 @@
 <div class="login-container">
-    <form id="login" class="ui form" novalidate method="POST" action="">
+    <%= if (AuthRedirect != "") { %>
+        <div class="ui message warning">
+            <%= AuthRedirect %>
+        </div>
+    <% } %>
+    <form id="login" class="ui form" novalidate method="POST" action="<%= FormAction %>">
         <input
             name="authenticity_token"
             type="hidden"

@@ -80,17 +80,33 @@ func App() *buffalo.App {
 	app.POST("/signup", SignupNew)
 
 	questions := app.Group("/questions")
-	questions.GET("/ask", AskQuestionIndex)
-	questions.POST("/ask", AskQuestion)
-	questions.POST("/{questionID}/answer/submit", SubmitAnswer)
+	questions.GET("/ask", authenticate(AskQuestionIndex))
+	questions.POST("/ask", authenticate(AskQuestion))
+	questions.POST("/{questionID}/answer/submit", authenticate(SubmitAnswer))
 	questions.GET("/{questionID}", QuestionDetail)
 
 	comments := app.Group("/posts/comments")
-	comments.POST("/{postID}", AddComment)
+	comments.POST("/{postID}", authenticate(AddComment))
 
 	app.ServeFiles("/", assetsBox) // serve files from the public directory
 
 	return app
+}
+
+func authenticate(next buffalo.Handler) buffalo.Handler {
+	return func(c buffalo.Context) error {
+
+		if c.Value("userId") != nil {
+			return next(c)
+		}
+
+		u := &models.User{}
+		c.Set("user", u)
+		c.Cookies().Delete("QAID")
+
+		url := "/login?returnUrl=" + c.Request().URL.String()
+		return c.Redirect(302, url)
+	}
 }
 
 // translations will load locale files, set up the translator `actions.T`,
