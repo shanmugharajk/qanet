@@ -1,33 +1,39 @@
-<div id="comment-<%= type %>-<%= id %>" class="bt-lgrey-1 pd-10 f-12 d-f">
-    <!-- flag + votes -->
-    <%= if (userId) { %>
-        <span class="pd-r5 f-11">
-            <i class="flag icon c-lgr cr-p"></i>
-            <%= if (closeVotes > 0) { %>
-                <span class="c-dgr f-11 d-b"><%= closeVotes %></span>
-            <% } %>
-        </span>
-    <% } %>
-    <!-- Comments + userInfo -->
-    <div>
-        <span class="pd-r5"><%= comment %></span>
-
-        <span class="pd-r10">
-            <a class="ui label custom-blue-link" href="#">
-                <%= author %>
-            </a>
-            <span class="c-lgr2 f-11">
-                at <%= at.Format("Jan 02 '06 15:04") %>
-            </span>
-        </span>
-
-        <%= if (userId == author) { %>
-            <span>
-                <i class="edit icon c-lgr cr-p f-11"></i>
-            </span>
-            <span>
-                <i class="trash icon c-lgr cr-p f-11"></i>
+<div id="comment-<%= type %>-<%= id %>" data-id="<%= id %>" data-type="<%= type %>" class="bt-lgrey-1 pd-10 f-12 comment-item">
+    <div class="d-f comment-detail">
+        <!-- flag + votes -->
+        <%= if (userId) { %>
+            <span class="pd-r5 f-11">
+                <a class="flag-comment"><i class="flag icon c-lgr cr-p"></i></a>
+                <%= if (closeVotes > 0) { %>
+                    <span class="c-dgr f-11 d-b"><%= closeVotes %></span>
+                <% } %>
             </span>
         <% } %>
+        <!-- Comments + userInfo -->
+        <div>
+            <span class="pd-r5 comment"><%= comment %></span>
+
+            <span class="pd-r10">
+                <a class="ui label custom-blue-link" href="#">
+                    <%= author %>
+                </a>
+                <span class="c-lgr2 f-11">
+                    at <%= at.Format("Jan 02 '06 15:04") %>
+                </span>
+            </span>
+
+            <%= if (userId == author) { %>
+                <a class="edit-comment">
+                    <i class="edit icon c-lgr cr-p f-11"></i>
+                </a>
+                <a class="delete-comment">
+                    <i class="trash icon c-lgr cr-p f-11"></i>
+                </a>
+            <% } %>
+        </div>
     </div>
+    <%= if (userId == author) { %>
+        <!-- Edit comment form -->
+        <%= partial("shared/commentform", {prefix: "edit-comment"}) %>
+    <% } %>
 </div>

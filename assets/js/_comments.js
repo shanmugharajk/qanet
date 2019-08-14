@@ -6,7 +6,7 @@ const showAddCommentForm = function(e) {
     .parent()
     .attr('id');
   $(`#${commentId} .comments-link`).addClass('d-n');
-  $(`#${commentId} .add-comments-form`).removeClass('d-n');
+  $(`#${commentId} .add-comment-form`).removeClass('d-n');
 };
 
 const saveComment = async function(e) {
@@ -64,15 +64,61 @@ const cancelCommentClick = function(e) {
   elem.addClass('d-n');
   elem.find('textarea').val('');
   elem.find('#error-post-answer').addClass('hidden');
-  elem
-    .parent()
-    .find('.comments-link')
-    .removeClass('d-n');
+
+  if (elem.attr('id').includes('edit-comment')) {
+    elem
+      .parent()
+      .find('.comment-detail')
+      .removeClass('d-n');
+  } else {
+    elem
+      .parent()
+      .find('.comments-link')
+      .removeClass('d-n');
+  }
 };
+
+const updateComment = async function(e) {
+  //
+};
+
+const editComment = function($comment) {
+  const id = $comment.data('id');
+  $comment.find('.comment-detail').addClass('d-n');
+  const $form = $comment.find(`#edit-comment-${id}`).removeClass('d-n');
+  $form.find('textarea').val($comment.find('.comment').html());
+};
+
+const deleteComment = function($comment) {
+  // TODO:
+};
+
+const flagComment = function($comment) {
+  // TODO:
+};
+
+const commentActions = {
+  deleteComment,
+  editComment,
+  flagComment
+};
+
+function bindCommentActions(e, action) {
+  const $comment = $(e.target).closest('.comment-item');
+  return commentActions[action]($comment);
+}
 
 // Init of various functions after document ready.
 export default function init() {
   $('.comments-link').click(showAddCommentForm);
+
   $('form[id^="add-comment-"] .cancel-btn').click(cancelCommentClick);
+  $('form[id^="edit-comment-"] .cancel-btn').click(cancelCommentClick);
+
   $('form[id^="add-comment-"]').submit(saveComment);
+  $('form[id^="edit-comment-"]').submit(updateComment);
+
+  $('.flag-comment').click(e => bindCommentActions(e, 'flagComment'));
+  $('.edit-comment').click(e => bindCommentActions(e, 'editComment'));
+  $('.delete-comment').click(e => bindCommentActions(e, 'deleteComment'));
 }

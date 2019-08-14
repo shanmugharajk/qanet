@@ -1,0 +1,24 @@
+<form id="<%= prefix %>-<%= id %>" data-post-id="<%= id %>" class="ui form <%= prefix %>-form d-n">
+    <!-- csrf token -->
+    <input name="authenticity_token" type="hidden" value="<%= authenticity_token %>">
+    <!-- To identify the comment type as it belongs  to question or answer -->
+    <input name="Type" type="hidden" value="<%= type %>">
+
+    <div class="field">
+        <textarea name="Comment" rows="4"
+            placeholder="Please enter minimum of 15 characters and maximum of 250 characters."></textarea>
+    </div>
+
+    <button type="submit" class="ui compact blue mini button">Add comment</button>
+    <button class="ui compact mini button cancel-btn">Cancel</button>
+
+    <!-- Loader -->
+    <div class="dot-elastic l-15 m-t10 d-n" id="loader"></div>
+    <div id="" class="m-t10 c-error f-12 d-n" id="form-error">
+        <span>Error in posting the comment.</span>
+    </div>
+    <div id="error-post-answer" class="ui negative message hidden m-t30">
+        <i class="close icon"></i>
+        <p>Error in posting the answer.</p>
+    </div>
+</form>
