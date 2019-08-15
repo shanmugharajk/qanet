@@ -26,9 +26,13 @@
                 <a class="edit-comment">
                     <i class="edit icon c-lgr cr-p f-11"></i>
                 </a>
-                <a class="delete-comment">
+                <a class="delete-comment" data-method="DELETE" data-confirm="Are you sure?">
                     <i class="trash icon c-lgr cr-p f-11"></i>
                 </a>
+                <%= partial("shared/shorterrormessage", {
+                    message: "Sorry, internal server error occurred.",
+                    showCloseButton: true
+                }) %>
             <% } %>
         </div>
     </div>

@@ -11,22 +11,29 @@ window.QaNet = {};
 
 // Menu dropdown initialization.
 const initDropdown = function() {
-  $("#menu").dropdown();
+  $('#menu').dropdown();
 
-  $(".multidd").dropdown({
+  $('.multidd').dropdown({
     allowAdditions: true
   });
 };
 
 const closeMessage = function() {
-  $(".message .close").on("click", function() {
+  $('.message .close').on('click', function() {
     $(this)
-      .closest(".message")
-      .transition("fade");
+      .closest('.message')
+      .transition('fade');
+  });
+};
+
+const closeShorErrorMessage = function() {
+  $('.short-error-message').on('click', function() {
+    $(this).addClass('d-n');
   });
 };
 
 export default function init() {
   initDropdown();
   closeMessage();
+  closeShorErrorMessage();
 }

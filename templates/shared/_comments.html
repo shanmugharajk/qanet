@@ -1,15 +1,15 @@
-<div class="m-t10 pd-2" id="comments-<%= type %>-<%= id %>" data-post-id="<%= id %>">
+<div class="m-t10 pd-2 comments-list" id="comments-<%= type %>-<%= id %>" data-post-id="<%= id %>">
     <!-- List of comments -->
     <div class="m-t10 m-b20">
         <%= for (c) in comments { %>
-        <%= partial("shared/comment", {
-                comment: c.Comment,
-                id: c.ID,
-                closeVotes: c.CloseVotes,
-                author: c.CreatedBy,
-                at: c.UpdatedAt,
-                type: type
-            }) %>
+            <%= partial("shared/comment", {
+                    comment: c.Comment,
+                    id: c.ID,
+                    closeVotes: c.CloseVotes,
+                    author: c.CreatedBy,
+                    at: c.UpdatedAt,
+                    type: type
+                }) %>
         <% } %>
     </div>
 

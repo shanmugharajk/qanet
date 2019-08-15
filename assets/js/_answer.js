@@ -9,8 +9,8 @@ const initEditor = function() {
 };
 
 const showPostAnswerError = function() {
-  $('#error-post-answer').removeClass('hidden');
-  $('#error-post-answer')[0].scrollIntoView({
+  $('#error-post-comment').removeClass('hidden');
+  $('#error-post-comment')[0].scrollIntoView({
     behavior: 'smooth',
     block: 'end'
   });
@@ -52,7 +52,7 @@ const postAnswer = async function(e) {
       .append(res.data)
       .removeClass('d-n');
   } catch (error) {
-    $('#error-post-answer').removeClass('hidden');
+    $('#error-post-comment').removeClass('hidden');
   } finally {
     $('#mini-loader-post-answer').addClass('d-n');
     answerEditor.enable();

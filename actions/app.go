@@ -79,14 +79,17 @@ func App() *buffalo.App {
 	app.GET("/signup", SignupIndex)
 	app.POST("/signup", SignupNew)
 
+	// Question
 	questions := app.Group("/questions")
 	questions.GET("/ask", authenticate(AskQuestionIndex))
 	questions.POST("/ask", authenticate(AskQuestion))
 	questions.POST("/{questionID}/answer/submit", authenticate(SubmitAnswer))
 	questions.GET("/{questionID}", QuestionDetail)
 
-	comments := app.Group("/posts/comments")
-	comments.POST("/{postID}", authenticate(AddComment))
+	// Comments
+	app.POST("/posts/{postID}/comments", authenticate(AddComment))
+	app.PUT("/posts/{postID}/comments/{commentID}", authenticate(UpdateComment))
+	app.DELETE("/posts/{type}/comments/{commentID}", authenticate(DeleteComment))
 
 	app.ServeFiles("/", assetsBox) // serve files from the public directory
 
