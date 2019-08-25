@@ -37,6 +37,7 @@ type Question struct {
 	AskedAt           time.Time `json:"askedAt" gorm:"-"`
 	AuthorPoints      int       `json:"authorPoints" gorm:"-"`
 	HasAcceptedAnswer bool      `json:"hasAcceptedAnswer" gorm:"-"`
+	TotalAnswers      int       `json:"totalAnswers" gorm:"-"`
 	TotalBookmarks    int       `json:"totalBookmarks" gorm:"-"`
 	SelfVote          int       `json:"selfVote" gorm:"-"`
 	SelfBookmarked    bool      `json:"selfBookmarked" gorm:"-"`

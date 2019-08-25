@@ -1,31 +1,31 @@
 .w-100p {
-  width: 100%;
+  width: 100% !important;
 }
 
 /* DISPLAY */
 .d-f {
-  display: flex;
+  display: flex !important;
 }
 
 .d-n {
-  display: none;
+  display: none !important;
 }
 
 .d-b {
-  display: block;
+  display: block !important;
 }
 
 .f-r {
-  float: right;
+  float: right !important;
 }
 
 .f-l {
-  float: left;
+  float: left !important;
 }
 
 .fc:after {
   clear: both !important;
-  content: "";
+  content: "" !important;
   display: block !important;
 }
 
@@ -58,6 +58,10 @@
   padding: 10px !important;
 }
 
+.pd-30 {
+  padding: 30px !important;
+}
+
 .pd-l15 {
   padding-left: 15px !important;
 }
@@ -74,12 +78,24 @@
   padding-right: 10px !important;
 }
 
-.pd-b20 {
-  padding-bottom: 20px !important;
+.pd-b5 {
+  padding-bottom: 5px !important;
+}
+
+.pd-rl5 {
+  padding: 0 5px 0 5px !important;
+}
+
+.pd-rl20 {
+  padding: 0 20px 0 20px !important;
 }
 
 .pd-tb20 {
-  padding: 20px 0 20px 0;
+  padding: 20px 0 20px 0 !important;
+}
+
+.pd-tb15 {
+  padding: 15px 0 15px 0 !important;
 }
 
 /* BACKGROUND */
@@ -97,7 +113,11 @@
 }
 
 .bg-flagged {
-  background: #ec8d42 !important;
+  background: $flagged-color !important;
+}
+
+.bg-accepted {
+  background: $answer-accepted-color !important;
 }
 
 /* POSITION */
@@ -208,7 +228,7 @@
 
 /* FLEX */
 .fl-1a {
-  flex: 1 auto;
+  flex: 1 auto !important;
 }
 
 .fl-1 {
@@ -244,16 +264,20 @@
   font-size: 15px !important;
 }
 
+.f-16 {
+  font-size: 16px !important;
+}
+
 .f-10 {
   font-size: 10px !important;
 }
 
 .fw-b {
-  font-weight: bold;
+  font-weight: bold !important;
 }
 
 .ww-bw {
-  word-wrap: break-word;
+  word-wrap: break-word !important;
 }
 
 /* CURSOR */
@@ -271,11 +295,11 @@
 }
 
 .c-o {
-  color: #f57f24 !important;
+  color: $orange-color !important;
 }
 
 .c-lgr {
-  color: #d3d3d363 !important;
+  color: $light-grey1-color !important;
 }
 
 .c-post {
@@ -283,11 +307,15 @@
 }
 
 .c-error {
-  color: #ff5722 !important;
+  color: $error-color !important;
 }
 
 .c-post:hover {
   color: #3b4045 !important;
+}
+
+.c-bl1 {
+  color: #0d1025b0 !important;
 }
 
 .c-gr {
@@ -314,64 +342,79 @@
   color: #0000005e !important;
 }
 
+.c-w {
+  color: white !important;
+}
+
 .c-flagged {
-  color: #ec8d42 !important;
+  color: $flagged-color !important;
+}
+
+.c-accepted {
+  color: $answer-accepted-color !important;
 }
 
 .c-bookmarked {
-  color: #eabd05 !important;
+  color: $bookmarked-color !important;
 }
-
 
 /* BORDERS */
 
 .b-r2 {
-  border-radius: 2px;
+  border-radius: 2px !important;
+}
+
+.b-accepted {
+  border: 1px solid $answer-accepted-color !important;
+}
+
+.bb-lgrey-qlist {
+  border-bottom: 1px solid #eff0f1 !important;
 }
 
 .bb-lgrey-1 {
-  border-bottom: 1px solid #2224260f;
+  border-bottom: 1px solid $lgrey1-color !important;
 }
 
 .bt-lgrey-1 {
-  border-top: 1px solid #2224260f;
+  border-top: 1px solid $lgrey1-color !important;
 }
 
 .btb-lgrey-1 {
-  border-top: 1px solid #2224260f;
-  border-bottom: 1px solid #2224260f;
+  border-top: 1px solid $lgrey1-color !important;
+  border-bottom: 1px solid $lgrey1-color !important;
 }
 
 .bt-lgrey-1:last-child {
-  border-bottom: 1px solid #2224260f;
+  border-bottom: 1px solid $lgrey1-color !important;
 }
 
 /* SPECIFIC STYLES */
 .splash-color-1 {
-  background-color: #F4A83D;
+  background-color: #f4a83d !important !important;
 }
 
 .trash.icon:hover {
-  color: #db2828 !important;
+  color: #db2828 !important !important;
 }
 
 .edit.icon:hover {
-  color: #444444 !important;
+  color: #444444 !important !important;
 }
 
 .flag.icon:hover {
-  color: #ec8d42 !important;
+  color: #ec8d42 !important !important;
 }
 
 #post-content .readonly.ql-container.ql-snow {
-  border: none;
+  border: none !important !important;
 }
 
 /* DESKTOP SPECIFIC STYLES */
 
 @media only screen and (min-width: 768px) {
   .d\:f-r {
-    float: right;
+    float: right !important;
   }
 }
 
@@ -384,7 +427,7 @@
 
   i.huge.icon,
   i.huge.icons {
-    font-size: 2.5em;
+    font-size: 2.5em !important;
   }
 
   .m\:f-17 {
@@ -392,7 +435,7 @@
   }
 
   .md\:m-t10 {
-    margin-top: 10px;
+    margin-top: 10px !important;
   }
 }
 
@@ -400,7 +443,7 @@
 
 @media only screen and (max-width: 767px) {
   .md\:m-t10 {
-    margin-top: 10px;
+    margin-top: 10px !important;
   }
 
   .md\:d-n {
@@ -409,6 +452,6 @@
 
   i.huge.icon,
   i.huge.icons {
-    font-size: 2.5em;
+    font-size: 2.5em !important;
   }
 }

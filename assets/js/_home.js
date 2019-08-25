@@ -1,20 +1,20 @@
 const initMenus = function() {
-  $('#ask-question-menu, #logout-menu, #login-menu').click(function(e) {
+  $("#ask-question-menu, #logout-menu, #login-menu").click(function(e) {
     e.preventDefault();
 
-    const href = $(this).attr('href');
+    const href = $(this).attr("href");
 
-    if (href === '/login' || href === '/logout') {
+    if (href === "/login" || href === "/logout") {
       let url = `${location.origin}/${href}`;
       if (location.pathname.length > 1) {
         url += `?returnUrl=${location.pathname}`;
       }
       location.href = url;
     } else {
-      if (Cookies.get('QAID') === 'T') {
-        location.href = '/login';
+      if (Cookies.get("QAID") === "T") {
+        location.href = "/questions/ask";
       } else {
-        location.href = '/login?src=question&returnUrl=/questions/ask';
+        location.href = "/login?src=question&returnUrl=/questions/ask";
       }
     }
   });
