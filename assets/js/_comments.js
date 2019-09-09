@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const bindAddCommentEvents = function() {
+const bindAddCommentSectionEvents = function () {
   $('.comments-link').click(showAddCommentForm);
   $('form[id^="add-comment-"] .cancel-btn').click(cancelCommentClick);
   $('form[id^="add-comment-"]').submit(saveComment);
 };
 
-const bindCommentSectionEvenets = function($elem) {
+const bindCommentSectionItemEvenets = function ($elem) {
   $elem.find('.flag-comment').click(e => bindCommentActions(e, 'flagComment'));
   $elem.find('.edit-comment').click(e => bindCommentActions(e, 'editComment'));
   $elem
@@ -16,7 +16,7 @@ const bindCommentSectionEvenets = function($elem) {
   $elem.find('form[id^="edit-comment-"]').submit(updateComment);
 };
 
-const showAddCommentForm = function(e) {
+const showAddCommentForm = function (e) {
   e.preventDefault();
   const commentId = $(e.target)
     .parent()
@@ -25,7 +25,7 @@ const showAddCommentForm = function(e) {
   $(`#${commentId} .add-comment-form`).removeClass('d-n');
 };
 
-const validateCommentForm = function($elem) {
+const validateCommentForm = function ($elem) {
   const data = $elem.serialize();
   const $comment = $elem.find('textarea');
 
@@ -33,7 +33,7 @@ const validateCommentForm = function($elem) {
     return data;
   }
 
-  const textChange = function() {
+  const textChange = function () {
     if ($(this).val().length < 11) {
       return;
     }
@@ -47,7 +47,7 @@ const validateCommentForm = function($elem) {
   return;
 };
 
-const cancelCommentClick = function(e) {
+const cancelCommentClick = function (e) {
   e.preventDefault();
 
   const elem = $(this).parent();
@@ -69,7 +69,7 @@ const cancelCommentClick = function(e) {
   }
 };
 
-const saveComment = async function(e) {
+const saveComment = async function (e) {
   e.preventDefault();
 
   const $elem = $(this);
@@ -108,7 +108,7 @@ const saveComment = async function(e) {
       .append(res.data);
 
     // Bind the events to the newly added elements
-    bindCommentSectionEvenets(
+    bindCommentSectionItemEvenets(
       $elem.parent().find(`#${$(res.data).attr('id')}`)
     );
   } catch (error) {
@@ -118,7 +118,7 @@ const saveComment = async function(e) {
   }
 };
 
-const updateComment = async function(e) {
+const updateComment = async function (e) {
   e.preventDefault();
 
   const $elem = $(this);
@@ -156,7 +156,7 @@ const updateComment = async function(e) {
   }
 };
 
-const editComment = function($comment) {
+const editComment = function ($comment) {
   const id = $comment.data('id');
   $comment.find('.short-error-message').addClass('d-n');
   $comment.find('.comment-detail').addClass('d-n');
@@ -164,7 +164,7 @@ const editComment = function($comment) {
   $form.find('textarea').val($comment.find('.comment').html());
 };
 
-const deleteComment = async function($comment) {
+const deleteComment = async function ($comment) {
   const id = $comment.data('id');
   const type = $comment.data('type');
   const xCsrfToken = $comment.find('input[name=authenticity_token]').val();
@@ -186,7 +186,7 @@ const deleteComment = async function($comment) {
   }
 };
 
-const flagComment = function($comment) {
+const flagComment = function ($comment) {
   $comment.find('.short-error-message').addClass('d-n');
 };
 
@@ -196,13 +196,13 @@ const commentActions = {
   flagComment
 };
 
-const bindCommentActions = function(e, action) {
+const bindCommentActions = function (e, action) {
   const $comment = $(e.target).closest('.comment-item');
   return commentActions[action]($comment);
 };
 
 // Init of various functions after document ready.
 export default function init() {
-  bindAddCommentEvents();
-  bindCommentSectionEvenets($('.comment-item'));
+  bindAddCommentSectionEvents();
+  bindCommentSectionItemEvenets($('.comment-item'));
 }

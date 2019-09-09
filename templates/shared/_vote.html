@@ -1,19 +1,19 @@
-<div class="ta-c c-gr m-r20">
+<div class="ta-c m-r20 c-gr">
     <!-- Upvote/DownVote -->
     <div>
-        <div class="cr-p" id="upvote" data-id="<%= id %>">
+        <button class="btn cr-p d-b c-gr" id="upvote" data-id="<%= id %>">
             <i class="huge caret up icon <%= if (selfVote == 1) { %> c-flagged <% } %>"></i>
-        </div>
+        </button>
         <span class="f-20 m:f-17"><%= votes %></span>
-        <div class="cr-p" id="downvote" data-id="<%= id %>">
+        <button class="btn cr-p d-b c-gr" id="downvote" data-id="<%= id %>">
             <i class="huge caret down icon <%= if (selfVote < 0) { %> c-flagged <% } %>"></i>
-        </div>
+        </button>
     </div>
 
     <!-- Bookmark -->
     <%= if (isQuestion) { %>
-        <div
-            class="f-20 cr-p
+        <button
+            class="btn f-20 cr-p
                 <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>"
                 data-id="<%= id %>">
                 <i class="big star icon f-15"></i>
@@ -24,14 +24,14 @@
                         </span>
                     </div>
                 <% } %>
-        </div>
+        </button>
     <% } %>
 
     <!-- Accept answer -->
     <%= if (!isQuestion) { %>
-        <div>
+        <button class="btn c-gr">
             <i class="big check icon"></i>
-        </div>
+        </button>
     <% } %>
 
     <!-- Three dot loading -->
