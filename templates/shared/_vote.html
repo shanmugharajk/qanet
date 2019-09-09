@@ -1,11 +1,11 @@
-<div class="ta-c m-r20 c-gr">
+<div class="voting-container ta-c m-r20 c-gr" data-type="<%= type %>">
     <!-- Upvote/DownVote -->
     <div>
-        <button class="btn cr-p d-b c-gr" id="upvote" data-id="<%= id %>">
+        <button class="btn cr-p d-b c-gr" id="upvote">
             <i class="huge caret up icon <%= if (selfVote == 1) { %> c-flagged <% } %>"></i>
         </button>
         <span class="f-20 m:f-17"><%= votes %></span>
-        <button class="btn cr-p d-b c-gr" id="downvote" data-id="<%= id %>">
+        <button class="btn cr-p d-b c-gr" id="downvote">
             <i class="huge caret down icon <%= if (selfVote < 0) { %> c-flagged <% } %>"></i>
         </button>
     </div>
@@ -13,9 +13,7 @@
     <!-- Bookmark -->
     <%= if (isQuestion) { %>
         <button
-            class="btn f-20 cr-p
-                <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>"
-                data-id="<%= id %>">
+            class="btn f-20 cr-p <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>">
                 <i class="big star icon f-15"></i>
                 <%= if (Question.TotalBookmarks > 0) { %>
                     <div class="pd-3">

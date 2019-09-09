@@ -1,12 +1,13 @@
 <!-- Question -->
-<div class="d-f">
+<div class="question-container d-f" data-post-id="<%= Question.ID %>">
     <!-- Votes/Bookmark -->
     <%= partial("shared/vote", {
         isQuestion: true,
         id: Question.ID,
         selfBookmarked: Question.SelfBookmarked,
         selfVote : Question.SelfVote,
-        votes: Question.Votes
+        votes: Question.Votes,
+        type: "question"
     }) %>
 
     <div class="mw-100 fl-1">
