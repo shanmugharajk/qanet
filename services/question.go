@@ -53,3 +53,19 @@ func GetQuestionDetails(tx *gorm.DB, userID interface{}, id int64) (models.Quest
 		First(&question)
 	return question, e.Error
 }
+
+// GetQuestions fetches the list of question with pagination.
+func GetQuestions(tx *gorm.DB) ([]models.Question, error) {
+	questions := []models.Question{}
+	e := tx.
+		Preload("QuestionTags").
+		Select(`*,
+			(select case when count(id) > 0 then 1 else 0 end from answers where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
+			(select count(*) from answers where question_id = questions.id) as total_answers,
+			created_at as asked_at,
+			(select points from users where id = questions.created_by) as author_points
+		`).
+		Find(&questions).
+		Offset(0).Limit(5)
+	return questions, e.Error
+}

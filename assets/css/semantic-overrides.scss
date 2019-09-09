@@ -64,6 +64,11 @@ i.icon {
     color: #39739d;
 }
 
+.ui.icon.button {
+    background: white !important;
+    padding: 0 !important;
+}
+
 @media only screen and (max-width: 600px) {
     .ui.menu {
         border: 0;

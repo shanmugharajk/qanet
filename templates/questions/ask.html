@@ -28,16 +28,12 @@
 
         <!-- Question body - Quill editor -->
         <div class="required field" id="ask-question-editor-container">
-            <% let cls = "" %>
-            <%= if (errors && errors.questionContent) { %>
-                cls = "editor-container-error"
-            <% } %>
             <label for="questionContent">Body</label>
             <input
                 id="questionContent"
                 name="QuestionContent"
                 type="hidden">
-            <div id="ask-question-editor-wrapper" class="<%= cls %>">
+            <div id="ask-question-editor-wrapper">
                 <div class="editor" id="ask-question-editor"></div>
                 <span class="f-11 c-dgr">Please explain your answer in minimum 100 characters</span>
             </div>
