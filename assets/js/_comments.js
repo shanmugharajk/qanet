@@ -108,6 +108,8 @@ export default function init() {
 
 /*import axios from 'axios';
 
+https://github.com/janl/mustache.js/blob/master/mustache.js#L73
+
 const bindAddCommentSectionEvents = function () {
   $('.comments-link').click(showAddCommentForm);
   $('form[id^="add-comment-"] .cancel-btn').click(cancelCommentClick);
