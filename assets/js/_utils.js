@@ -1,8 +1,8 @@
-export default function() {
+export default function () {
   window.QaNet = window.QaNet || {};
 
   window.QaNet.Utils = {
-    getParameterByName: function(name, url) {
+    getParameterByName: function (name, url) {
       if (!url) url = window.location.href;
       name = name.replace(/[\[\]]/g, '\\$&');
       var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
@@ -13,3 +13,22 @@ export default function() {
     }
   };
 }
+
+/*
+  var entityMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+    '/': '&#x2F;',
+    '`': '&#x60;',
+    '=': '&#x3D;'
+  };
+
+  function escapeHtml (string) {
+    return String(string).replace(/[&<>"'`=\/]/g, function fromEntityMap (s) {
+      return entityMap[s];
+    });
+  }
+  */
