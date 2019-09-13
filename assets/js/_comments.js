@@ -3,12 +3,18 @@ import axios from 'axios';
 // TODO: Unescape while editing the comment which has the html entity.
 // https://github.com/janl/mustache.js/blob/master/mustache.js#L73
 
-const bindCommentItemEvents = function ($elem) {
-  $elem.find('.flag-comment').click(flagComment);
-  $elem.find('.edit-comment').click(editComment);
-  $elem.find('.delete-comment').click(deleteComment);
-  $elem.find('form[id^="edit-comment-"] .cancel-btn').click(cancelCommentClick);
-  $elem.find('form[id^="edit-comment-"]').submit(updateComment);
+export const bindCommentsEvents = function () {
+  $('.comments-link').off('click').on('click', showAddCommentForm);
+  $('form[id^="add-comment-"] .cancel-btn').off('click').on('click', cancelCommentClick);
+  $('form[id^="add-comment-"]').off('submit').on('submit', saveComment);
+}
+
+const bindCommentItemEvents = function () {
+  $('.comment-item .flag-comment').off('click').on('click', flagComment);
+  $('.comment-item .edit-comment').off('click').on('click', editComment);
+  $('.comment-item .delete-comment').off('click').on('click', deleteComment);
+  $('.comment-item form[id^="edit-comment-"] .cancel-btn').off('click').on('click', cancelCommentClick);
+  $('.comment-item form[id^="edit-comment-"]').off('submit').on('submit', updateComment);
 }
 
 const flagComment = function (e) {
@@ -127,13 +133,12 @@ const saveComment = async function (e) {
 
     // Show the add comment link button
     const $commentsList = $elem.parent();
-    const newComment = $(res.data);
 
     $commentsList.find('.comments-link').removeClass('d-n');
-    // Adding the events to newly added elements
-    bindCommentItemEvents(newComment);
     // Append the result to the comment lists
-    $commentsList.find('div').first().append(newComment);
+    $commentsList.find('div').first().append(res.data);
+    // Adding the events to newly added elements
+    bindCommentItemEvents();
   } catch (error) {
     $elem.find('#error-post-comment').removeClass('d-n');
   } finally {
@@ -185,8 +190,6 @@ const updateComment = async function (e) {
 
 // Init of various functions after document ready.
 export default function init() {
-  $('.comments-link').click(showAddCommentForm);
-  $('form[id^="add-comment-"] .cancel-btn').click(cancelCommentClick);
-  $('form[id^="add-comment-"]').submit(saveComment);
-  bindCommentItemEvents($('.comment-item'));
+  bindCommentsEvents();
+  bindCommentItemEvents();
 }

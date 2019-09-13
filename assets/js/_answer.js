@@ -1,14 +1,15 @@
 import axios from 'axios';
 
+let ibindCommentsEvents;
 let answerEditor;
 const answerEditorId = '#add-answer-editor';
 
-const initEditor = function() {
+const initEditor = function () {
   answerEditor = QaNet.Editor.getQuilInstance(answerEditorId);
   return answerEditor;
 };
 
-const showPostAnswerError = function() {
+const showPostAnswerError = function () {
   $('#error-post-comment').removeClass('hidden');
   $('#error-post-comment')[0].scrollIntoView({
     behavior: 'smooth',
@@ -16,7 +17,7 @@ const showPostAnswerError = function() {
   });
 };
 
-const postAnswer = async function(e) {
+const postAnswer = async function (e) {
   e.preventDefault();
 
   const at = answerEditor.getText();
@@ -51,6 +52,8 @@ const postAnswer = async function(e) {
     $('#answers')
       .append(res.data)
       .removeClass('d-n');
+    // Bind the comment link, form events
+    ibindCommentsEvents();
   } catch (error) {
     $('#error-post-comment').removeClass('hidden');
   } finally {
@@ -59,7 +62,8 @@ const postAnswer = async function(e) {
   }
 };
 
-export default function init() {
+export default function init(bindCommentsEvents) {
+  ibindCommentsEvents = bindCommentsEvents;
   $('#post-answer').submit(postAnswer);
   $('#postYourAnswer').click(() => $('#post-answer').submit());
   initEditor();

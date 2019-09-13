@@ -1,11 +1,11 @@
 import initAnswer from './_answer';
-import initComments from './_comments';
+import initComments, { bindCommentsEvents } from './_comments';
 
-const initQuestionDetail = function() {
+const initQuestionDetail = function () {
   if ($('#questionDetail').length <= 0) {
     return;
   }
-  initAnswer();
+  initAnswer(bindCommentsEvents);
   initComments();
 };
 

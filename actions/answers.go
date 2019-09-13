@@ -45,5 +45,6 @@ func SubmitAnswer(c buffalo.Context) error {
 	a.AnswerComments = []models.AnswerComment{}
 
 	c.Set("Answer", a)
+	c.Set("type", "answer")
 	return c.Render(200, r.Template("text/html", "questions/_answer"))
 }
