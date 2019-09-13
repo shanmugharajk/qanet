@@ -46,7 +46,7 @@ func GetQuestionDetails(tx *gorm.DB, userID interface{}, id int64) (models.Quest
 			(select case when count(id) > 0 then 1 else 0 end from answers where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
 			created_at as asked_at,
 			(select points from users where id = questions.created_by) as author_points,
-			(select vote from voters_list where id = questions.id AND voter_id = ?) as self_vote,
+			(select vote from voters_list where post_id = questions.id AND voter_id = ?) as self_vote,
 			(select case when count(question_id) > 0 then 1 else 0 end from bookmarks where question_id = questions.id AND user_id = ?) as self_bookmarked,
 			(select count(question_id) from bookmarks where question_id = questions.id) as total_bookmarks
 		`, userID, userID).
