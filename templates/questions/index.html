@@ -2,6 +2,14 @@
   <div class="pd-30">
     <h3 class="ui header m-b30">Questions</h3>
 
+    <%= if (len(Questions) == 0) { %>
+      <div class="ui info message">
+        <div>
+          Sorry, no posts are available.
+        </div>
+      </div>
+    <% } %>
+
     <div class="pd-rl20">
       <%= for (question) in Questions { %>
         <%
