@@ -13,8 +13,7 @@
     <!-- Bookmark -->
     <%= if (isQuestion) { %>
         <button
-            id="bookmark-post"
-            class="btn f-20 cr-p <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>">
+            class="bookmark btn f-20 cr-p <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>">
                 <i class="big star icon f-15"></i>
                 <%= if (Question.TotalBookmarks > 0) { %>
                     <div class="pd-3">
