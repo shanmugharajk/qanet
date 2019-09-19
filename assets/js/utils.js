@@ -1,4 +1,4 @@
-export default function () {
+(function () {
   window.QaNet = window.QaNet || {};
 
   window.QaNet.Utils = {
@@ -10,9 +10,18 @@ export default function () {
       if (!results) return null;
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    },
+
+    showMessage: function (message) {
+      const $container = $('#qanet-message-toast div')
+      $container.removeClass('hidden');
+
+      if (message) {
+        $container.find('p').text(message);
+      }
     }
   };
-}
+})();
 
 /*
   var entityMap = {

@@ -7,10 +7,10 @@
  */
 
 // Global object can be used in all files.
-window.QaNet = {};
+window.QaNet = window.QaNet || {};
 
 // Menu dropdown initialization.
-const initDropdown = function() {
+const initDropdown = function () {
   $('#menu').dropdown();
 
   $('.multidd').dropdown({
@@ -18,16 +18,16 @@ const initDropdown = function() {
   });
 };
 
-const closeMessage = function() {
-  $('.message .close').on('click', function() {
+const closeMessage = function () {
+  $('.message .close').on('click', function () {
     $(this)
       .closest('.message')
       .transition('fade');
   });
 };
 
-const closeShorErrorMessage = function() {
-  $('.short-error-message').on('click', function() {
+const closeShorErrorMessage = function () {
+  $('.short-error-message').on('click', function () {
     $(this).addClass('d-n');
   });
 };

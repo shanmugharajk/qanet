@@ -40,5 +40,5 @@ func AddBookmark(tx *gorm.DB, userID string, postID int64) (int64, error) {
 		return 0, e.Error
 	}
 
-	return total, nil
+	return total + 1, nil
 }

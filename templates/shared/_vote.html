@@ -15,13 +15,17 @@
         <button
             class="bookmark btn f-20 cr-p <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>">
                 <i class="big star icon f-15"></i>
-                <%= if (Question.TotalBookmarks > 0) { %>
-                    <div class="pd-3">
-                        <span class="f-11">
-                            <%= Question.TotalBookmarks %>
-                        </span>
-                    </div>
-                <% } %>
+                <%
+                    let cls = ""
+                    if (Question.TotalBookmarks == 0) {
+                        cls = "d-n"
+                    }
+                %>
+                <div class="pd-3 <%= cls %>">
+                    <span class="f-11">
+                        <%= Question.TotalBookmarks %>
+                    </span>
+                </div>
         </button>
     <% } %>
 
@@ -33,5 +37,5 @@
     <% } %>
 
     <!-- Three dot loading -->
-    <div class="dot-elastic l-15 m-t20 d-n" id="mini-loader-<%= id %>"></div>
+    <div class="dot-elastic l-20 m-t20 d-n" id="mini-loader-<%= id %>"></div>
 </div>
