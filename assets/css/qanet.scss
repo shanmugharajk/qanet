@@ -17,6 +17,10 @@
   display: block !important;
 }
 
+.jc-c {
+  justify-content: center !important;
+}
+
 .f-r {
   float: right !important;
 }
@@ -124,8 +128,25 @@
 
 /* POSITION */
 
-.p-fixed {
+.p-f {
   position: fixed !important;
+}
+
+.p-a {
+  position: absolute !important;
+}
+
+/* TOP */
+.t-0 {
+  top: 0 !important;
+}
+
+.t-55 {
+  top: 55px !important;
+}
+
+.t-m10 {
+  top: -10px !important
 }
 
 /* MARGINS */
@@ -151,6 +172,10 @@
 
 .m-t50 {
   margin-top: 50px !important;
+}
+
+.m-t70 {
+  margin-top: 70px !important;
 }
 
 .m-b5 {
@@ -198,6 +223,10 @@
   width: 32px !important;
 }
 
+.w-35 {
+  width: 35px !important;
+}
+
 .w-50 {
   width: 50px !important;
 }
@@ -216,6 +245,10 @@
 
 .mw-100 {
   min-width: 100px !important;
+}
+
+.w-800 {
+  width: 700px !important;
 }
 
 .w-100p {
@@ -285,6 +318,12 @@
 /* CURSOR */
 .cr-p {
   cursor: pointer !important;
+}
+
+/* Z-INDEX */
+
+.zi-1 {
+  z-index: 1;
 }
 
 /* COLOR */
@@ -395,6 +434,7 @@
 .btn {
   outline: none;
   border: none;
+  background: none;
 }
 
 .splash-color-1 {
@@ -427,7 +467,11 @@
 
 /* MOBILE STYLES */
 
-@media only screen and (max-width: 368px) {
+@media only screen and (max-width: 375px) {
+  body {
+    font-size: 12px;
+  }
+
   .md\:d-n {
     display: none !important;
   }
@@ -437,8 +481,12 @@
     font-size: 2.5em !important;
   }
 
-  .m\:f-17 {
-    font-size: 17px !important;
+  .m\:f-10 {
+    font-size: 10px !important;
+  }
+
+  .m\:f-15 {
+    font-size: 15px !important;
   }
 
   .md\:m-t10 {

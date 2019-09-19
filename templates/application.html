@@ -21,6 +21,8 @@
     <%= yield %>
   </div>
 
+  <%= partial("shared/toast.html") %>
+
   <%= javascriptTag("vendors/jquery.min.js") %>
   <%= javascriptTag("vendors/semantic.min.js") %>
   <%= javascriptTag("vendors/quill.min.js") %>

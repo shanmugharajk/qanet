@@ -4,6 +4,7 @@ const addToBookmark = async function () {
   const $post = $(this).closest('.post-container');
   const postId = $post.data('post-id');
   const xCsrfToken = $post.find('.comments-list input[name=authenticity_token]').val();
+  const $loader = $post.find(`#mini-loader-${postId}`);
 
   try {
     const res = await axios.post(`/posts/bookmarks/${postId}`, {}, {
@@ -12,6 +13,7 @@ const addToBookmark = async function () {
       }
     });
     console.log(res);
+
   } catch (error) {
     console.log(error);
   }

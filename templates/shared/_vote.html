@@ -4,7 +4,7 @@
         <button class="upvote btn cr-p d-b c-gr">
             <i class="huge caret up icon <%= if (selfVote == 1) { %> c-flagged <% } %>"></i>
         </button>
-        <span class="f-20 m:f-17"><%= votes %></span>
+        <span class="f-20 m:f-15"><%= votes %></span>
         <button class="downvote btn cr-p d-b c-gr">
             <i class="huge caret down icon <%= if (selfVote < 0) { %> c-flagged <% } %>"></i>
         </button>
@@ -27,7 +27,7 @@
 
     <!-- Accept answer -->
     <%= if (!isQuestion) { %>
-        <button class="accept-answer btn c-gr">
+        <button class="accept-answer btn c-gr w-35 m:f-10">
             <i class="big check icon"></i>
         </button>
     <% } %>

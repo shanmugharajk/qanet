@@ -1,36 +1,38 @@
-<div class="ui menu">
-    <a href="/" class="header item">QaNet</a>
+<div class="p-f t-0 w-100p zi-1">
+    <div class="ui menu">
+        <a href="/" class="header item">QaNet</a>
 
-    <div class="item md:d-n">
-        <form method="POST" action="/search">
-            <div class="ui transparent icon input">
-                <input type="text" class="prompt" placeholder="Enter text to search....">
-                <button class="ui icon button">
-                    <i class="search link icon"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-
-    <div class="right menu" id="header-right-menu">
-        <a href="/questions/ask" class="item md:d-n" id="ask-question-menu">
-            <i class="question circle icon"></i>
-            Ask Question
-        </a>
-        <%= if (currentUser) { %>
-            <div id="menu" class="ui dropdown item">
-                <i class="user icon"></i>
-                &nbsp; <%= currentUser.DisplayName %>
-                <i class="dropdown icon"></i>
-                <div class="menu">
-                    <a href="/profile" class="item">Your profile</a>
-                    <a href="/logout" class="item" id="logout-menu">Logout</a>
+        <div class="item md:d-n">
+            <form method="POST" action="/search">
+                <div class="ui transparent icon input">
+                    <input type="text" class="prompt" placeholder="Enter text to search....">
+                    <button class="ui icon button">
+                        <i class="search link icon"></i>
+                    </button>
                 </div>
-            </div>
-        <% } else { %>
-            <a href="/login" class="item" id="login-menu">
-                Login
+            </form>
+        </div>
+
+        <div class="right menu" id="header-right-menu">
+            <a href="/questions/ask" class="item md:d-n" id="ask-question-menu">
+                <i class="question circle icon"></i>
+                Ask Question
             </a>
-        <% } %>
+            <%= if (currentUser) { %>
+                <div id="menu" class="ui dropdown item">
+                    <i class="user icon"></i>
+                    &nbsp; <%= currentUser.DisplayName %>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a href="/profile" class="item">Your profile</a>
+                        <a href="/logout" class="item" id="logout-menu">Logout</a>
+                    </div>
+                </div>
+            <% } else { %>
+                <a href="/login" class="item" id="login-menu">
+                    Login
+                </a>
+            <% } %>
+        </div>
     </div>
 </div>
