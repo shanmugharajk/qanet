@@ -17,8 +17,23 @@
       $container.removeClass('hidden');
 
       if (message) {
-        $container.find('p').text(message);
+        $container.find('p').html(message);
       }
+    },
+
+    authenticate: function () {
+      if (Cookies.get("qaid") === "t") {
+        return true;
+      }
+
+      const message = `
+        Please <a href='/login?returnUrl=${location.href}'>Login</a>
+        to do this operation.
+      `;
+
+      window.QaNet.Utils.showMessage(message);
+
+      return false;
     }
   };
 })();

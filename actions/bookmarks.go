@@ -10,6 +10,8 @@ import (
 	"github.com/pkg/errors"
 )
 
+// TODO: Refactor this, code duplication in the two handlers.
+
 // AddToBookmark adds the post to the bookmark.
 func AddToBookmark(c buffalo.Context) error {
 	paramPostID := c.Param("postID")
@@ -26,6 +28,30 @@ func AddToBookmark(c buffalo.Context) error {
 	var err2 error
 
 	rows, err2 = services.AddBookmark(tx, userID, postID)
+	if err2 != nil {
+		return errors.WithStack(err)
+	}
+
+	return c.Render(200, r.String(strconv.FormatInt(rows, 10)))
+}
+
+// DeleteBookmark removes the post from the users bookmarks list and returns the current total
+// number of bookmarks for the post.
+func DeleteBookmark(c buffalo.Context) error {
+	paramPostID := c.Param("postID")
+
+	postID, err := strconv.ParseInt(paramPostID, 10, 64)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	tx, _ := c.Value("tx").(*gorm.DB)
+	userID := c.Value("userId").(string)
+
+	var rows int64
+	var err2 error
+
+	rows, err2 = services.DeleteBookmark(tx, userID, postID)
 	if err2 != nil {
 		return errors.WithStack(err)
 	}

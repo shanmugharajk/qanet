@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"net/http"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/envy"
 	forcessl "github.com/gobuffalo/mw-forcessl"
@@ -88,6 +90,7 @@ func App() *buffalo.App {
 
 	// Comments
 	app.POST("/posts/bookmarks/{postID}", authenticate(AddToBookmark))
+	app.DELETE("/posts/bookmarks/{postID}", authenticate(DeleteBookmark))
 	app.POST("/posts/{postID}/comments", authenticate(AddComment))
 	app.PUT("/posts/{postID}/comments/{commentID}", authenticate(UpdateComment))
 	app.DELETE("/posts/{type}/comments/{commentID}", authenticate(DeleteComment))
@@ -99,14 +102,14 @@ func App() *buffalo.App {
 
 func authenticate(next buffalo.Handler) buffalo.Handler {
 	return func(c buffalo.Context) error {
-
 		if c.Value("userId") != nil {
 			return next(c)
 		}
 
 		u := &models.User{}
 		c.Set("user", u)
-		c.Cookies().Delete("QAID")
+		c.Session().Clear()
+		DeleteCookie("qaid", c)
 
 		url := "/login?returnUrl=" + c.Request().URL.String()
 		return c.Redirect(302, url)
@@ -135,6 +138,18 @@ func forceSSL() buffalo.MiddlewareFunc {
 		SSLRedirect:     ENV == "production",
 		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
 	})
+}
+
+// DeleteCookie sets the response header to adds a Set-Cookie header to the
+// provided ResponseWriter's header and instructs browser to expire it.
+var DeleteCookie = func(name string, c buffalo.Context) {
+	ck := http.Cookie{
+		Name:   name,
+		Path:   "/",
+		MaxAge: -1,
+	}
+
+	http.SetCookie(c.Response(), &ck)
 }
 
 // GormTransaction - wraps the gorm transaction logic in the middleware

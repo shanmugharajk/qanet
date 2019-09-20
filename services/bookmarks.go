@@ -13,32 +13,72 @@ func AddBookmark(tx *gorm.DB, userID string, postID int64) (int64, error) {
 		QuestionID: postID,
 	}
 
-	var e *gorm.DB
-	var existing int64
+	var err error
+	var existing bool
 
-	// Check whether it already exists and return it it is.
-	e = tx.Model(bookmark).Where("user_id = ? and question_id = ?", userID, postID).Count(&existing)
-
-	if e.Error != nil {
-		return 0, e.Error
+	if existing, err = isAlreadyBookmarked(tx, userID, postID); err != nil {
+		return 0, err
 	}
 
 	// Fetching the total no of bookmarks
 	var total int64
-
-	e = tx.Model(bookmark).Where("question_id = ?", postID).Count(&total)
-
-	if e.Error != nil {
-		return 0, e.Error
+	if total, err = getBookmarkCount(tx, postID); err != nil {
+		return 0, err
 	}
 
-	if existing > 0 {
+	// Check whether it already exists and return if it it is.
+	if existing {
 		return total, nil
 	}
 
-	if e = tx.Save(bookmark); e.Error != nil {
-		return 0, e.Error
+	if db := tx.Save(bookmark); db.Error != nil {
+		return 0, db.Error
 	}
 
 	return total + 1, nil
+}
+
+// DeleteBookmark deletes the post from the bookmarks list of the user and
+// returns the current number of bookmark.
+func DeleteBookmark(tx *gorm.DB, userID string, postID int64) (int64, error) {
+	if e := tx.Delete(m.Bookmarks{}, "question_id = ? and user_id = ?", postID, userID); e.Error != nil {
+		return 0, e.Error
+	}
+
+	var err error
+	var total int64
+
+	if total, err = getBookmarkCount(tx, postID); err != nil {
+		return 0, err
+	}
+
+	return total, nil
+}
+
+func getBookmarkCount(tx *gorm.DB, postID int64) (int64, error) {
+	var count int64
+	var e *gorm.DB
+
+	e = tx.Model(m.Bookmarks{}).Where("question_id = ?", postID).Count(&count)
+
+	if e.Error != nil {
+		return count, e.Error
+	}
+
+	return count, nil
+}
+
+func isAlreadyBookmarked(tx *gorm.DB, userID string, postID int64) (bool, error) {
+	var existing int64
+	var e *gorm.DB
+
+	e = tx.Model(m.Bookmarks{}).
+		Where("user_id = ? and question_id = ?", userID, postID).
+		Count(&existing)
+
+	if e.Error != nil {
+		return false, e.Error
+	}
+
+	return existing > 0, nil
 }

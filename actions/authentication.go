@@ -52,7 +52,7 @@ func LoginNew(c buffalo.Context) error {
 	}
 
 	c.Session().Set("currentUserId", user.ID)
-	c.Cookies().SetWithExpirationTime("QAID", "T", time.Now().Add(30*24*time.Hour))
+	c.Cookies().SetWithExpirationTime("qaid", "t", time.Now().Add(30*24*time.Hour))
 
 	if c.Param("returnUrl") != "" {
 		return c.Redirect(302, c.Param("returnUrl"))
@@ -64,7 +64,7 @@ func LoginNew(c buffalo.Context) error {
 // Logout clears the session and logs a user out
 func Logout(c buffalo.Context) error {
 	c.Session().Clear()
-	c.Cookies().Delete("QAID")
+	DeleteCookie("qaid", c)
 
 	if c.Param("returnUrl") != "" {
 		return c.Redirect(302, c.Param("returnUrl"))
