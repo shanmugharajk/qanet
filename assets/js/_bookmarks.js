@@ -2,48 +2,6 @@ import axios from 'axios';
 
 const { Utils } = window.QaNet;
 
-const addToBookmark = async function ($btn, postId, xCsrfToken) {
-  try {
-    const res = await axios.post(`/posts/bookmarks/${postId}`, {}, {
-      headers: {
-        'X-CSRF-Token': xCsrfToken
-      }
-    });
-
-    if (res.status !== 200) {
-      throw new Error('Oops, something went wrong')
-    }
-
-    $btn.find('div').removeClass('d-n').find('span').text(res.data);
-    $btn.addClass('c-bookmarked');
-  } catch (error) {
-    throw error;
-  }
-}
-
-const removeBookmark = async function ($btn, postId, xCsrfToken) {
-  try {
-    const res = await axios.delete(`/posts/bookmarks/${postId}`, {
-      headers: {
-        'X-CSRF-Token': xCsrfToken
-      }
-    });
-
-    if (res.status !== 200) {
-      throw new Error('Oops, something went wrong');
-    }
-
-    if (res.data === 0) {
-      $btn.find('div').addClass('d-n');
-    }
-
-    $btn.find('div').find('span').text(res.data);
-    $btn.removeClass('c-bookmarked');
-  } catch (error) {
-    throw error;
-  }
-}
-
 const onBookmarkClick = async function () {
   if (!Utils.authenticate()) {
     return;
@@ -54,14 +12,30 @@ const onBookmarkClick = async function () {
   const postId = $post.data('post-id');
   const xCsrfToken = $post.find('.comments-list input[name=authenticity_token]').val();
   const $loader = $post.find(`#mini-loader-${postId}`);
+  const isAdd = $post.find('.c-bookmarked').length === 0;
+  const options = { headers: { 'X-CSRF-Token': xCsrfToken } };
+  const url = `/posts/bookmarks/${postId}`;
+  const method = isAdd ? "post" : "delete";
 
   try {
     $loader.removeClass('d-n');
 
-    if ($post.find('.c-bookmarked').length === 0) {
-      addToBookmark($btn, postId, xCsrfToken);
+    const res = await axios[method](url, options);
+
+    if (res.status !== 200) {
+      throw new Error('Oops, something went wrong');
+    }
+
+    if (res.data === 0) {
+      $btn.find('div').addClass('d-n');
+    }
+
+    if (isAdd) {
+      $btn.find('div').removeClass('d-n').find('span').text(res.data);
+      $btn.addClass('c-bookmarked');
     } else {
-      removeBookmark($btn, postId, xCsrfToken);
+      $btn.find('div').find('span').text(res.data);
+      $btn.removeClass('c-bookmarked');
     }
   } catch (error) {
     Utils.showMessage(error);
