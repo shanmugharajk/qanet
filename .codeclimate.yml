@@ -9,6 +9,7 @@ engines:
     enabled: true
 exclude_paths:
   - grifts/**/*
+  - queries/**/*
   - "**/*_test.go"
   - "*_test.go"
   - "**_test.go"

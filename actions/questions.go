@@ -71,18 +71,12 @@ func QuestionDetail(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	selfVoteDetails, err := services.FetchVoteDetails(tx, userID, qid)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-
 	answers, err := services.GetAnswers(tx, userID, qid, 1, 5)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
 	c.Set("Question", question)
-	c.Set("SelfVoteDetails", selfVoteDetails)
 	c.Set("Answers", answers)
 	return c.Render(200, r.HTML("questions/detail.html"))
 }

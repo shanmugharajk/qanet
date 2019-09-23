@@ -1,11 +1,12 @@
-<div class="post-container d-f pd-tb20 bb-lgrey-1" data-post-id="<%= Answer.ID %>" data-type="<%= type %>">
+<div class="post-container d-f pd-tb20 bb-lgrey-1" data-post-id="<%= Answer.ID %>"
+    data-question-id="<%= Answer.QuestionID %>" data-type="<%= type %>">
     <!-- Votes -->
     <!-- TODO: Hardcoded for now. -->
     <%= partial("shared/vote", {
         isQuestion: false,
         id: Answer.ID,
         selfVote : Answer.SelfVote,
-        votes: 0
+        votes: Answer.Votes
     }) %>
 
     <div class="mw-100 w-100p fl 1">

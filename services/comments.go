@@ -37,16 +37,16 @@ func SaveQuestionComment(tx *gorm.DB, c *m.QuestionComment, isNew bool) (*valida
 		return verrs, nil
 	}
 
-	var e *gorm.DB
+	var db *gorm.DB
 
 	if isNew == true {
-		e = tx.Create(c)
+		db = tx.Create(c)
 	} else {
-		e = tx.Model(&c).Update(c).Where("id = ?", c.ID)
+		db = tx.Model(&c).Update(c).Where("id = ?", c.ID)
 	}
 
-	if e.Error != nil {
-		return validate.NewErrors(), e.Error
+	if db.Error != nil {
+		return validate.NewErrors(), db.Error
 	}
 
 	return validate.NewErrors(), nil
@@ -59,16 +59,16 @@ func SaveAnswerComment(tx *gorm.DB, c *m.AnswerComment, isNew bool) (*validate.E
 		return verrs, nil
 	}
 
-	var e *gorm.DB
+	var db *gorm.DB
 
 	if isNew == true {
-		e = tx.Create(c)
+		db = tx.Create(c)
 	} else {
-		e = tx.Model(&c).Update(c).Where("id = ?", c.ID)
+		db = tx.Model(&c).Update(c).Where("id = ?", c.ID)
 	}
 
-	if e.Error != nil {
-		return validate.NewErrors(), e.Error
+	if db.Error != nil {
+		return validate.NewErrors(), db.Error
 	}
 
 	return validate.NewErrors(), nil

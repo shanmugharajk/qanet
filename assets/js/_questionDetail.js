@@ -1,6 +1,7 @@
 import initAnswer from './_answer';
 import initComments, { bindCommentsEvents } from './_comments';
 import initBookmark from './_bookmarks';
+import initVote from './_vote';
 
 const initQuestionDetail = function () {
   if ($('#questionDetail').length <= 0) {
@@ -9,6 +10,7 @@ const initQuestionDetail = function () {
   initAnswer(bindCommentsEvents);
   initComments();
   initBookmark();
+  initVote();
 };
 
 // Init of various functions after document ready.

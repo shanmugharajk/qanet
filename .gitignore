@@ -25,4 +25,4 @@ node_modules/
 dist/
 generated/
 .vendor/
-
+queries

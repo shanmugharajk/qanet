@@ -89,8 +89,11 @@ func App() *buffalo.App {
 	questions.GET("/{questionID}", QuestionDetail)
 
 	// Bookmark
-	app.POST("/posts/bookmarks/{postID}", authenticate(UpdateBookmark))
-	app.DELETE("/posts/bookmarks/{postID}", authenticate(UpdateBookmark))
+	app.POST("/posts/{postID}/bookmarks", authenticate(UpdateBookmark))
+	app.DELETE("/posts/{postID}/bookmarks", authenticate(UpdateBookmark))
+
+	// Vote
+	app.POST("/posts/{postID}/vote/{vote}", authenticate(VoteHandler))
 
 	// Comments
 	app.POST("/posts/{postID}/comments", authenticate(AddComment))

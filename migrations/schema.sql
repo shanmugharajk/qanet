@@ -284,19 +284,20 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Name: voters_list; Type: TABLE; Schema: public; Owner: postgres
+-- Name: votes; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.voters_list (
+CREATE TABLE public.votes (
     post_id bigint NOT NULL,
     voter_id character varying(50) NOT NULL,
+    is_question boolean DEFAULT false NOT NULL,
     vote integer NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
 );
 
 
-ALTER TABLE public.voters_list OWNER TO postgres;
+ALTER TABLE public.votes OWNER TO postgres;
 
 --
 -- Name: answer_comments id; Type: DEFAULT; Schema: public; Owner: postgres
@@ -399,11 +400,11 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: voters_list voters_list_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: votes votes_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.voters_list
-    ADD CONSTRAINT voters_list_pkey PRIMARY KEY (post_id, voter_id, vote);
+ALTER TABLE ONLY public.votes
+    ADD CONSTRAINT votes_pkey PRIMARY KEY (post_id, voter_id, is_question);
 
 
 --
@@ -604,11 +605,11 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: voters_list voters_list_voter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: votes votes_voter_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.voters_list
-    ADD CONSTRAINT voters_list_voter_id_fkey FOREIGN KEY (voter_id) REFERENCES public.users(id) ON DELETE RESTRICT;
+ALTER TABLE ONLY public.votes
+    ADD CONSTRAINT votes_voter_id_fkey FOREIGN KEY (voter_id) REFERENCES public.users(id) ON DELETE RESTRICT;
 
 
 --

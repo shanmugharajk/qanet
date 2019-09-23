@@ -3,20 +3,33 @@ package services
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/shanmugharajk/qanet/models"
+	m "github.com/shanmugharajk/qanet/models"
 )
 
-// FetchVoteDetails gets the question, answers, comments vote/flag details.
-func FetchVoteDetails(tx *gorm.DB, userID interface{}, questionID int64) ([]models.VotersList, error) {
-	voteDetails := []models.VotersList{}
-	e := tx.Where("post_id = ? AND voter_id = ?", questionID, userID).
-		Find(&voteDetails)
-	return voteDetails, e.Error
+// FetchUserDetails gets the user details based on the id.
+func FetchUserDetails(tx *gorm.DB, userID string) ([]models.User, error) {
+	user := []m.User{}
+	db := tx.Where("id = ?", userID).
+		Find(&user)
+	return user, db.Error
 }
 
-// FetchUserDetails gets the user details based on the id.
-func FetchUserDetails(tx *gorm.DB, UserID string) ([]models.User, error) {
-	user := []models.User{}
-	e := tx.Where("id = ?", UserID).
-		Find(&user)
-	return user, e.Error
+// AddUserPoints adds points to the user
+func AddUserPoints(tx *gorm.DB, userID string, points int) error {
+	db := tx.Model(m.User{}).
+		Where("id = ?", userID).
+		UpdateColumn("points", gorm.Expr("points + ?", points))
+
+	return db.Error
+}
+
+// DeductUserPoints subtracts  points to the user
+func DeductUserPoints(tx *gorm.DB, userID string, points int) error {
+	db := tx.Exec(`
+		UPDATE users SET points =
+			CASE WHEN users.points > ? THEN users.points - ?
+			ELSE 1 END
+		WHERE id = ?`, points+1, points, userID)
+
+	return db.Error
 }

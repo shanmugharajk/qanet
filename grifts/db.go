@@ -27,6 +27,7 @@ func addUsers() error {
 	user.Password = "user@123"
 	user.RoleID = normalUserRole.ID
 	user.IsActive = true
+	user.Points = 200
 	ph, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return errors.WithStack(err)
@@ -54,6 +55,7 @@ func addUsers() error {
 	adminUser.Password = "admin@123"
 	adminUser.RoleID = adminUserRole.ID
 	adminUser.IsActive = true
+	adminUser.Points = 200
 	aph, err := bcrypt.GenerateFromPassword([]byte(adminUser.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return errors.WithStack(err)

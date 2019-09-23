@@ -26,8 +26,9 @@ type Answer struct {
 	AnswerComments []AnswerComment `json:"comments"`
 
 	// Dto purpose
-	AuthorPoints int `json:"authorPoints" gorm:"-"`
-	SelfVote     int `json:"selfVote" gorm:"-"`
+	AuthorPoints   int `json:"authorPoints" gorm:"-"`
+	SelfVote       int `json:"selfVote" gorm:"-"`
+	SelfIsAccepted int `json:"selfIsAccepted" gorm:"-"`
 }
 
 // Validate - validates the question details.

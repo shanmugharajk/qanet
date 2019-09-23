@@ -41,8 +41,8 @@ func AddBookmark(tx *gorm.DB, userID string, postID int64) (int64, error) {
 // DeleteBookmark deletes the post from the bookmarks list of the user and
 // returns the current number of bookmark.
 func DeleteBookmark(tx *gorm.DB, userID string, postID int64) (int64, error) {
-	if e := tx.Delete(m.Bookmarks{}, "question_id = ? and user_id = ?", postID, userID); e.Error != nil {
-		return 0, e.Error
+	if db := tx.Delete(m.Bookmarks{}, "question_id = ? and user_id = ?", postID, userID); db.Error != nil {
+		return 0, db.Error
 	}
 
 	var err error
@@ -57,12 +57,12 @@ func DeleteBookmark(tx *gorm.DB, userID string, postID int64) (int64, error) {
 
 func getBookmarkCount(tx *gorm.DB, postID int64) (int64, error) {
 	var count int64
-	var e *gorm.DB
+	var db *gorm.DB
 
-	e = tx.Model(m.Bookmarks{}).Where("question_id = ?", postID).Count(&count)
+	db = tx.Model(m.Bookmarks{}).Where("question_id = ?", postID).Count(&count)
 
-	if e.Error != nil {
-		return count, e.Error
+	if db.Error != nil {
+		return count, db.Error
 	}
 
 	return count, nil
@@ -70,14 +70,14 @@ func getBookmarkCount(tx *gorm.DB, postID int64) (int64, error) {
 
 func isAlreadyBookmarked(tx *gorm.DB, userID string, postID int64) (bool, error) {
 	var existing int64
-	var e *gorm.DB
+	var db *gorm.DB
 
-	e = tx.Model(m.Bookmarks{}).
+	db = tx.Model(m.Bookmarks{}).
 		Where("user_id = ? and question_id = ?", userID, postID).
 		Count(&existing)
 
-	if e.Error != nil {
-		return false, e.Error
+	if db.Error != nil {
+		return false, db.Error
 	}
 
 	return existing > 0, nil

@@ -10,6 +10,7 @@ ignored_folders:
 - bin
 - node_modules
 - .sass-cache
+- queries
 included_extensions:
 - .go
 - .env

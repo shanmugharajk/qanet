@@ -63,6 +63,6 @@ func fetchNormalUserRole(tx *gorm.DB) (models.UserRole, error) {
 	userRole := models.UserRole{}
 	userRole.ID = models.Roles["normal_user"]
 	userRole.Name = models.Roles["normal_user"]
-	d := tx.FirstOrCreate(&userRole)
-	return userRole, d.Error
+	db := tx.FirstOrCreate(&userRole)
+	return userRole, db.Error
 }

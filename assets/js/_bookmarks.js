@@ -14,7 +14,7 @@ const onBookmarkClick = async function () {
   const $loader = $post.find(`#mini-loader-${postId}`);
   const isAdd = $post.find('.c-bookmarked').length === 0;
   const options = { headers: { 'X-CSRF-Token': xCsrfToken } };
-  const url = `/posts/bookmarks/${postId}`;
+  const url = `/posts/${postId}/bookmarks`;
   const method = isAdd ? "post" : "delete";
 
   try {

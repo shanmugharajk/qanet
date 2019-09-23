@@ -6,13 +6,13 @@ import (
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/pkg/errors"
-	"github.com/shanmugharajk/qanet/models"
+	m "github.com/shanmugharajk/qanet/models"
 )
 
 // SubmitAnswer accepts the posted answer, validates and
 // adds the answer to the corresponding question.
 func SubmitAnswer(c buffalo.Context) error {
-	a := &models.Answer{}
+	a := &m.Answer{}
 	if err := c.Bind(a); err != nil {
 		return errors.WithStack(err)
 	}
@@ -42,7 +42,7 @@ func SubmitAnswer(c buffalo.Context) error {
 	// have been thrown error and we are catching that above.
 	a.AuthorPoints = authorDetail[0].Points
 	a.SelfVote = 0
-	a.AnswerComments = []models.AnswerComment{}
+	a.AnswerComments = []m.AnswerComment{}
 
 	c.Set("Answer", a)
 	c.Set("type", "answer")
