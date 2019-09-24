@@ -13,7 +13,7 @@
     <!-- Bookmark -->
     <%= if (isQuestion) { %>
         <button
-            class="bookmark btn f-20 cr-p <%= if (selfBookmarked) { %> c-bookmarked <% } else { %> c-lgr <% } %>">
+            class="bookmark btn f-20 cr-p c-lgr <%= if (selfBookmarked) { %> c-bookmarked <% } %>">
                 <i class="big star icon f-15 "></i>
                 <%
                     let cls = ""

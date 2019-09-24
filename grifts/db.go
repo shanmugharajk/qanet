@@ -1,6 +1,8 @@
 package grifts
 
 import (
+	"fmt"
+
 	"github.com/markbates/grift/grift"
 	"github.com/pkg/errors"
 	"github.com/shanmugharajk/qanet/models"
@@ -15,7 +17,7 @@ func addUsers() error {
 	normalUserRole.ID = models.Roles["normal_user"]
 	normalUserRole.Name = models.Roles["normal_user"]
 
-	if res := models.GormDB.Create(&normalUserRole); res.Error != nil {
+	if res := models.DbConnection.Create(&normalUserRole); res.Error != nil {
 		return res.Error
 	}
 
@@ -34,7 +36,7 @@ func addUsers() error {
 	}
 	user.PasswordHash = string(ph)
 
-	if res := models.GormDB.Create(&user); res.Error != nil {
+	if res := models.DbConnection.Create(&user); res.Error != nil {
 		return res.Error
 	}
 
@@ -43,7 +45,7 @@ func addUsers() error {
 	adminUserRole.ID = models.Roles["admin_user"]
 	adminUserRole.Name = models.Roles["admin_user"]
 
-	if res := models.GormDB.Create(&adminUserRole); res.Error != nil {
+	if res := models.DbConnection.Create(&adminUserRole); res.Error != nil {
 		return res.Error
 	}
 
@@ -62,7 +64,7 @@ func addUsers() error {
 	}
 	adminUser.PasswordHash = string(aph)
 
-	if res := models.GormDB.Create(&adminUser); res.Error != nil {
+	if res := models.DbConnection.Create(&adminUser); res.Error != nil {
 		return res.Error
 	}
 
@@ -76,7 +78,7 @@ func addTags() error {
 	csharp.CreatedBy = adminUserID
 	csharp.UpdatedBy = adminUserID
 
-	if res := models.GormDB.Create(&csharp); res.Error != nil {
+	if res := models.DbConnection.Create(&csharp); res.Error != nil {
 		return res.Error
 	}
 
@@ -86,7 +88,7 @@ func addTags() error {
 	golang.CreatedBy = adminUserID
 	golang.UpdatedBy = adminUserID
 
-	if res := models.GormDB.Create(&golang); res.Error != nil {
+	if res := models.DbConnection.Create(&golang); res.Error != nil {
 		return res.Error
 	}
 
@@ -95,8 +97,11 @@ func addTags() error {
 
 var _ = grift.Namespace("db", func() {
 
-	grift.Desc("seed", "Seeds a database")
-	grift.Add("seed", func(c *grift.Context) error {
+	err := grift.Desc("seed", "Seeds a database")
+
+	fmt.Println(err)
+
+	err = grift.Add("seed", func(c *grift.Context) error {
 		if err := addUsers(); err != nil {
 			return errors.WithStack(err)
 		}
@@ -107,4 +112,6 @@ var _ = grift.Namespace("db", func() {
 
 		return nil
 	})
+
+	fmt.Println(err)
 })

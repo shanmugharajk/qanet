@@ -1,13 +1,13 @@
 package actions
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/envy"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
-	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"github.com/unrolled/secure"
 
@@ -52,8 +52,8 @@ func App() *buffalo.App {
 	if app.Env != "development" {
 		// TODO: Create a custom error page.
 		app.ErrorHandlers[500] = func(status int, origErr error, c buffalo.Context) error {
-			c.Response().Write([]byte("OOPS, Internal server error."))
-			return nil
+			_, err := c.Response().Write([]byte("OOPS, Internal server error."))
+			return err
 		}
 	}
 
@@ -67,7 +67,7 @@ func App() *buffalo.App {
 	// Remove to disable this.
 	app.Use(csrf.New)
 
-	app.Use(GormTransaction(models.GormDB))
+	app.Use(GormTransaction(models.DbConnection))
 
 	// Setup and use translations:
 	app.Use(translations())
@@ -128,7 +128,11 @@ func authenticate(next buffalo.Handler) buffalo.Handler {
 func translations() buffalo.MiddlewareFunc {
 	var err error
 	if T, err = i18n.New(packr.New("app:locales", "../locales"), "en-US"); err != nil {
-		app.Stop(err)
+		// Check to make go-lint happy
+		// TODO: any other way??
+		if err2 := app.Stop(err); err2 != nil {
+			log.Println(err2)
+		}
 	}
 	return T.Middleware()
 }
@@ -158,7 +162,7 @@ var DeleteCookie = func(name string, c buffalo.Context) {
 }
 
 // GormTransaction - wraps the gorm transaction logic in the middleware
-var GormTransaction = func(db *gorm.DB) buffalo.MiddlewareFunc {
+var GormTransaction = func(db models.GormDB) buffalo.MiddlewareFunc {
 	return func(h buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
 

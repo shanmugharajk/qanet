@@ -12,8 +12,11 @@ import (
 
 // UpdateBookmark adds the post to the bookmark.
 func UpdateBookmark(c buffalo.Context) error {
+	var err error
+	var postID int64
+
 	paramPostID := c.Param("postID")
-	postID, err := strconv.ParseInt(paramPostID, 10, 64)
+	postID, err = strconv.ParseInt(paramPostID, 10, 64)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -22,15 +25,14 @@ func UpdateBookmark(c buffalo.Context) error {
 	userID := c.Value("userId").(string)
 
 	var rows int64
-	var err2 error
 
 	if c.Request().Method == "POST" {
-		rows, err2 = services.AddBookmark(tx, userID, postID)
+		rows, err = services.AddBookmark(tx, userID, postID)
 	} else {
-		rows, err2 = services.DeleteBookmark(tx, userID, postID)
+		rows, err = services.DeleteBookmark(tx, userID, postID)
 	}
 
-	if err2 != nil {
+	if err != nil {
 		return errors.WithStack(err)
 	}
 

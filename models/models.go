@@ -5,31 +5,41 @@ import (
 
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/validate"
 	"github.com/jinzhu/gorm"
 
 	// This is required here for Gorm.
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-// DB is a connection to your database to be used
-// throughout your application.
-var DB *pop.Connection
+type GormDB struct {
+	*gorm.DB
+}
 
-// GormDB is a gorm orm instance.
-var GormDB *gorm.DB
+// DbConnection is a gorm orm instance.
+var DbConnection GormDB
+
+type QaNetModel interface {
+	Validate() *validate.Errors
+}
 
 func init() {
-	var err error
 	env := envy.Get("GO_ENV", "development")
-	DB, err = pop.Connect(env)
+	DB, err := pop.Connect(env)
+
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	deets := DB.Dialect.Details()
-	GormDB, err = gorm.Open(deets.Dialect, DB.URL())
+
+	conn, err := gorm.Open(deets.Dialect, DB.URL())
+	DbConnection = GormDB{conn}
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	GormDB = GormDB.LogMode(true)
+
+	conn = DbConnection.LogMode(true)
+	DbConnection = GormDB{conn}
 }
