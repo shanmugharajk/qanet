@@ -7,25 +7,27 @@ import (
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/validate"
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 
 	// This is required here for Gorm.
 	_ "github.com/jinzhu/gorm/dialects/postgres"
 )
 
-type GormDB struct {
-	*gorm.DB
-}
+// DB is a connection to your database to be used
+// throughout your application.
+var DB *pop.Connection
 
 // DbConnection is a gorm orm instance.
-var DbConnection GormDB
+var DbConnection *gorm.DB
 
 type QaNetModel interface {
 	Validate() *validate.Errors
 }
 
 func init() {
+	var err error
 	env := envy.Get("GO_ENV", "development")
-	DB, err := pop.Connect(env)
+	DB, err = pop.Connect(env)
 
 	if err != nil {
 		log.Fatal(err)
@@ -33,13 +35,25 @@ func init() {
 
 	deets := DB.Dialect.Details()
 
-	conn, err := gorm.Open(deets.Dialect, DB.URL())
-	DbConnection = GormDB{conn}
+	DbConnection, err = gorm.Open(deets.Dialect, DB.URL())
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	conn = DbConnection.LogMode(true)
-	DbConnection = GormDB{conn}
+	DbConnection = DbConnection.LogMode(true)
+}
+
+func DeleteByID(tx *gorm.DB, id interface{}, model interface{}) error {
+	db := tx.Where("id = ?", id).Delete(model)
+
+	if db.Error != nil {
+		return db.Error
+	}
+
+	if db.RowsAffected == 0 {
+		return errors.New("the id passed is invalid")
+	}
+
+	return nil
 }

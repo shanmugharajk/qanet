@@ -8,6 +8,7 @@ import (
 	"github.com/gobuffalo/envy"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
+	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"github.com/unrolled/secure"
 
@@ -162,7 +163,7 @@ var DeleteCookie = func(name string, c buffalo.Context) {
 }
 
 // GormTransaction - wraps the gorm transaction logic in the middleware
-var GormTransaction = func(db models.GormDB) buffalo.MiddlewareFunc {
+var GormTransaction = func(db *gorm.DB) buffalo.MiddlewareFunc {
 	return func(h buffalo.Handler) buffalo.Handler {
 		return func(c buffalo.Context) error {
 
