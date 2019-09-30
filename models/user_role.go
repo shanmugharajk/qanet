@@ -22,3 +22,13 @@ func (u *UserRole) Validate(tx *gorm.DB) *validate.Errors {
 		&validators.StringLengthInRange{Field: u.Name, Name: "Name", Min: 6},
 	)
 }
+
+// FirstOrCreateNormalUser gets the details with role as 'NORMAL_USER'
+// If there is no records available it will create a role.
+func FirstOrCreateNormalUser(tx *gorm.DB) (*UserRole, error) {
+	userRole := new(UserRole)
+	userRole.ID = Roles["normal_user"]
+	userRole.Name = Roles["normal_user"]
+	db := tx.FirstOrCreate(&userRole)
+	return userRole, db.Error
+}

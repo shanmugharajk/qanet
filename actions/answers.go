@@ -1,28 +1,33 @@
 package actions
 
 import (
-	"github.com/jinzhu/gorm"
-	"github.com/shanmugharajk/qanet/services"
-
 	"github.com/gobuffalo/buffalo"
+	"github.com/gobuffalo/validate"
+	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
-	m "github.com/shanmugharajk/qanet/models"
+	"github.com/shanmugharajk/qanet/models"
 )
 
 // SubmitAnswer accepts the posted answer, validates and
 // adds the answer to the corresponding question.
 func SubmitAnswer(c buffalo.Context) error {
-	a := &m.Answer{}
-	if err := c.Bind(a); err != nil {
+	var err error
+	a := new(models.Answer)
+
+	if err = c.Bind(a); err != nil {
 		return errors.WithStack(err)
 	}
 
 	a.CreatedBy = c.Value("userId").(string)
 	a.UpdatedBy = c.Value("userId").(string)
+	a.IsActive = true
+	a.IsClosed = false
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.AddAnswer(tx, a)
+	verrors := new(validate.Errors)
+	verrors, err = models.Add(tx, a)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -32,7 +37,10 @@ func SubmitAnswer(c buffalo.Context) error {
 		return c.Render(400, r.Template("text/html", "shared/_error"))
 	}
 
-	authorDetail, err := services.FetchUserDetails(tx, a.CreatedBy)
+	authorDetail := new(models.User)
+
+	err = models.GetById(tx, a.CreatedBy, authorDetail)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -40,9 +48,9 @@ func SubmitAnswer(c buffalo.Context) error {
 	// This here always will be return one record.
 	// While inserting in answers table if the user is invalid it would
 	// have been thrown error and we are catching that above.
-	a.AuthorPoints = authorDetail[0].Points
+	a.AuthorPoints = authorDetail.Points
 	a.SelfVote = 0
-	a.AnswerComments = []m.AnswerComment{}
+	a.AnswerComments = []models.AnswerComment{}
 
 	c.Set("Answer", a)
 	c.Set("type", "answer")

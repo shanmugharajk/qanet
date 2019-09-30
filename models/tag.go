@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
+	"github.com/jinzhu/gorm"
 )
 
 // Tag is the model for tags table.
@@ -21,4 +22,10 @@ func (t *Tag) Validate() *validate.Errors {
 		&validators.StringIsPresent{Field: t.ID, Name: "Id"},
 		&validators.StringIsPresent{Field: t.Description, Name: "Description"},
 	)
+}
+
+func GetAllTags(tx *gorm.DB) ([]*Tag, error) {
+	var t []*Tag
+	db := tx.Find(&t)
+	return t, db.Error
 }

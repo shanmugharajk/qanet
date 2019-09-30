@@ -2,7 +2,7 @@
 <div class="post-container d-f" data-post-id="<%= Question.ID %>" data-type="question">
     <!-- Votes/Bookmark -->
     <%= partial("shared/vote", {
-        isQuestion: true,
+        PostType: true,
         id: Question.ID,
         selfBookmarked: Question.SelfBookmarked,
         selfVote : Question.SelfVote,

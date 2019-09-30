@@ -7,14 +7,13 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"github.com/shanmugharajk/qanet/models"
-	"github.com/shanmugharajk/qanet/services"
 )
 
 // AskQuestionIndex returns the form for creating new post.
 func AskQuestionIndex(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	tags, err := services.FetchAllTags(tx)
+	tags, err := models.GetAllTags(tx)
 	if err != nil {
 		return err
 	}
@@ -37,7 +36,7 @@ func AskQuestion(c buffalo.Context) error {
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.CreateQuestion(tx, q)
+	verrors, err := models.AddQuestion(tx, q)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -66,12 +65,12 @@ func QuestionDetail(c buffalo.Context) error {
 	userID := c.Value("userId")
 
 	// TODO: Record not found excpetion.
-	question, err := services.GetQuestionDetails(tx, userID, qid)
+	question, err := models.GetQuestionDetails(tx, userID, qid)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	answers, err := services.GetAnswers(tx, userID, qid, 1, 5)
+	answers, err := models.GetAnswers(tx, userID, qid, 1, 5)
 	if err != nil {
 		return errors.WithStack(err)
 	}

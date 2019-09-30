@@ -19,6 +19,10 @@
       if (message) {
         $container.find('p').html(message);
       }
+
+      setTimeout(() => {
+        $container.addClass('hidden');
+      }, 4000);
     },
 
     authenticate: function () {

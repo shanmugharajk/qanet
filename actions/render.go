@@ -11,12 +11,6 @@ import (
 var r *render.Engine
 var assetsBox = packr.New("app:assets", "../public")
 
-// SUCCESS constant
-var SUCCESS = "SUCCESS"
-
-// ERROR constant
-var ERROR = "ERROR"
-
 // Response structure for REST calls.
 type Response struct {
 	Code string      `json:"type"`

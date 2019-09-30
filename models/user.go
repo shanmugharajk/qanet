@@ -1,11 +1,14 @@
 package models
 
 import (
+	"strings"
 	"time"
 
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // Roles - different user roles
@@ -65,4 +68,66 @@ func (u *User) Validate(tx *gorm.DB) *validate.Errors {
 	}
 
 	return verrs
+}
+
+// CreateUser creates a new user and also has the encryption logic.
+func CreateUser(tx *gorm.DB, u *User) (*validate.Errors, error) {
+	u.Email = strings.ToLower(u.Email)
+
+	ph, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return validate.NewErrors(), errors.WithStack(err)
+	}
+
+	u.PasswordHash = string(ph)
+
+	verrs := u.Validate(tx)
+	if verrs.HasAny() {
+		return verrs, nil
+	}
+
+	userRole, err := FirstOrCreateNormalUser(tx)
+	if err != nil {
+		return validate.NewErrors(), errors.WithStack(err)
+	}
+
+	u.RoleID = userRole.ID
+	u.IsActive = true
+	e := tx.Create(u)
+
+	return validate.NewErrors(), e.Error
+}
+
+func UpdateUserPointsById(tx *gorm.DB, userId string, points int) error {
+	if points == 0 {
+		return nil
+	}
+
+	if points < 0 {
+		return DeductUserPointsById(tx, userId, points)
+	}
+
+	if points > 0 {
+		return AddUserPointsById(tx, userId, points)
+	}
+
+	return nil
+}
+
+func AddUserPointsById(tx *gorm.DB, userId string, points int) error {
+	db := tx.Model(User{}).
+		Where("id = ?", userId).
+		UpdateColumn("points", gorm.Expr("points + ?", points))
+
+	return db.Error
+}
+
+func DeductUserPointsById(tx *gorm.DB, userId string, points int) error {
+	db := tx.Exec(`
+		UPDATE users SET points =
+			CASE WHEN users.points > ? THEN users.points - ?
+			ELSE 1 END
+		WHERE id = ?`, points+1, points, userId)
+
+	return db.Error
 }

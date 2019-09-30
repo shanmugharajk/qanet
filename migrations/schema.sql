@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 11.4
--- Dumped by pg_dump version 11.4
+-- Dumped from database version 10.5
+-- Dumped by pg_dump version 10.5
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -12,9 +12,22 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
-SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
 
 SET default_tablespace = '';
 
@@ -290,7 +303,7 @@ ALTER TABLE public.users OWNER TO postgres;
 CREATE TABLE public.votes (
     post_id bigint NOT NULL,
     voter_id character varying(50) NOT NULL,
-    is_question boolean DEFAULT false NOT NULL,
+    post_type integer DEFAULT 1 NOT NULL,
     vote integer NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
@@ -404,7 +417,7 @@ ALTER TABLE ONLY public.users
 --
 
 ALTER TABLE ONLY public.votes
-    ADD CONSTRAINT votes_pkey PRIMARY KEY (post_id, voter_id, is_question);
+    ADD CONSTRAINT votes_pkey PRIMARY KEY (post_id, voter_id, post_type, vote);
 
 
 --

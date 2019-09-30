@@ -11,7 +11,7 @@
     </div>
 
     <!-- Bookmark -->
-    <%= if (isQuestion) { %>
+    <%= if (PostType) { %>
         <button
             class="bookmark btn f-20 cr-p c-lgr <%= if (selfBookmarked) { %> c-bookmarked <% } %>">
                 <i class="big star icon f-15 "></i>
@@ -30,7 +30,7 @@
     <% } %>
 
     <!-- Accept answer -->
-    <%= if (!isQuestion) { %>
+    <%= if (!PostType) { %>
         <button class="accept-answer btn cr-p c-gr w-35 m:f-10">
             <i class="big check icon"></i>
         </button>

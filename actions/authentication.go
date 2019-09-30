@@ -7,7 +7,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"github.com/shanmugharajk/qanet/models"
-	"github.com/shanmugharajk/qanet/services"
+	"golang.org/x/crypto/bcrypt"
 )
 
 // LoginIndex - Handler for login index page.
@@ -44,7 +44,7 @@ func LoginNew(c buffalo.Context) error {
 	// Get the DB connection from the context
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	user, err := services.LoginUser(tx, u)
+	user, err := loginUser(tx, u)
 	if err != nil {
 		c.Set("user", u)
 		c.Set("error", err.Error())
@@ -83,14 +83,14 @@ func SignupIndex(c buffalo.Context) error {
 // SignupNew creates a new user and redirects to the home if the
 // user gets created successfully.
 func SignupNew(c buffalo.Context) error {
-	u := &models.User{}
+	u := new(models.User)
 	if err := c.Bind(u); err != nil {
 		return errors.WithStack(err)
 	}
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.CreateUser(tx, u)
+	verrors, err := models.CreateUser(tx, u)
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -123,4 +123,19 @@ func SetCurrentUser(next buffalo.Handler) buffalo.Handler {
 		}
 		return next(c)
 	}
+}
+
+func loginUser(tx *gorm.DB, u *models.User) (*models.User, error) {
+	existing := new(models.User)
+
+	if err := models.GetById(tx, u.ID, &existing); err != nil {
+		return u, err
+	}
+
+	// confirm that the given password matches the hashed password from the db
+	if err := bcrypt.CompareHashAndPassword([]byte(existing.PasswordHash), []byte(u.Password)); err != nil {
+		return u, errors.New("invalid credentials")
+	}
+
+	return existing, nil
 }

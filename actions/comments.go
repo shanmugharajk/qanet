@@ -5,7 +5,6 @@ import (
 
 	"github.com/jinzhu/gorm"
 	"github.com/shanmugharajk/qanet/models"
-	"github.com/shanmugharajk/qanet/services"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/pkg/errors"
@@ -33,6 +32,7 @@ func AddComment(c buffalo.Context) error {
 	paramPostID := c.Param("postID")
 
 	postID, err := strconv.ParseInt(paramPostID, 10, 64)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -63,11 +63,13 @@ func UpdateComment(c buffalo.Context) error {
 	paramCommentID := c.Param("commentID")
 
 	postID, err := strconv.ParseInt(paramPostID, 10, 64)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
 	commentID, err := strconv.ParseInt(paramCommentID, 10, 64)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -93,6 +95,7 @@ func DeleteComment(c buffalo.Context) error {
 	paramCommentID := c.Param("commentID")
 
 	commentID, err := strconv.ParseInt(paramCommentID, 10, 64)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -100,31 +103,23 @@ func DeleteComment(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
 
 	if paramPostType == question {
-		return deleteQuestionComment(c, tx, commentID)
+		return deleteComment(c, tx, commentID, models.QuestionComment{})
 	}
 
 	if paramPostType == answer {
-		return deleteAnswerComment(c, tx, commentID)
+		return deleteComment(c, tx, commentID, models.AnswerComment{})
 	}
 
 	// Should not reach here.
 	return errors.New("internal error occurred")
 }
 
-func deleteQuestionComment(c buffalo.Context, tx *gorm.DB, id int64) error {
-	if e := services.DeleteQuestionComment(tx, id); e != nil {
+func deleteComment(c buffalo.Context, tx *gorm.DB, id int64, model interface{}) error {
+	if e := models.DeleteById(tx, id, model); e != nil {
 		return errors.WithStack(e)
 	}
 
 	return c.Render(202, r.String("Deleted successfully"))
-}
-
-func deleteAnswerComment(c buffalo.Context, tx *gorm.DB, id int64) error {
-	if e := services.DeleteAnswerComment(tx, id); e != nil {
-		return errors.WithStack(e)
-	}
-
-	return c.Render(201, r.String("Deleted successfully"))
 }
 
 func saveAnswerComment(c buffalo.Context, commentForm *commentForm) error {
@@ -136,7 +131,8 @@ func saveAnswerComment(c buffalo.Context, commentForm *commentForm) error {
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.SaveAnswerComment(tx, comment, true)
+	verrors, err := models.Add(tx, comment)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -150,6 +146,8 @@ func saveAnswerComment(c buffalo.Context, commentForm *commentForm) error {
 }
 
 func updateAnswerComment(c buffalo.Context, commentForm *commentForm) error {
+	var err error
+
 	comment := &models.AnswerComment{}
 	comment.Comment = commentForm.Comment
 	comment.ID = commentForm.ID
@@ -158,17 +156,19 @@ func updateAnswerComment(c buffalo.Context, commentForm *commentForm) error {
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.SaveAnswerComment(tx, comment, false)
+	_, err = models.UpdateById(tx, comment.ID, comment)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	if verrors.HasAny() {
+	if err != nil {
 		c.Set("errorMessage", "Invalid data has been entered. Please check and try again.")
 		return c.Render(400, r.Template("text/html", "shared/_error"))
 	}
 
-	newComment, err := services.FetchAnswerComment(tx, comment.ID)
+	newComment := new(models.AnswerComment)
+	err = models.GetById(tx, comment.ID, newComment)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -185,7 +185,8 @@ func saveQuestionComment(c buffalo.Context, commentForm *commentForm) error {
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.SaveQuestionComment(tx, comment, true)
+	verrors, err := models.Add(tx, comment)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
@@ -199,6 +200,8 @@ func saveQuestionComment(c buffalo.Context, commentForm *commentForm) error {
 }
 
 func updateQuestionComment(c buffalo.Context, commentForm *commentForm) error {
+	var err error
+
 	comment := &models.QuestionComment{}
 	comment.Comment = commentForm.Comment
 	comment.ID = commentForm.ID
@@ -207,17 +210,20 @@ func updateQuestionComment(c buffalo.Context, commentForm *commentForm) error {
 
 	tx, _ := c.Value("tx").(*gorm.DB)
 
-	verrors, err := services.SaveQuestionComment(tx, comment, false)
+	_, err = models.UpdateById(tx, comment.ID, comment)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}
 
-	if verrors.HasAny() {
+	if err != nil {
 		c.Set("errorMessage", "Invalid data has been entered. Please check and try again.")
 		return c.Render(400, r.Template("text/html", "shared/_error"))
 	}
 
-	newComment, err := services.FetchQuestionComment(tx, comment.ID)
+	newComment := new(models.QuestionComment)
+	err = models.GetById(tx, comment.ID, newComment)
+
 	if err != nil {
 		return errors.WithStack(err)
 	}

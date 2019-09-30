@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"github.com/jinzhu/gorm"
-	"github.com/shanmugharajk/qanet/services"
+	"github.com/shanmugharajk/qanet/models"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/pkg/errors"
@@ -27,9 +27,9 @@ func UpdateBookmark(c buffalo.Context) error {
 	var rows int64
 
 	if c.Request().Method == "POST" {
-		rows, err = services.AddBookmark(tx, userID, postID)
+		rows, err = models.AddBookmark(tx, userID, postID)
 	} else {
-		rows, err = services.DeleteBookmark(tx, userID, postID)
+		rows, err = models.DeleteBookmark(tx, userID, postID)
 	}
 
 	if err != nil {
