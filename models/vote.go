@@ -9,10 +9,9 @@ import (
 type VoteType int
 
 const (
-	Upvote             VoteType = 1
-	Downvote           VoteType = -1
-	AcceptAnswer       VoteType = 5
-	SelfAcceptedAnswer VoteType = 0
+	Upvote           VoteType = 1
+	Downvote         VoteType = -1
+	AcceptAnswerVote VoteType = 5
 )
 
 // Vote is the model for votes table.
@@ -30,7 +29,7 @@ type Vote struct {
 // VoteResponse is the response object for Vote handler.
 type VoteResponse struct {
 	Vote    int    `json:"vote"`
-	Result  string `josn:"result"`
+	Result  string `json:"result"`
 	Message string `json:"message"`
 }
 
@@ -61,15 +60,4 @@ func GetVoteDetail(
 	}
 
 	return &voteDetails[0], db.Error
-}
-
-func DeleteVoteByQuery(
-	tx *gorm.DB, postId int64, voterId string, postType PostType, inVotes []VoteType,
-) error {
-	db := tx.Where(
-		`post_id = ? AND voter_id = ? AND post_type = ? AND vote IN (?)`,
-		postId, voterId, postType, inVotes,
-	).Delete(Vote{})
-
-	return db.Error
 }

@@ -1,12 +1,12 @@
 <div class="voting-container ta-c m-r20 c-gr">
     <!-- Upvote/DownVote -->
     <div>
-        <button class="upvote btn cr-p d-b c-gr">
-            <i class="huge caret up icon <%= if (selfVote == 1) { %> c-vote <% } %>"></i>
+        <button class="upvote btn cr-p d-b c-gr <%= if (selfVote == 1) { %> c-vote <% } %>">
+            <i class="huge caret up icon"></i>
         </button>
         <span class="f-20 m:f-15"><%= votes %></span>
-        <button class="downvote btn cr-p d-b c-gr">
-            <i class="huge caret down icon <%= if (selfVote < 0) { %> c-vote <% } %>"></i>
+        <button class="downvote btn cr-p d-b c-gr <%= if (selfVote < 0) { %> c-vote <% } %>">
+            <i class="huge caret down icon"></i>
         </button>
     </div>
 
@@ -31,7 +31,13 @@
 
     <!-- Accept answer -->
     <%= if (!PostType) { %>
-        <button class="accept-answer btn cr-p c-gr w-35 m:f-10">
+        <%
+            let cls = ""
+            if (Answer.IsAccepted) {
+                cls = "c-accepted"
+            }
+        %>
+        <button class="accept-answer btn cr-p c-gr w-35 m:f-10 <%= cls %>">
             <i class="big check icon"></i>
         </button>
     <% } %>

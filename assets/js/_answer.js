@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 let ibindCommentsEvents;
+let ibindVoteEvents;
 let answerEditor;
+
 const answerEditorId = '#add-answer-editor';
 
 const initEditor = function () {
@@ -54,6 +56,8 @@ const postAnswer = async function (e) {
       .removeClass('d-n');
     // Bind the comment link, form events
     ibindCommentsEvents();
+    // Bind the vote button events.
+    ibindVoteEvents();
   } catch (error) {
     $('#error-post-comment').removeClass('hidden');
   } finally {
@@ -62,8 +66,9 @@ const postAnswer = async function (e) {
   }
 };
 
-export default function init(bindCommentsEvents) {
+export default function init(bindCommentsEvents, bindVoteEvents) {
   ibindCommentsEvents = bindCommentsEvents;
+  ibindVoteEvents = bindVoteEvents;
   $('#post-answer').submit(postAnswer);
   $('#postYourAnswer').click(() => $('#post-answer').submit());
   initEditor();

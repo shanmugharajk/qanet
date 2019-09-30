@@ -1,7 +1,7 @@
 create_table("votes") {
     t.Column("post_id", "bigint", {})
     t.Column("voter_id", "string", {"size": 50})
-    t.Column("post_type", "int", {"default": 1})
+    t.Column("post_type", "int", {"default": 0})
     t.Column("vote", "int", {})
 
     t.PrimaryKey("post_id", "voter_id", "post_type", "vote")

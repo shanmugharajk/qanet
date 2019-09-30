@@ -22,3 +22,5 @@ create_table("answers") {
     t.ForeignKey("deactivated_by", {"users": ["id"]}, {"on_delete": "restrict"})
     t.ForeignKey("question_id", {"questions": ["id"]}, {"on_delete": "cascade"})
 }
+
+sql("CREATE INDEX idx_questions_id ON answers(question_id);")

@@ -125,7 +125,7 @@ func AddUserPointsById(tx *gorm.DB, userId string, points int) error {
 func DeductUserPointsById(tx *gorm.DB, userId string, points int) error {
 	db := tx.Exec(`
 		UPDATE users SET points =
-			CASE WHEN users.points > ? THEN users.points - ?
+			CASE WHEN users.points > ? THEN users.points + ?
 			ELSE 1 END
 		WHERE id = ?`, points+1, points, userId)
 

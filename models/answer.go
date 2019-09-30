@@ -76,15 +76,19 @@ func GetAnswers(tx *gorm.DB, userId interface{}, questionId int64, pageNo int, n
 		Where("question_id = ?", questionId).
 		Select(`*,
 			(select points from users where id = answers.created_by) as author_points,
-			(select vote from votes where post_id = answers.id AND voter_id = ? AND post_type = 0 AND vote != 5) as self_vote,
-			(select vote from votes where post_id = answers.id AND voter_id = ? AND post_type = 0 AND vote = 5) as self_is_accepted
+			(select vote from votes where
+				post_id = answers.id AND voter_id = ? AND
+				post_type = 0 AND vote NOT IN (5, 0)) as self_vote,
+			(select vote from votes where
+				post_id = answers.id AND voter_id = ? AND
+				post_type = 0 AND vote IN (5, 0)) as self_is_accepted
 		`, userId, userId).
 		Find(&answers)
 
 	return answers, db.Error
 }
 
-func AcceptTheAnswer(tx *gorm.DB, answerId int64, questionId int64) error {
+func UndoAcceptedAnswer(tx *gorm.DB, answerId int64, questionId int64) error {
 	var db *gorm.DB
 
 	db = tx.Exec(`
@@ -96,6 +100,16 @@ func AcceptTheAnswer(tx *gorm.DB, answerId int64, questionId int64) error {
 		return db.Error
 	}
 
+	return nil
+}
+
+func AcceptAnswer(tx *gorm.DB, answerId int64, questionId int64) error {
+	if err := UndoAcceptedAnswer(tx, answerId, questionId); err != nil {
+		return err
+	}
+
+	var db *gorm.DB
+
 	db = tx.Exec(`
 		UPDATE answers SET is_accepted = true
 		WHERE id = ?
@@ -106,6 +120,21 @@ func AcceptTheAnswer(tx *gorm.DB, answerId int64, questionId int64) error {
 	}
 
 	return nil
+}
+
+func GetPreviousAcceptedAnswer(tx *gorm.DB, questionId int64) (*Answer, error) {
+	answers := []Answer{}
+
+	if db := tx.Where("question_id = ? AND is_accepted = true", questionId).
+		Find(&answers); db.Error != nil {
+		return nil, db.Error
+	}
+
+	if len(answers) > 0 {
+		return &answers[0], nil
+	}
+
+	return nil, nil
 }
 
 func GetActiveNonClosedAnswerById(tx *gorm.DB, id int64, postType PostType) (Post, error) {

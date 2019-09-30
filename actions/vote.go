@@ -12,7 +12,7 @@ import (
 const UPVOTE_NOT_ELIGIBLE = "You need minimum 15 votes to upvote a post"
 const ERROR_IN_UPDATING = "Got an error in updating points"
 const ACCEPT_ANSWER_NOT_ELIGIBLE = "You are not eligible to accept this answer"
-const SELF_VOTE_ERROR = "Can't your own post"
+const SELF_VOTE_ERROR = "Can't vote your own post"
 const ALREADY_POSTED = "Already submitted"
 const INVALID_VOTE = "Invalid vote"
 
@@ -80,7 +80,7 @@ func updateVote(tx *gorm.DB, newVote *models.Vote) models.VoteResponse {
 			return getErrorResponse(err.Error())
 		}
 		break
-	case models.AcceptAnswer:
+	case models.AcceptAnswerVote:
 		if err = acceptAnswer(tx, newVote, post, voter); err != nil {
 			return getErrorResponse(err.Error())
 		}
@@ -89,8 +89,7 @@ func updateVote(tx *gorm.DB, newVote *models.Vote) models.VoteResponse {
 		return getErrorResponse(INVALID_VOTE)
 	}
 
-	// TODO: get the updated the post points.
-	return models.VoteResponse{Vote: post.TotalVote(), Result: "SUCCESS"}
+	return getPostVotes(tx, post.PostId(), newVote.PostType)
 }
 
 func upvote(tx *gorm.DB, newVote *models.Vote, post models.Post, voter *models.User) error {
@@ -119,7 +118,7 @@ func upvote(tx *gorm.DB, newVote *models.Vote, post models.Post, voter *models.U
 		return err
 	}
 
-	return UpdateVoteDetails(tx, newVote, []models.VoteType{newVote.Vote, -1})
+	return updateVoteDetails(tx, newVote, []models.VoteType{newVote.Vote, -1})
 }
 
 func downvote(tx *gorm.DB, newVote *models.Vote, post models.Post, voter *models.User) error {
@@ -143,66 +142,139 @@ func downvote(tx *gorm.DB, newVote *models.Vote, post models.Post, voter *models
 		return err
 	}
 
-	return UpdateVoteDetails(tx, newVote, []models.VoteType{newVote.Vote, 1})
+	return updateVoteDetails(tx, newVote, []models.VoteType{newVote.Vote, 1})
 }
 
-func acceptAnswer(tx *gorm.DB, newVote *models.Vote, post models.Post, voter *models.User) error {
-	var err error
-	question := new(models.Question)
-
-	if err = models.GetById(tx, post.QuestionId(), question); err != nil {
-		return errors.New(models.ERROR_IN_FETCHING)
-	}
-
-	if question.CreatedBy != voter.ID {
-		return errors.New(ACCEPT_ANSWER_NOT_ELIGIBLE)
-	}
-
-	var previous *models.Vote
-
-	if previous, err = models.GetVoteDetail(
-		tx, newVote.PostID, newVote.VoterID, newVote.PostType, []models.VoteType{0, 5},
-	); err != nil {
-		return err
-	}
-
-	if err = revokePointsForPreviousAcceptedAnswerAuthor(tx, newVote, previous, post); err != nil {
-		return err
-	}
-
-	points := getPointsForAcceptAnswer(newVote, previous, post)
-
-	if err = updatePoints(tx, points, post, voter.ID); err != nil {
-		return err
-	}
-
-	if err = models.AcceptTheAnswer(tx, post.PostId(), post.QuestionId()); err != nil {
-		return nil
-	}
-
-	return UpdateVoteDetails(tx, newVote, []models.VoteType{0, 5})
-}
-
-func UpdateVoteDetails(tx *gorm.DB, newVote *models.Vote, toClear []models.VoteType) error {
+func acceptAnswer(tx *gorm.DB, vote *models.Vote, post models.Post, voter *models.User) error {
 	var err error
 
-	err = models.DeleteVoteByQuery(tx, newVote.PostID, newVote.VoterID, newVote.PostType, toClear)
+	if err = canAcceptAnswer(tx, post.QuestionId(), voter.ID); err != nil {
+		return err
+	}
+
+	var prevVote *models.Vote
+	var prevAnswer *models.Answer
+
+	prevVote, prevAnswer, err = getPreviousAcceptedAnswerAndVote(tx, post.QuestionId(), vote)
 	if err != nil {
 		return err
 	}
+	// Special case for accepted answer since updatePoints didn't handle the below case.
+	if err = revokePointsForPreviousAcceptedAnswerAuthor(tx, vote, prevVote, prevAnswer); err != nil {
+		return err
+	}
 
-	_, err = models.Add(tx, newVote)
+	if vote.Undo {
+		if post.Author() != vote.VoterID {
+			if err = models.UpdateUserPointsById(tx, post.Author(), -20); err != nil {
+				return errors.New(ERROR_IN_UPDATING)
+			}
+		}
+
+		if err = models.UndoAcceptedAnswer(tx, post.PostId(), post.QuestionId()); err != nil {
+			return errors.New(ERROR_IN_UPDATING)
+		}
+
+		err = deleteVoteDetail(tx, vote.PostID, vote.VoterID, vote.PostType, vote.Vote)
+		if err != nil {
+			return errors.New(ERROR_IN_UPDATING)
+		}
+	} else {
+		if post.Author() != vote.VoterID {
+			if err = models.UpdateUserPointsById(tx, post.Author(), 20); err != nil {
+				return errors.New(ERROR_IN_UPDATING)
+			}
+		}
+
+		if err = models.AcceptAnswer(tx, post.PostId(), post.QuestionId()); err != nil {
+			return errors.New(ERROR_IN_UPDATING)
+		}
+	}
+
+	if prevVote != nil {
+		err = deleteVoteDetail(tx, prevVote.PostID, prevVote.VoterID, prevVote.PostType, prevVote.Vote)
+		if err != nil {
+			return errors.New(ERROR_IN_UPDATING)
+		}
+	}
+
+	if !vote.Undo {
+		_, err = models.Add(tx, vote)
+	}
+
+	return err
+}
+
+func deleteVoteDetail(
+	tx *gorm.DB, postId int64, voterId string, postType models.PostType, vote models.VoteType,
+) error {
+	db := tx.Where(
+		`post_id = ? AND voter_id = ? AND post_type = ? AND vote IN (?)`,
+		postId, voterId, postType, vote,
+	).Delete(models.Vote{})
+
+	return db.Error
+}
+
+func canAcceptAnswer(tx *gorm.DB, questionId int64, voterId string) error {
+	question := new(models.Question)
+	if err := models.GetById(tx, questionId, question); err != nil {
+		return errors.New(models.ERROR_IN_FETCHING)
+	}
+	if question.CreatedBy != voterId {
+		return errors.New(ACCEPT_ANSWER_NOT_ELIGIBLE)
+	}
+	return nil
+}
+
+func getPreviousAcceptedAnswerAndVote(
+	tx *gorm.DB, questionId int64, newVote *models.Vote,
+) (previVote *models.Vote, prevAnswer *models.Answer, err error) {
+	prevAnswer, err = models.GetPreviousAcceptedAnswer(tx, questionId)
+
+	if err != nil {
+		err = errors.New(models.ERROR_IN_FETCHING)
+		return
+	}
+
+	if prevAnswer == nil {
+		return
+	}
+
+	previVote, err = models.GetVoteDetail(
+		tx, prevAnswer.ID, newVote.VoterID, newVote.PostType, []models.VoteType{0, 5},
+	)
+
+	return
+}
+
+func updateVoteDetails(tx *gorm.DB, newVote *models.Vote, votesToClear []models.VoteType) error {
+	var err error
+
+	db := tx.Where(
+		`post_id = ? AND voter_id = ? AND post_type = ? AND vote IN (?)`,
+		newVote.PostID, newVote.VoterID, newVote.PostType, votesToClear,
+	).Delete(models.Vote{})
+
+	if db.Error != nil {
+		return db.Error
+	}
+
+	if !newVote.Undo {
+		_, err = models.Add(tx, newVote)
+	}
+
 	return err
 }
 
 func revokePointsForPreviousAcceptedAnswerAuthor(
-	tx *gorm.DB, current *models.Vote, previous *models.Vote, post models.Post,
+	tx *gorm.DB, current *models.Vote, previous *models.Vote, prevPost models.Post,
 ) error {
-	if previous == nil || current.Undo || post.Author() == previous.VoterID {
+	if previous == nil || current.Undo || prevPost.Author() == previous.VoterID {
 		return nil
 	}
 
-	if err := models.UpdateUserPointsById(tx, previous.VoterID, -20); err != nil {
+	if err := models.UpdateUserPointsById(tx, prevPost.Author(), -20); err != nil {
 		return errors.New(ERROR_IN_UPDATING)
 	}
 
@@ -227,6 +299,14 @@ func updatePoints(tx *gorm.DB, points *points, post models.Post, voterId string)
 	return nil
 }
 
+func getPostVotes(tx *gorm.DB, postId int64, postType models.PostType) models.VoteResponse {
+	post, err := getPost(tx, postId, postType)
+	if err != nil {
+		return getErrorResponse(ERROR_IN_UPDATING)
+	}
+	return models.VoteResponse{Vote: post.TotalVote(), Result: "SUCCESS"}
+}
+
 func getPost(tx *gorm.DB, id int64, postType models.PostType) (models.Post, error) {
 	if postType == models.QuestionPost {
 		return models.GetActiveNonClosedQuestionById(tx, id, postType)
@@ -238,6 +318,17 @@ func getPost(tx *gorm.DB, id int64, postType models.PostType) (models.Post, erro
 func getPointsForUpvote(current *models.Vote, previous *models.Vote) *points {
 	points := new(points)
 
+	if current.Undo {
+		if current.PostType == models.QuestionPost {
+			points.author = -2
+		} else {
+			points.author = -10
+		}
+		points.post = -1
+
+		return points
+	}
+
 	if previous == nil {
 		if current.PostType == models.QuestionPost {
 			points.author = 2
@@ -245,18 +336,11 @@ func getPointsForUpvote(current *models.Vote, previous *models.Vote) *points {
 			points.author = 10
 		}
 		points.post = 1
-	} else if current.Undo {
-		if current.PostType == models.QuestionPost {
-			points.author = -2
-		} else {
-			points.author = -10
-		}
-		points.post = -1
 	} else {
 		if current.PostType == models.QuestionPost {
 			points.author = 4
 		} else {
-			points.author = 20
+			points.author = 15
 		}
 
 		points.voter = 1
@@ -269,6 +353,18 @@ func getPointsForUpvote(current *models.Vote, previous *models.Vote) *points {
 func getPointsForDownvote(current *models.Vote, previous *models.Vote) *points {
 	points := new(points)
 
+	if current.Undo {
+		if current.PostType == models.QuestionPost {
+			points.author = 2
+		} else {
+			points.author = 5
+		}
+		points.post = 1
+		points.voter = 1
+
+		return points
+	}
+
 	if previous == nil {
 		if current.PostType == models.QuestionPost {
 			points.author = -2
@@ -277,42 +373,14 @@ func getPointsForDownvote(current *models.Vote, previous *models.Vote) *points {
 		}
 		points.post = -1
 		points.voter = -1
-	} else if current.Undo {
-		if current.PostType == models.QuestionPost {
-			points.author = 2
-		} else {
-			points.author = 5
-		}
-		points.post = 1
-		points.voter = 1
 	} else {
 		if current.PostType == models.QuestionPost {
 			points.author = -4
 		} else {
-			points.author = -20
+			points.author = -15
 		}
 		points.post = -2
 		points.voter = -1
-	}
-
-	return points
-}
-
-func getPointsForAcceptAnswer(
-	current *models.Vote, previous *models.Vote, post models.Post,
-) *points {
-	points := new(points)
-
-	if previous == nil {
-		// Add points if not self accepted answer
-		if post.Author() != current.VoterID {
-			points.author = 20
-		}
-	} else if current.Undo {
-		// Add points if not self accepted answer
-		if post.Author() != current.VoterID {
-			points.author = -20
-		}
 	}
 
 	return points
@@ -356,7 +424,7 @@ func isVoteValid(newVote *models.Vote, postAuthor string) bool {
 	// 2. Undo own accepted answer
 	if newVote.VoterID != postAuthor ||
 		newVote.PostType == models.AnswerPost && newVote.Undo ||
-		newVote.PostType == models.AnswerPost && newVote.Vote == models.AcceptAnswer {
+		newVote.PostType == models.AnswerPost && newVote.Vote == models.AcceptAnswerVote {
 		return true
 	}
 

@@ -303,7 +303,7 @@ ALTER TABLE public.users OWNER TO postgres;
 CREATE TABLE public.votes (
     post_id bigint NOT NULL,
     voter_id character varying(50) NOT NULL,
-    post_type integer DEFAULT 1 NOT NULL,
+    post_type integer DEFAULT 0 NOT NULL,
     vote integer NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL
