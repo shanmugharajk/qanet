@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// UserRole - user_role table.
 type UserRole struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`

@@ -1,0 +1,49 @@
+<%= for (question) in Questions.Records { %>
+    <%
+      let cls = ""
+      if (question.HasAcceptedAnswer) {
+        cls = "bg-accepted c-w"
+      } else if (question.TotalAnswers > 0) {
+        cls = "b-accepted c-accepted"
+      }
+    %>
+    <div class="d-f pd-tb15 bb-lgrey-qlist home--question-list-item">
+        <!-- Right container -->
+        <div class="d-f ta-c c-bl1">
+          <!-- Vote -->
+          <div class="pd-10">
+            <div class="f-16"><span><%= question.Votes %></span></div>
+            <div class="f-11">Votes</div>
+          </div>
+
+          <!-- Answers -->
+          <div class="pd-10 m-l10 <%= cls %>">
+            <div class="f-16"><span><%= question.TotalAnswers %></span></div>
+            <div class="f-11">Answers</div>
+          </div>
+        </div>
+
+        <div class="m-l20 fl-1a">
+          <h5>
+            <a href="/questions/<%= question.ID %>" class="question-link">
+              <%= question.Title %>
+            </a>
+          </h5>
+          <div class="d-f">
+            <!-- Tags -->
+            <div class="fl-1a">
+                <%= partial("questions/tags", {tags: question.QuestionTags}) %>
+            </div>
+            <div class="f-12 c-dgr2 m-r20">
+              <%= if (question.AskedAt.Equal(question.UpdatedAt)) { %>
+                <span>asked  <%= question.AskedAt.Format("Jan 02 '06 15:04") %></span>
+              <% } else { %>
+                <span>updated  <%= question.UpdatedAt.Format("Jan 02 '06 15:04") %></span>
+              <% } %>
+              <a href="#" class="pd-rl5"><%= question.CreatedBy %></a>
+              <span><%= question.AuthorPoints %></span>
+            </div>
+          </div>
+        </div>
+    </div>
+  <% } %>

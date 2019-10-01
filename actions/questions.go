@@ -9,7 +9,6 @@ import (
 	"github.com/shanmugharajk/qanet/models"
 )
 
-// AskQuestionIndex returns the form for creating new post.
 func AskQuestionIndex(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
 
@@ -23,7 +22,6 @@ func AskQuestionIndex(c buffalo.Context) error {
 	return c.Render(200, r.HTML("questions/ask.html"))
 }
 
-// AskQuestion accepts the posted data and creates a new question.
 func AskQuestion(c buffalo.Context) error {
 	q := &models.Question{}
 	if err := c.Bind(q); err != nil {

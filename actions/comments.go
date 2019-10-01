@@ -20,8 +20,6 @@ type commentForm struct {
 	ID      int64
 }
 
-// AddComment returns the response of comment HTML
-// after successfully added to database.
 func AddComment(c buffalo.Context) error {
 	commentForm := &commentForm{}
 
@@ -51,7 +49,6 @@ func AddComment(c buffalo.Context) error {
 	return errors.New("internal error occurred")
 }
 
-// UpdateComment updates and returns the updated comment HTML.
 func UpdateComment(c buffalo.Context) error {
 	commentForm := &commentForm{}
 
@@ -89,7 +86,6 @@ func UpdateComment(c buffalo.Context) error {
 	return errors.New("internal error occurred")
 }
 
-// DeleteComment deletes comment based on the post id from query param.
 func DeleteComment(c buffalo.Context) error {
 	paramPostType := c.Param("type")
 	paramCommentID := c.Param("commentID")

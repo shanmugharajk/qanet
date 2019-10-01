@@ -8,8 +8,6 @@ import (
 	"github.com/shanmugharajk/qanet/models"
 )
 
-// SubmitAnswer accepts the posted answer, validates and
-// adds the answer to the corresponding question.
 func SubmitAnswer(c buffalo.Context) error {
 	var err error
 	a := new(models.Answer)

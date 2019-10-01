@@ -20,6 +20,11 @@ const initMenus = function () {
   });
 };
 
+const initPagination = function () {
+  // TODO:
+}
+
 export default function init() {
   initMenus();
+  initPagination();
 }

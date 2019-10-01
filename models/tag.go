@@ -6,7 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// Tag is the model for tags table.
 type Tag struct {
 	ID          string `json:"id"`
 	Description string `json:"description"`

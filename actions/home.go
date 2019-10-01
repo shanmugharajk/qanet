@@ -1,20 +1,22 @@
 package actions
 
 import (
+	"time"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"github.com/shanmugharajk/qanet/models"
 )
 
-// HomeHandler is a default handler to serve up
-// a home page.
 func HomeHandler(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
-	questions, err := models.GetQuestions(tx)
+	results, err := models.GetQuestions(tx)
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	c.Set("Questions", questions)
+
+	c.Cookies().SetWithExpirationTime("qcursor", results.Cursor, time.Now().Add(30*24*time.Hour))
+	c.Set("Questions", results)
 	return c.Render(200, r.HTML("questions/index.html"))
 }

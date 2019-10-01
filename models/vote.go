@@ -14,7 +14,6 @@ const (
 	AcceptAnswerVote VoteType = 5
 )
 
-// Vote is the model for votes table.
 type Vote struct {
 	PostID   int64    `json:"postId"`
 	VoterID  string   `json:"voterId"`

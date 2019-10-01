@@ -22,8 +22,6 @@ type points struct {
 	post   int
 }
 
-// VoteHandler handles all the post votes routes and updates the
-// vote for the points and user points.
 func VoteHandler(c buffalo.Context) error {
 	paramPostId := c.Param("postID")
 	postId, err := strconv.ParseInt(paramPostId, 10, 64)

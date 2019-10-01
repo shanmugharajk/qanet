@@ -10,7 +10,6 @@ import (
 	"github.com/pkg/errors"
 )
 
-// UpdateBookmark adds the post to the bookmark.
 func UpdateBookmark(c buffalo.Context) error {
 	var err error
 	var postID int64

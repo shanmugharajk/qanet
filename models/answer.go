@@ -8,7 +8,6 @@ import (
 	customvalidators "github.com/shanmugharajk/qanet/models/validators"
 )
 
-// Answer is the model for answers table
 type Answer struct {
 	ID            int64  `json:"id"`
 	AnswerContent string `json:"answerContent"`

@@ -33,6 +33,7 @@ type Pagination struct {
 	Records        interface{}
 	PageNum        int
 	RecordsPerPage int
+	Cursor         string
 }
 
 type PaginationParam struct {
@@ -40,6 +41,7 @@ type PaginationParam struct {
 	PageNum        int
 	RecordsPerPage int
 	Result         interface{}
+	Offset         bool
 }
 
 func init() {
@@ -69,8 +71,6 @@ func Paginate(p *PaginationParam) (*Pagination, error) {
 		return nil, db.Error
 	}
 
-	totalPage := int(math.Ceil(float64(totalRecords) / float64(p.RecordsPerPage)))
-
 	if p.PageNum < 1 {
 		p.PageNum = 1
 	}
@@ -78,6 +78,8 @@ func Paginate(p *PaginationParam) (*Pagination, error) {
 	if p.RecordsPerPage == 0 {
 		p.RecordsPerPage = 20
 	}
+
+	totalPage := int(math.Ceil(float64(totalRecords) / float64(p.RecordsPerPage)))
 
 	var offset int
 	var paginator Pagination
@@ -89,7 +91,11 @@ func Paginate(p *PaginationParam) (*Pagination, error) {
 	}
 
 	if p.PageNum <= totalPage {
-		p.Query.Limit(p.RecordsPerPage).Offset(offset).Find(p.Result)
+		if p.Offset {
+			p.Query.Limit(p.RecordsPerPage).Offset(offset).Find(p.Result)
+		} else {
+			p.Query.Limit(p.RecordsPerPage).Find(p.Result)
+		}
 	}
 
 	paginator.TotalRecords = totalRecords

@@ -17,7 +17,6 @@ var Roles = map[string]string{
 	"normal_user": "NORMAL_USER",
 }
 
-// User is the gorm model representation of table users.
 type User struct {
 	ID           string    `json:"id"`
 	DisplayName  string    `json:"display_name"`

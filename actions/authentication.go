@@ -65,6 +65,7 @@ func LoginNew(c buffalo.Context) error {
 func Logout(c buffalo.Context) error {
 	c.Session().Clear()
 	DeleteCookie("qaid", c)
+	DeleteCookie("qcursor", c)
 
 	if c.Param("returnUrl") != "" {
 		return c.Redirect(302, c.Param("returnUrl"))

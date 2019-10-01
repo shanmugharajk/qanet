@@ -6,7 +6,6 @@ import (
 	customvalidators "github.com/shanmugharajk/qanet/models/validators"
 )
 
-// AnswerComment is the model for answer_comments table.
 type AnswerComment struct {
 	ID            int64  `json:"id"`
 	Comment       string `json:"comment"`

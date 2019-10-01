@@ -1,6 +1,7 @@
 package models
 
 import (
+	"strconv"
 	"strings"
 	"time"
 
@@ -80,6 +81,14 @@ func (q *Question) Author() string {
 	return q.CreatedBy
 }
 
+func (q *Question) StrID() string {
+	return strconv.FormatInt(q.ID, 10)
+}
+
+func (q *Question) StrUpdatedAt() string {
+	return strings.Replace(q.UpdatedAt.String(), " +0000 +0000", "", 1)
+}
+
 func (q *Question) UpdateVoteById(tx *gorm.DB, points int) error {
 	db := tx.Model(Question{}).
 		Where("id = ?", q.ID).
@@ -124,45 +133,30 @@ func GetQuestionDetails(tx *gorm.DB, userID interface{}, id int64) (*Question, e
 		Preload("QuestionTags").
 		Where("id = ?", id).
 		Select(`*,
-			(select case when count(id) > 5 then 1 else 0 end from question_comments where question_id = questions.id) as has_more_comments,
-			(select case when count(id) > 0 then 1 else 0 end from answers where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
+			(select case
+				when count(id) > 5
+					then 1
+					else 0
+				end from question_comments
+				where question_id = questions.id) as has_more_comments,
+			(select case
+				when count(id) > 0
+					then 1
+					else 0
+				end from answers
+				where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
 			created_at as asked_at,
 			(select points from users where id = questions.created_by) as author_points,
 			(select vote from votes where post_id = questions.id AND voter_id = ? AND post_type = 1) as self_vote,
-			(select case when count(question_id) > 0 then 1 else 0 end from bookmarks where question_id = questions.id AND user_id = ?) as self_bookmarked,
+			(select case
+				when count(question_id) > 0
+					then 1 else 0
+				end from bookmarks
+				where question_id = questions.id AND user_id = ?) as self_bookmarked,
 			(select count(question_id) from bookmarks where question_id = questions.id) as total_bookmarks
 		`, userID, userID).
 		First(&question)
 	return question, db.Error
-}
-
-func GetQuestions(tx *gorm.DB) ([]*Question, error) {
-	questions := []*Question{}
-	db := tx.
-		Preload("QuestionTags").
-		Select(`*,
-			(select case when count(id) > 0 then 1 else 0 end from answers where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
-			(select count(*) from answers where question_id = questions.id) as total_answers,
-			created_at as asked_at,
-			(select points from users where id = questions.created_by) as author_points
-		`).
-		Find(&questions).
-		Offset(0).Limit(55)
-	return questions, db.Error
-}
-
-func GetQuestionAuthor(tx *gorm.DB, id int64, name string) (bool, error) {
-	var count int64
-
-	db := tx.Model(Question{}).
-		Where("id = ? AND  created_by = ?", id, name).
-		Count(&count)
-
-	if db.Error != nil {
-		return false, db.Error
-	}
-
-	return count > 0, nil
 }
 
 func GetActiveNonClosedQuestionById(tx *gorm.DB, id int64, postType PostType) (Post, error) {
@@ -185,4 +179,44 @@ func GetActiveNonClosedQuestionById(tx *gorm.DB, id int64, postType PostType) (P
 	}
 
 	return &question[0], nil
+}
+
+func GetQuestions(tx *gorm.DB) (*Pagination, error) {
+	q := make([]*Question, 0, 20)
+
+	db := getQuestionsListQuery(tx)
+
+	params := new(PaginationParam)
+	params.Query = db
+	params.Result = &q
+	params.Offset = true
+	params.PageNum = 1
+
+	paginatedResults, err := Paginate(params)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(q) == 20 {
+		paginatedResults.Cursor = q[19].StrID() + "_" + q[19].StrUpdatedAt()
+	}
+
+	return paginatedResults, nil
+}
+
+func getQuestionsListQuery(tx *gorm.DB) *gorm.DB {
+	return tx.
+		Preload("QuestionTags").
+		Select(`*,
+			(select case
+				when count(id) > 0
+					then 1
+					else 0
+				end from answers
+			where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
+			(select count(*) from answers where question_id = questions.id) as total_answers,
+			created_at as asked_at,
+			updated_at as updated_at,
+			(select points from users where id = questions.created_by) as author_points`).
+		Order("updated_at desc, id desc")
 }

@@ -428,6 +428,13 @@ CREATE INDEX idx_fts_search ON public.questions USING gin (title_search);
 
 
 --
+-- Name: idx_questions_id; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX idx_questions_id ON public.answers USING btree (question_id);
+
+
+--
 -- Name: schema_migration_version_idx; Type: INDEX; Schema: public; Owner: postgres
 --
 
