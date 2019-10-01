@@ -2,6 +2,7 @@ package models
 
 import (
 	"log"
+	"math"
 
 	"github.com/gobuffalo/envy"
 	"github.com/gobuffalo/pop"
@@ -24,6 +25,23 @@ type QaNetModel interface {
 	Validate() *validate.Errors
 }
 
+type Pagination struct {
+	TotalRecords   int64
+	TotalPage      int
+	NextPage       int
+	PrevPage       int
+	Records        interface{}
+	PageNum        int
+	RecordsPerPage int
+}
+
+type PaginationParam struct {
+	Query          *gorm.DB
+	PageNum        int
+	RecordsPerPage int
+	Result         interface{}
+}
+
 func init() {
 	var err error
 	env := envy.Get("GO_ENV", "development")
@@ -42,6 +60,57 @@ func init() {
 	}
 
 	DbConnection = DbConnection.LogMode(true)
+}
+
+func Paginate(p *PaginationParam) (*Pagination, error) {
+	var totalRecords int64
+
+	if db := p.Query.Model(p.Result).Count(&totalRecords); db.Error != nil {
+		return nil, db.Error
+	}
+
+	totalPage := int(math.Ceil(float64(totalRecords) / float64(p.RecordsPerPage)))
+
+	if p.PageNum < 1 {
+		p.PageNum = 1
+	}
+
+	if p.RecordsPerPage == 0 {
+		p.RecordsPerPage = 20
+	}
+
+	var offset int
+	var paginator Pagination
+
+	if p.PageNum == 1 {
+		offset = 0
+	} else {
+		offset = (paginator.PageNum - 1) * p.RecordsPerPage
+	}
+
+	if p.PageNum <= totalPage {
+		p.Query.Limit(p.RecordsPerPage).Offset(offset).Find(p.Result)
+	}
+
+	paginator.TotalRecords = totalRecords
+	paginator.RecordsPerPage = p.RecordsPerPage
+	paginator.TotalPage = totalPage
+	paginator.Records = p.Result
+	paginator.PageNum = p.PageNum
+
+	if p.PageNum > 1 {
+		paginator.PrevPage = p.PageNum - 1
+	} else {
+		paginator.PrevPage = p.PageNum
+	}
+
+	if p.PageNum == paginator.TotalPage {
+		paginator.NextPage = p.PageNum
+	} else {
+		paginator.NextPage = p.PageNum + 1
+	}
+
+	return &paginator, nil
 }
 
 func Add(tx *gorm.DB, model QaNetModel) (*validate.Errors, error) {

@@ -147,7 +147,7 @@ func GetQuestions(tx *gorm.DB) ([]*Question, error) {
 			(select points from users where id = questions.created_by) as author_points
 		`).
 		Find(&questions).
-		Offset(0).Limit(5)
+		Offset(0).Limit(55)
 	return questions, db.Error
 }
 
