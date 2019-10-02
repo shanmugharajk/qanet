@@ -11,7 +11,7 @@ import (
 
 func HomeHandler(c buffalo.Context) error {
 	tx, _ := c.Value("tx").(*gorm.DB)
-	results, err := models.GetQuestions(tx)
+	results, err := models.GetQuestions(tx, "", "")
 	if err != nil {
 		return errors.WithStack(err)
 	}

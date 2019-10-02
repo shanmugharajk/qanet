@@ -2,6 +2,8 @@ package actions
 
 import (
 	"strconv"
+	"strings"
+	"time"
 
 	"github.com/gobuffalo/buffalo"
 	"github.com/jinzhu/gorm"
@@ -28,7 +30,6 @@ func AskQuestion(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
-	// TODO: Should add middleware to check auth for posting question.
 	q.CreatedBy = c.Value("userId").(string)
 	q.UpdatedBy = c.Value("userId").(string)
 
@@ -76,4 +77,44 @@ func QuestionDetail(c buffalo.Context) error {
 	c.Set("Question", question)
 	c.Set("Answers", answers)
 	return c.Render(200, r.HTML("questions/detail.html"))
+}
+
+func GetQuestions(c buffalo.Context) error {
+	id, timestamp, err := extractCursorInfo(c)
+	if err != nil {
+		return c.Render(500, r.String(err.Error()))
+	}
+
+	tx, _ := c.Value("tx").(*gorm.DB)
+	results, err := models.GetQuestions(tx, id, timestamp)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	c.Cookies().SetWithExpirationTime("qcursor", results.Cursor, time.Now().Add(30*24*time.Hour))
+	c.Set("Questions", results)
+	return c.Render(200, r.Template("text/html", "questions/_questions.html"))
+}
+
+func extractCursorInfo(c buffalo.Context) (string, string, error) {
+	qcursor, err := c.Cookies().Get("qcursor")
+
+	if err != nil {
+		return "", "", errors.New("Invalid cursor")
+	}
+
+	if len(qcursor) == 0 {
+		return "", "", nil
+	}
+
+	cursorInfos := strings.Split(qcursor, "_")
+
+	if len(cursorInfos) != 2 {
+		return "", "", errors.New("Invalid cursor")
+	}
+
+	id := cursorInfos[0]
+	timeStamp := cursorInfos[1]
+
+	return id, timeStamp, nil
 }

@@ -10,6 +10,7 @@ import (
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
+	"github.com/rs/cors"
 	"github.com/unrolled/secure"
 
 	csrf "github.com/gobuffalo/mw-csrf"
@@ -45,9 +46,18 @@ func App() *buffalo.App {
 		return app
 	}
 
+	// TODO: modify origin
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+	})
+
 	app = buffalo.New(buffalo.Options{
 		Env:         ENV,
 		SessionName: "_qanet_session",
+		PreWares: []buffalo.PreWare{
+			c.Handler,
+		},
 	})
 
 	if app.Env != "development" {
@@ -84,6 +94,7 @@ func App() *buffalo.App {
 
 	// Question
 	questions := app.Group("/questions")
+	questions.GET("", GetQuestions)
 	questions.GET("/ask", authenticate(AskQuestionIndex))
 	questions.POST("/ask", authenticate(AskQuestion))
 	questions.POST("/{questionID}/answer/submit", authenticate(SubmitAnswer))

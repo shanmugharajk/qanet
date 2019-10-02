@@ -127,9 +127,7 @@ func AddQuestion(tx *gorm.DB, q *Question) (*validate.Errors, error) {
 func GetQuestionDetails(tx *gorm.DB, userID interface{}, id int64) (*Question, error) {
 	question := new(Question)
 	db := tx.
-		Preload("QuestionComments", func(tx *gorm.DB) *gorm.DB {
-			return tx.Offset(0).Limit(5)
-		}).
+		Preload("QuestionComments").
 		Preload("QuestionTags").
 		Where("id = ?", id).
 		Select(`*,
@@ -181,24 +179,29 @@ func GetActiveNonClosedQuestionById(tx *gorm.DB, id int64, postType PostType) (P
 	return &question[0], nil
 }
 
-func GetQuestions(tx *gorm.DB) (*Pagination, error) {
+func GetQuestions(tx *gorm.DB, id string, timestamp string) (*Pagination, error) {
 	q := make([]*Question, 0, 20)
 
 	db := getQuestionsListQuery(tx)
 
+	if len(id) != 0 && len(timestamp) != 0 {
+		db = db.Where("id < ? AND updated_at < ?", id, timestamp)
+	}
+
 	params := new(PaginationParam)
 	params.Query = db
 	params.Result = &q
-	params.Offset = true
-	params.PageNum = 1
+	params.Offset = false
 
 	paginatedResults, err := Paginate(params)
 	if err != nil {
 		return nil, err
 	}
 
-	if len(q) == 20 {
-		paginatedResults.Cursor = q[19].StrID() + "_" + q[19].StrUpdatedAt()
+	if len(q) > 0 {
+		paginatedResults.Cursor = q[len(q)-1].StrID() + "_" + q[len(q)-1].StrUpdatedAt()
+	} else {
+		paginatedResults.Cursor = id + "_" + timestamp
 	}
 
 	return paginatedResults, nil

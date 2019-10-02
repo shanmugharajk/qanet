@@ -18,14 +18,6 @@
   version = "v0.3.1"
 
 [[projects]]
-  digest = "1:f780d408067189c4c42b53f7bb24ebf8fd2a1e4510b813ed6e79dd6563e38cc5"
-  name = "github.com/ajg/form"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "5c4e22684113ffc2a77577c178189940925f9aef"
-  version = "v1.5.1"
-
-[[projects]]
   digest = "1:b6d886569181ec96ca83d529f4d6ba0cbf92ace7bb6f633f90c5f34d9bba7aab"
   name = "github.com/blang/semver"
   packages = ["."]
@@ -40,14 +32,6 @@
   packages = ["crdb"]
   pruneopts = "UT"
   revision = "e0a95dfd547cc9c3ebaaba1a12c2afe4bf621ac5"
-
-[[projects]]
-  digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
-  name = "github.com/davecgh/go-spew"
-  packages = ["spew"]
-  pruneopts = "UT"
-  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
-  version = "v1.1.1"
 
 [[projects]]
   digest = "1:6f9339c912bbdda81302633ad7e99a28dfa5a639c864061f1929510a9a64aa74"
@@ -200,14 +184,6 @@
   version = "v0.2.2"
 
 [[projects]]
-  digest = "1:72efb2c5facb7637c8425091d2535232425ea324e3bca322e2095ffa337e9374"
-  name = "github.com/gobuffalo/httptest"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "1139798440d977dd7127ef3bab8438e9fc57ff56"
-  version = "v1.3.0"
-
-[[projects]]
   branch = "master"
   digest = "1:f391538f4166f7c0aa50943372af196304488b039fe663c134d42f064e1ed92c"
   name = "github.com/gobuffalo/logger"
@@ -288,10 +264,9 @@
   version = "v0.2.0"
 
 [[projects]]
-  digest = "1:778c48e86e53e4d5baeb76a8227518931c99cc046ed932f27491137f59b82448"
+  digest = "1:64747c682d7cf01b2838324e79d41fee61afa98845eccf07fd1df18a49323680"
   name = "github.com/gobuffalo/packr"
   packages = [
-    ".",
     "v2",
     "v2/file",
     "v2/file/resolver",
@@ -329,17 +304,6 @@
   pruneopts = "UT"
   revision = "d8d4348a78fad398a00911ca7468eff86aa65d68"
   version = "v4.11.1"
-
-[[projects]]
-  digest = "1:4a8161a3b203365b3a01a1a46d0ac7c7c3a4de68ed4482acbf381a8e724d3aa2"
-  name = "github.com/gobuffalo/suite"
-  packages = [
-    ".",
-    "fix",
-  ]
-  pruneopts = "UT"
-  revision = "917e29a4226b0b4d66176c8db37947b73eb22623"
-  version = "v2.6.2"
 
 [[projects]]
   branch = "master"
@@ -550,14 +514,6 @@
   version = "v1.0.6"
 
 [[projects]]
-  digest = "1:08de92704387e73fc4303fdc576e49341c48916e3812a7e99c592d41089dec3f"
-  name = "github.com/markbates/hmax"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "08a278df3de4af7a56aa89153f13587c4f77bc13"
-  version = "v1.1.0"
-
-[[projects]]
   digest = "1:3804a3a02964db8e6db3e5e7960ac1c1a9b12835642dd4f4ac4e56c749ec73eb"
   name = "github.com/markbates/inflect"
   packages = ["."]
@@ -679,14 +635,6 @@
   version = "v0.8.1"
 
 [[projects]]
-  digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
-  name = "github.com/pmezard/go-difflib"
-  packages = ["difflib"]
-  pruneopts = "UT"
-  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
-  version = "v1.0.0"
-
-[[projects]]
   digest = "1:e09ada96a5a41deda4748b1659cc8953961799e798aea557257b56baee4ecaf3"
   name = "github.com/rogpeppe/go-internal"
   packages = [
@@ -697,6 +645,14 @@
   pruneopts = "UT"
   revision = "438578804ca6f31be148c27683afc419ce47c06e"
   version = "v1.3.0"
+
+[[projects]]
+  digest = "1:c5dfe46811af7e2eff7c11fc84b6c841520338613c056f659f262d5a4fb42fa8"
+  name = "github.com/rs/cors"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "db0fe48135e83b5812a5a31be0eea66984b1b521"
+  version = "v1.7.0"
 
 [[projects]]
   branch = "master"
@@ -782,18 +738,6 @@
   pruneopts = "UT"
   revision = "298182f68c66c05229eb03ac171abe6e309ee79a"
   version = "v1.0.3"
-
-[[projects]]
-  digest = "1:8ff03ccc603abb0d7cce94d34b613f5f6251a9e1931eba1a3f9888a9029b055c"
-  name = "github.com/stretchr/testify"
-  packages = [
-    "assert",
-    "require",
-    "suite",
-  ]
-  pruneopts = "UT"
-  revision = "ffdc059bfe9ce6a4e144ba849dbedead332c6053"
-  version = "v1.3.0"
 
 [[projects]]
   digest = "1:9d79e011219ebcc4a7a6e89cd6126c35c6e7c9e1e9faece1b69bf521286b5a35"
@@ -903,16 +847,15 @@
     "github.com/gobuffalo/mw-forcessl",
     "github.com/gobuffalo/mw-i18n",
     "github.com/gobuffalo/mw-paramlogger",
-    "github.com/gobuffalo/packr",
     "github.com/gobuffalo/packr/v2",
     "github.com/gobuffalo/pop",
-    "github.com/gobuffalo/suite",
     "github.com/gobuffalo/validate",
     "github.com/gobuffalo/validate/validators",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
     "github.com/markbates/grift/grift",
     "github.com/pkg/errors",
+    "github.com/rs/cors",
     "github.com/unrolled/secure",
     "golang.org/x/crypto/bcrypt",
   ]

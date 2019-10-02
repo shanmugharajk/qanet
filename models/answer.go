@@ -69,9 +69,7 @@ func (a *Answer) UpdateVoteById(tx *gorm.DB, points int) error {
 func GetAnswers(tx *gorm.DB, userId interface{}, questionId int64, pageNo int, noOfRecords int) ([]*Answer, error) {
 	answers := []*Answer{}
 	db := tx.
-		Preload("AnswerComments", func(tx *gorm.DB) *gorm.DB {
-			return tx.Offset(0).Limit(5)
-		}).
+		Preload("AnswerComments").
 		Where("question_id = ?", questionId).
 		Select(`*,
 			(select points from users where id = answers.created_by) as author_points,
