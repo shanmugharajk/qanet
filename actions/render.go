@@ -31,11 +31,11 @@ func init() {
 			// uncomment for non-Bootstrap form helpers:
 			// "form":     plush.FormHelper,
 			// "form_for": plush.FormForHelper,
-			"quil_for": func(content string) template.HTML {
+			"html_escape": func(content string) template.HTML {
 				content = strings.ReplaceAll(content, "<script>", "&lt;script&gt;")
-				content = strings.ReplaceAll(content, "<a", "&lt;a")
-				content = strings.ReplaceAll(content, "<a>", "&lt;a&gt;")
-				content = strings.ReplaceAll(content, "</a>", "&lt;/a&gt;")
+				// content = strings.ReplaceAll(content, "<a", "&lt;a")
+				// content = strings.ReplaceAll(content, "<a>", "&lt;a&gt;")
+				// content = strings.ReplaceAll(content, "</a>", "&lt;/a&gt;")
 				content = strings.ReplaceAll(content, "</script>", "&lt;/script&gt;")
 				return template.HTML(content)
 			},

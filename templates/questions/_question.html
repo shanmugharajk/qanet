@@ -13,7 +13,7 @@
     <div class="mw-100 fl-1">
         <!-- Question content (editor) -->
         <div class="ql-snow readonly" id="q-<%= Question.ID %>">
-            <%= quil_for(Question.QuestionContent) %>
+            <%= html_escape(Question.QuestionContent) %>
         </div>
         <!-- Tags -->
         <%= partial("questions/tags", {tags: Question.QuestionTags}) %>

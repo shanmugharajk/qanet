@@ -12,7 +12,7 @@
     <div class="mw-100 w-100p fl 1">
         <!-- Answer content (editor) -->
         <div class="ql-snow readonly" id="q-<%= Answer.ID %>">
-            <%= quil_for(Answer.AnswerContent) %>
+            <%= html_escape(Answer.AnswerContent) %>
         </div>
 
         <div class="d-f m-t10">
