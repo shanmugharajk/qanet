@@ -8,10 +8,11 @@ Question answer forum with minimal features like stack overflow built with Golan
 - Admin page to manage the flagged posts, comments.
 - Bookmark questions.
 - Realtime updates on the new answer, vote.
-- Full text search on questions title.
+- Full text search on post.
 
 ## Todo
 
+- [ ] Full text search
 - [ ] Edit post
 - [ ] Bounty points, flag posts, comments
 - [ ] Realtime updates
