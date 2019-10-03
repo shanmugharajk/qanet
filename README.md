@@ -2,6 +2,8 @@
 
 Question answer forum with minimal features like stack overflow built with Golang, Buffalo, Gorm and postgresql.
 
+*Note The old C#, angular can be found here https://github.com/shanmugharajk/QaNet/tree/dotnet-version*
+
 ## Features
 
 - Post questions and answers with comments and voting.
