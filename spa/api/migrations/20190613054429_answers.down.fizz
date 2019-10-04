@@ -1,0 +1,2 @@
+drop_table("answers")
+sql("DROP INDEX idx_questions_id")

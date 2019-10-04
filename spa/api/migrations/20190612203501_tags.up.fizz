@@ -1,0 +1,13 @@
+create_table("tags") {
+    t.Column("id", "string", {"primary": true, "size": 50})
+    t.Column("description", "string", {"size": 500})
+
+    t.Column("created_at", "timestamp", {"default_raw": "now()"})
+    t.Column("updated_at", "timestamp", {"default_raw": "now()"})
+
+    t.Column("created_by", "string", {"size": 50})
+    t.Column("updated_by", "string", {"size": 50})
+
+    t.ForeignKey("created_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("updated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+}

@@ -1,0 +1,24 @@
+create_table("questions") {
+    t.Column("id", "bigint", {"primary": true})
+    t.Column("title", "string", {})
+    t.Column("title_search", "tsvector", {"null": true})
+    t.Column("question_content", "text", {})
+    t.Column("bookmarks", "int", {"default": 0})
+    t.Column("votes", "int", {"default": 0})
+    t.Column("close_votes", "int", {"default": 0})
+    t.Column("bounty_points", "int", {"default": 0})
+    t.Column("bounty_expiry_date", "date", {})
+    t.Column("is_active", "bool", {"default": true})
+    t.Column("is_closed", "bool", {"default": false})
+    t.Column("is_reopen_requested", "bool", {"default": false})
+    t.Column("deactivated_by", "string", {"size": 50, "null": true, "default_raw": "null"})
+    t.Column("updated_by", "string", {"size": 50})
+    t.Column("created_by", "string", {"size": 50})
+
+    t.Column("created_at", "timestamp", {"default_raw": "now()"})
+    t.Column("updated_at", "timestamp", {"default_raw": "now()"})
+
+    t.ForeignKey("created_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("updated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("deactivated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+}

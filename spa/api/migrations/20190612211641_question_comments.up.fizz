@@ -1,0 +1,17 @@
+create_table("question_comments") {
+    t.Column("id", "bigint", {"primary": true})
+    t.Column("comment", "text", {})
+    t.Column("question_id", "bigint", {})
+    t.Column("close_votes",  "int", {"default": 0})
+    t.Column("is_active", "bool", {"default": true})
+    t.Column("deactivated_by", "string", {"size": 50, "null": true, "default_raw": "null"})
+    t.Column("created_at", "timestamp", {"default_raw": "now()"})
+	t.Column("updated_at", "timestamp", {"default_raw": "now()"})
+    t.Column("updated_by", "string", {"size": 50})
+    t.Column("created_by", "string", {"size": 50})
+
+    t.ForeignKey("deactivated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("created_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("updated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("question_id", {"questions": ["id"]}, {"on_delete": "cascade"})
+}

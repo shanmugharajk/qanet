@@ -1,0 +1,26 @@
+create_table("answers") {
+    t.Column("id", "bigint", {"primary": true})
+    t.Column("answer_content", "text", {})
+    t.Column("votes", "int", {"default": 0})
+    t.Column("close_votes", "int", {"default": 0})
+
+    t.Column("is_closed", "bool", {"default": false})
+    t.Column("is_active", "bool", {"default": true})
+    t.Column("is_accepted", "bool", {"default": false})
+
+    t.Column("created_by", "string", {"size": 50})
+    t.Column("deactivated_by", "string", {"size": 50, "null": true, "default_raw": "null"})
+    t.Column("updated_by", "string", {"size": 50})
+
+    t.Column("question_id", "bigint", {})
+
+    t.Column("created_at", "timestamp", {"default_raw": "now()"})
+	t.Column("updated_at", "timestamp", {"default_raw": "now()"})
+
+    t.ForeignKey("created_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("updated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("deactivated_by", {"users": ["id"]}, {"on_delete": "restrict"})
+    t.ForeignKey("question_id", {"questions": ["id"]}, {"on_delete": "cascade"})
+}
+
+sql("CREATE INDEX idx_questions_id ON answers(question_id);")

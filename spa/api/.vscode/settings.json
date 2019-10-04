@@ -1,0 +1,12 @@
+{
+    "go.lintTool": "golangci-lint",
+    "go.lintFlags": [
+        "--fast"
+    ],
+    "go.useLanguageServer": true,
+    "go.formatTool": "goimports",
+    "go.toolsEnvVars": {
+        "GO111MODULE": "on"
+    },
+    "editor.formatOnSave": true
+}

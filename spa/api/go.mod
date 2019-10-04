@@ -16,9 +16,14 @@ require (
 	github.com/gobuffalo/packr/v2 v2.6.0
 	github.com/gobuffalo/pop v4.12.0+incompatible
 	github.com/gobuffalo/suite v2.8.2+incompatible
+	github.com/gobuffalo/validate v2.0.3+incompatible
 	github.com/gobuffalo/x v0.0.0-20190224155809-6bb134105960
 	github.com/jackc/pgconn v1.0.1 // indirect
+	github.com/jinzhu/gorm v1.9.11
 	github.com/markbates/grift v1.1.0
+	github.com/pkg/errors v0.8.1
 	github.com/rs/cors v1.7.0
+	github.com/shanmugharajk/qanet v0.0.0-20191004045902-5cfe61d90a8f
 	github.com/unrolled/secure v0.0.0-20190103195806-76e6d4e9b90c
+	golang.org/x/crypto v0.0.0-20190820162420-60c769a6c586
 )

@@ -1,0 +1,10 @@
+create_table("question_tags") {
+    t.Column("question_id", "bigint", {})
+    t.Column("tag_id", "string", {"size": 50})
+    t.PrimaryKey("question_id", "tag_id")
+
+    t.ForeignKey("question_id", {"questions": ["id"]}, {"on_delete": "cascade"})
+    t.ForeignKey("tag_id", {"tags": ["id"]}, {"on_delete": "restrict"})
+
+    t.DisableTimestamps()
+}
