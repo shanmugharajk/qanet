@@ -1,20 +1,17 @@
 package models
 
 import (
-	"strings"
 	"time"
 
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
 	"github.com/jinzhu/gorm"
-	"github.com/pkg/errors"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // Roles - different user roles
 const (
 	NormalUser Role = iota
-	Admin
+	AdminUser
 )
 
 type User struct {
@@ -24,7 +21,7 @@ type User struct {
 	Points       int       `json:"points"`
 	Email        string    `json:"email"`
 	PasswordHash string    `json:"password_hash"`
-	RoleID       Role      `json:"role_id"`
+	RoleID       *Role     `json:"role_id"`
 	IsActive     bool      `json:"is_active"`
 	LastLoggedIn time.Time `json:"last_logged_in"`
 	UpdatedAt    time.Time `json:"updatedAt" gorm:"not null"`
@@ -67,32 +64,4 @@ func (u *User) Validate(tx *gorm.DB) *validate.Errors {
 	}
 
 	return verrs
-}
-
-// CreateUser creates a new user and also has the encryption logic.
-func CreateUser(tx *gorm.DB, u *User) (*validate.Errors, error) {
-	u.Email = strings.ToLower(u.Email)
-
-	ph, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
-	if err != nil {
-		return validate.NewErrors(), errors.WithStack(err)
-	}
-
-	u.PasswordHash = string(ph)
-
-	verrs := u.Validate(tx)
-	if verrs.HasAny() {
-		return verrs, nil
-	}
-
-	userRole, err := FirstOrCreateNormalUser(tx)
-	if err != nil {
-		return validate.NewErrors(), errors.WithStack(err)
-	}
-
-	u.RoleID = userRole.ID
-	u.IsActive = true
-	e := tx.Create(u)
-
-	return validate.NewErrors(), e.Error
 }

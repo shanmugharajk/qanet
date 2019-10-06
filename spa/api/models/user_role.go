@@ -9,8 +9,8 @@ import (
 type Role int
 
 type UserRole struct {
-	ID   Role `json:"id"`
-	Name string   `json:"name"`
+	ID   *Role  `json:"id" gorm:"default:0" sql:"default: 0"`
+	Name string `json:"name"`
 }
 
 // Validate - validates the user details.
@@ -21,12 +21,8 @@ func (u *UserRole) Validate(tx *gorm.DB) *validate.Errors {
 	)
 }
 
-// FirstOrCreateNormalUser gets the details with role as 'NormalUser'
-// If there is no records available it will create a role.
-func FirstOrCreateNormalUser(tx *gorm.DB) (*UserRole, error) {
-	userRole := new(UserRole)
-	userRole.ID = NormalUser
-	userRole.Name = "NORMAL USER"
-	db := tx.FirstOrCreate(&userRole)
-	return userRole, db.Error
+func GetRole(role Role) *Role {
+	r := new(Role)
+	*r = role
+	return r
 }
