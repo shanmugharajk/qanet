@@ -4,6 +4,7 @@ go 1.13
 
 require (
 	github.com/cockroachdb/cockroach-go v0.0.0-20190916165215-ad57a61cc915 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gobuffalo/buffalo v0.14.10
 	github.com/gobuffalo/buffalo-pop v1.17.2
 	github.com/gobuffalo/envy v1.7.0
