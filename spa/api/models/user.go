@@ -28,6 +28,7 @@ type User struct {
 	CreatedAt    time.Time `json:"createdAt" gorm:"not null"`
 
 	Password string `json:"password" gorm:"-"`
+	Token    string `json:"token" gorm:"-"`
 }
 
 // Validate - validates the user details.

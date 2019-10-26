@@ -1,13 +1,16 @@
 package actions
 
 import (
+	"net/http"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/envy"
 	forcessl "github.com/gobuffalo/mw-forcessl"
 	paramlogger "github.com/gobuffalo/mw-paramlogger"
+	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 	"github.com/unrolled/secure"
 
-	"github.com/gobuffalo/buffalo-pop/pop/popmw"
 	contenttype "github.com/gobuffalo/mw-contenttype"
 	"github.com/gobuffalo/x/sessions"
 	"github.com/rs/cors"
@@ -33,12 +36,18 @@ var app *buffalo.App
 // placed last in the route declarations, as it will prevent routes
 // declared after it to never be called.
 func App() *buffalo.App {
+	// TODO: modify origin
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:3000"},
+		AllowCredentials: true,
+	})
+
 	if app == nil {
 		app = buffalo.New(buffalo.Options{
 			Env:          ENV,
 			SessionStore: sessions.Null{},
 			PreWares: []buffalo.PreWare{
-				cors.Default().Handler,
+				c.Handler,
 			},
 			SessionName: "_api_session",
 		})
@@ -49,15 +58,15 @@ func App() *buffalo.App {
 		// Log request parameters (filters apply).
 		app.Use(paramlogger.ParameterLogger)
 
+		// GormTransaction - wraps the gorm transaction logic in the middleware
+		app.Use(GormTransaction(models.DbConnection))
+
 		// Set the request content type to JSON
 		app.Use(contenttype.Set("application/json"))
 
-		// Wraps each request in a transaction.
-		//  c.Value("tx").(*pop.Connection)
-		// Remove to disable this.
-		app.Use(popmw.Transaction(models.DB))
-
-		app.GET("/", HomeHandler)
+		api := app.Group("/api")
+		api.GET("/", HomeHandler)
+		api.POST("/signin", SignInHandler)
 	}
 
 	return app
@@ -74,3 +83,53 @@ func forceSSL() buffalo.MiddlewareFunc {
 		SSLProxyHeaders: map[string]string{"X-Forwarded-Proto": "https"},
 	})
 }
+
+// DeleteCookie sets the response header to adds a Set-Cookie header to the
+// provided ResponseWriter's header and instructs browser to expire it.
+var DeleteCookie = func(name string, c buffalo.Context) {
+	ck := http.Cookie{
+		Name:   name,
+		Path:   "/",
+		MaxAge: -1,
+	}
+
+	http.SetCookie(c.Response(), &ck)
+}
+
+// GormTransaction - wraps the gorm transaction logic in the middleware
+var GormTransaction = func(db *gorm.DB) buffalo.MiddlewareFunc {
+	return func(h buffalo.Handler) buffalo.Handler {
+		return func(c buffalo.Context) error {
+
+			ef := func() error {
+				if err := h(c); err != nil {
+					return err
+				}
+				if res, ok := c.Response().(*buffalo.Response); ok {
+					if res.Status < 200 || res.Status >= 400 {
+						return errNonSuccess
+					}
+				}
+				return nil
+			}
+
+			// wrap all requests in a transaction and set the length
+			// of time doing things in the db to the log.
+			tx := db.Begin()
+			if tx.Error != nil {
+				return errors.WithStack(tx.Error)
+			}
+			defer tx.Commit()
+
+			c.Set("tx", tx)
+			err := ef()
+			if err != nil && errors.Cause(err) != errNonSuccess {
+				tx.Rollback()
+				return err
+			}
+			return nil
+		}
+	}
+}
+
+var errNonSuccess = errors.New("internal server error")

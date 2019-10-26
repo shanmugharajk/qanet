@@ -34,6 +34,14 @@
   revision = "e0a95dfd547cc9c3ebaaba1a12c2afe4bf621ac5"
 
 [[projects]]
+  digest = "1:76dc72490af7174349349838f2fe118996381b31ea83243812a97e5a0fd5ed55"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
+
+[[projects]]
   digest = "1:6f9339c912bbdda81302633ad7e99a28dfa5a639c864061f1929510a9a64aa74"
   name = "github.com/dustin/go-humanize"
   packages = ["."]
@@ -89,6 +97,18 @@
   pruneopts = "UT"
   revision = "f7987157e9157ca5b7d488faacf3efa776ff8c79"
   version = "v0.14.6"
+
+[[projects]]
+  digest = "1:d70b7d200a97fb4ac7100be640080fcbf822a2e10d3c578f0519dcb8175f8364"
+  name = "github.com/gobuffalo/buffalo-pop"
+  packages = [
+    "internal/takeon/github.com/markbates/errx",
+    "pop",
+    "pop/popmw",
+  ]
+  pruneopts = "UT"
+  revision = "c7111bed1ed234f471b96a5a753bc25d77193072"
+  version = "v1.23.0"
 
 [[projects]]
   digest = "1:d29ee5ef14a7e0253facd0bcebe6a69a7a4e02a67eb24d2aacd8ccb4a7cea6fc"
@@ -214,6 +234,14 @@
   packages = ["."]
   pruneopts = "UT"
   revision = "e161e8a93e3b94f8c89598420eb13b4f7d660450"
+
+[[projects]]
+  branch = "master"
+  digest = "1:e27766b87dca480ef1fd1e4fe9f39bbae979cbca260677a5098e7ef5a3b7f6ae"
+  name = "github.com/gobuffalo/mw-contenttype"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "36c73cc938f3f18f394bec1e91a72fe251de512f"
 
 [[projects]]
   branch = "master"
@@ -346,12 +374,13 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:9090af09a15415dc95b9c8e6a09f1f14545bcebd8a5edb496e2be9b782a55b3b"
+  digest = "1:765aa82af227db3bc2badcf038e65200aa2995cbac59ce62b4b2edabdc80a6cf"
   name = "github.com/gobuffalo/x"
   packages = [
     "defaults",
     "httpx",
     "randx",
+    "sessions",
   ]
   pruneopts = "UT"
   revision = "d80e318e1bb44bede3d7a2c89bd41eb70213c95c"
@@ -840,9 +869,12 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/dgrijalva/jwt-go",
     "github.com/gobuffalo/buffalo",
+    "github.com/gobuffalo/buffalo-pop/pop/popmw",
     "github.com/gobuffalo/buffalo/render",
     "github.com/gobuffalo/envy",
+    "github.com/gobuffalo/mw-contenttype",
     "github.com/gobuffalo/mw-csrf",
     "github.com/gobuffalo/mw-forcessl",
     "github.com/gobuffalo/mw-i18n",
@@ -851,6 +883,7 @@
     "github.com/gobuffalo/pop",
     "github.com/gobuffalo/validate",
     "github.com/gobuffalo/validate/validators",
+    "github.com/gobuffalo/x/sessions",
     "github.com/jinzhu/gorm",
     "github.com/jinzhu/gorm/dialects/postgres",
     "github.com/markbates/grift/grift",

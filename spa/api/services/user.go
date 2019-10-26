@@ -49,7 +49,15 @@ func LoginUser(tx *gorm.DB, u *models.User) (*models.User, error) {
 		return u, errors.New("invalid credentials")
 	}
 
-	// TODO: Add token here
+	var err error
+	var token string
+
+	if token, err = createTokenString(existing.ID, existing.RoleID); err != nil {
+		return u, errors.New("error in generating token")
+	}
+
+	existing.Token = token
+
 	return existing, nil
 }
 

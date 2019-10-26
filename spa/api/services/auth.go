@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/shanmugharajk/qanet/spa/api/models"
 	"github.com/shanmugharajk/qanet/spa/api/utils"
 )
 
@@ -12,8 +13,8 @@ const AuthTokenValidTime = time.Hour * 24 * 30
 
 type TokenClaims struct {
 	jwt.StandardClaims
-	Role string `json:"role"`
-	Csrf string `json:"csrf"`
+	Role *models.Role `json:"role"`
+	Csrf string       `json:"csrf"`
 }
 
 type UserToken struct {
@@ -21,7 +22,7 @@ type UserToken struct {
 	Csrf      string `json:"csrf"`
 }
 
-func CreateNewTokens(userid string, role string) (token UserToken, err error) {
+func CreateNewTokens(userid string, role *models.Role) (token UserToken, err error) {
 	csrfSecret, err := utils.GenerateRandomString(32)
 	if err != nil {
 		return
@@ -40,7 +41,7 @@ func CreateNewTokens(userid string, role string) (token UserToken, err error) {
 	return
 }
 
-func createTokenString(userid string, role string) (tokenString string, err error) {
+func createTokenString(userid string, role *models.Role) (tokenString string, err error) {
 	tokenString = ""
 
 	var csrf string
