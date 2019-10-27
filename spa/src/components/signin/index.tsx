@@ -2,9 +2,12 @@ import React from 'react';
 import { Formik, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
 import { Header, Segment } from 'semantic-ui-react';
-import api, { successCode } from '../../api';
-import LoginForm from './loginForm';
-import LoginContainer from './loginContainer';
+import api, {
+  successCode,
+  internalServerError
+} from '../../../shared/endpoints';
+import LoginForm from './signInForm';
+import Container from './container';
 import axios from '../../lib/customAxios';
 
 interface ILoginFormData {
@@ -27,30 +30,33 @@ const validate = function({ id, password }: ILoginFormData) {
   return errors;
 };
 
-const Login = function() {
+const SignIn: React.SFC = function() {
   const [error, setError] = React.useState('');
   const router = useRouter();
 
   const onSubmit = async function(values: any, actions: any) {
     try {
+      // Clear the existing error after submitting.
+      setError('');
+
       const res = await axios.post(api.login, values);
       const resData = res.data;
 
       if (resData.code === successCode) {
-        actions.resetForm({ ...initialValues });
         router.push('/');
+        actions.resetForm({ ...initialValues });
       } else {
-        setError(resData.data);
+        setError(resData.data.message || internalServerError);
       }
     } catch (error) {
-      setError('internal server error, try after sometime');
+      setError(internalServerError);
     } finally {
       actions.setSubmitting(false);
     }
   };
 
   return (
-    <LoginContainer>
+    <Container>
       <Header attached="top" as="h4">
         Sign In
       </Header>
@@ -64,8 +70,8 @@ const Login = function() {
           )}
         />
       </Segment>
-    </LoginContainer>
+    </Container>
   );
 };
 
-export default Login;
+export default SignIn;

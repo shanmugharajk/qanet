@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
-const LoginContainer = styled("div")`
-  padding-top: 50px;
+const Container = styled('div')`
+  padding: 50px 0 50px 0;
   margin: auto;
   width: 600px !important;
 
@@ -36,4 +36,4 @@ const LoginContainer = styled("div")`
   }
 `;
 
-export default LoginContainer;
+export default Container;

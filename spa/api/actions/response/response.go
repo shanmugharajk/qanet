@@ -16,8 +16,8 @@ func Success(data interface{}) *Response {
 	return getResponse(SuccessCode, data)
 }
 
-func Failure(data interface{}) *Response {
-	return getResponse(ErrorCode, data)
+func Failure(message string) *Response {
+	return getResponse(ErrorCode, map[string]string{"message": message})
 }
 
 func getResponse(code ResponseCode, data interface{}) *Response {

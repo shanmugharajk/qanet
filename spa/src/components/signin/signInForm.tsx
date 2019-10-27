@@ -1,8 +1,9 @@
-import React from "react";
-import Link from "next/link";
-import { Form, Button } from "semantic-ui-react";
-import { Field, FormikProps } from "formik";
-import Input from "../input";
+import React from 'react';
+import Link from 'next/link';
+import { Form, Button } from 'semantic-ui-react';
+import { Field, FormikProps } from 'formik';
+import Input from '../input';
+import ErrorText from '../errorText';
 
 interface ILoginFormProps {}
 
@@ -13,6 +14,7 @@ interface IProps extends FormikProps<ILoginFormProps> {
 const LoginForm = function(props: IProps) {
   return (
     <Form onSubmit={props.handleSubmit}>
+      {props.errorMessage && <ErrorText text={props.errorMessage}></ErrorText>}
       <Field
         name="id"
         label="Email"

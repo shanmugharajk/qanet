@@ -67,6 +67,7 @@ func App() *buffalo.App {
 		api := app.Group("/api")
 		api.GET("/", HomeHandler)
 		api.POST("/signin", SignInHandler)
+		api.POST("/signup", SignupHandler)
 	}
 
 	return app
@@ -95,6 +96,8 @@ var DeleteCookie = func(name string, c buffalo.Context) {
 
 	http.SetCookie(c.Response(), &ck)
 }
+
+var errNonSuccess = errors.New("internal server error")
 
 // GormTransaction - wraps the gorm transaction logic in the middleware
 var GormTransaction = func(db *gorm.DB) buffalo.MiddlewareFunc {
@@ -131,5 +134,3 @@ var GormTransaction = func(db *gorm.DB) buffalo.MiddlewareFunc {
 		}
 	}
 }
-
-var errNonSuccess = errors.New("internal server error")

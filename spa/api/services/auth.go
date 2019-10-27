@@ -22,26 +22,7 @@ type UserToken struct {
 	Csrf      string `json:"csrf"`
 }
 
-func CreateNewTokens(userid string, role *models.Role) (token UserToken, err error) {
-	csrfSecret, err := utils.GenerateRandomString(32)
-	if err != nil {
-		return
-	}
-
-	authTokenString, err := createTokenString(userid, role)
-	if err != nil {
-		return
-	}
-
-	token = UserToken{
-		AuthToken: authTokenString,
-		Csrf:      csrfSecret,
-	}
-
-	return
-}
-
-func createTokenString(userid string, role *models.Role) (tokenString string, err error) {
+func CreateTokenString(userid string, role *models.Role) (tokenString string, err error) {
 	tokenString = ""
 
 	var csrf string

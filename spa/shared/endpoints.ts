@@ -7,6 +7,10 @@ export const successCode = 'SUCCESS';
 
 export const failureCode = 'ERROR';
 
+export const internalServerError =
+  'Internal server error. Please try after sometime';
+
 export default {
-  login: `${authBaseUrl}/signin`
+  login: `${authBaseUrl}/signin`,
+  signUp: `${authBaseUrl}/signup`
 };

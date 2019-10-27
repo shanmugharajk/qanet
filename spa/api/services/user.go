@@ -38,27 +38,31 @@ func CreateUser(tx *gorm.DB, u *models.User) (*validate.Errors, error) {
 }
 
 func LoginUser(tx *gorm.DB, u *models.User) (*models.User, error) {
-	existing := new(models.User)
+	existing := make([]*models.User, 0, 1)
 
 	if err := GetById(tx, u.ID, &existing); err != nil {
 		return u, err
 	}
 
+	if len(existing) == 0 {
+		return u, errors.New("invalid credentials")
+	}
+
 	// confirm that the given password matches the hashed password from the db
-	if err := bcrypt.CompareHashAndPassword([]byte(existing.PasswordHash), []byte(u.Password)); err != nil {
+	if err := bcrypt.CompareHashAndPassword([]byte(existing[0].PasswordHash), []byte(u.Password)); err != nil {
 		return u, errors.New("invalid credentials")
 	}
 
 	var err error
 	var token string
 
-	if token, err = createTokenString(existing.ID, existing.RoleID); err != nil {
+	if token, err = CreateTokenString(existing[0].ID, existing[0].RoleID); err != nil {
 		return u, errors.New("error in generating token")
 	}
 
-	existing.Token = token
+	existing[0].Token = token
 
-	return existing, nil
+	return existing[0], nil
 }
 
 func firstOrCreateNormalUser(tx *gorm.DB) (*models.UserRole, error) {

@@ -16,14 +16,14 @@ const (
 
 type User struct {
 	ID           string    `json:"id"`
-	DisplayName  string    `json:"display_name"`
+	DisplayName  string    `json:"displayName"`
 	About        string    `json:"about"`
 	Points       int       `json:"points"`
 	Email        string    `json:"email"`
-	PasswordHash string    `json:"password_hash"`
-	RoleID       *Role     `json:"role_id"`
-	IsActive     bool      `json:"is_active"`
-	LastLoggedIn time.Time `json:"last_logged_in"`
+	PasswordHash string    `json:"passwordHash"`
+	RoleID       *Role     `json:"roleId"`
+	IsActive     bool      `json:"isActive"`
+	LastLoggedIn time.Time `json:"lastLoggedIn"`
 	UpdatedAt    time.Time `json:"updatedAt" gorm:"not null"`
 	CreatedAt    time.Time `json:"createdAt" gorm:"not null"`
 
@@ -38,7 +38,7 @@ func (u *User) Validate(tx *gorm.DB) *validate.Errors {
 		&validators.StringLengthInRange{Field: u.ID, Name: "Id", Min: 6},
 
 		&validators.StringIsPresent{Field: u.DisplayName, Name: "DisplayName"},
-		&validators.StringLengthInRange{Field: u.DisplayName, Name: "DisplayName", Min: 6},
+		&validators.StringLengthInRange{Field: u.DisplayName, Name: "DisplayName", Min: 4},
 
 		&validators.StringIsPresent{Field: u.Email, Name: "Email"},
 		&validators.StringIsPresent{Field: u.PasswordHash, Name: "PasswordHash"},
