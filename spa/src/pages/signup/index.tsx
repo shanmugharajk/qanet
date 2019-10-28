@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import Router from 'next/router';
 import Signup from '../../components/signup';
-import { ICustomContext } from '../_app';
+import { PageContext } from '../../@types';
 
 interface IProps {}
 
@@ -10,11 +10,7 @@ const SignupPage: NextPage<IProps> = function() {
   return <Signup />;
 };
 
-interface Context extends ICustomContext {
-  isLoggedIn: boolean;
-}
-
-SignupPage.getInitialProps = async function({ res, isLoggedIn }: Context) {
+SignupPage.getInitialProps = async function({ res, isLoggedIn }: PageContext) {
   if (isLoggedIn) {
     if (typeof window === 'undefined') {
       (res as any).redirect('/');

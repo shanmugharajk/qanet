@@ -9,8 +9,8 @@ const A = styled("a")`
   }
 `;
 
-const CustomA = React.forwardRef(({ onClick, href, text }: any, ref: any) => (
-  <A className="ui blue button" href={href} onClick={onClick} ref={ref}>
+const CustomA = React.forwardRef(({ href, text }: IProps, ref: any) => (
+  <A className="ui blue button" href={href} ref={ref}>
     {text}
   </A>
 ));

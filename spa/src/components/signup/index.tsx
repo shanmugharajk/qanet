@@ -43,6 +43,7 @@ const validate = function(data: ISignupFormData) {
 const SignUp: React.SFC = function() {
   const [error, setError] = React.useState('');
   const router = useRouter();
+  const { redirectUrl } = router.query;
 
   const onSubmit = async function(values: any, actions: any) {
     try {
@@ -51,9 +52,10 @@ const SignUp: React.SFC = function() {
 
       const res = await axios.post(api.signUp, values);
       const resData = res.data;
+      const url = redirectUrl ? (redirectUrl as string) : '/';
 
       if (resData.code === successCode) {
-        router.push('/');
+        router.push(url);
         actions.resetForm({ ...initialValues });
       } else {
         setError(resData.data.message || internalServerError);

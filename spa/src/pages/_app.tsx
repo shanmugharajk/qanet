@@ -1,21 +1,16 @@
-import 'semantic-ui-css/semantic.min.css';
+import "semantic-ui-css/semantic.min.css";
 
-import React from 'react';
-import { NextPageContext } from 'next';
-import App, { AppContext } from 'next/app';
-import Header from '../components/header';
-import cookies from '../lib/cookies';
-
-export interface ICustomContext extends NextPageContext {
-  userInfo: any;
-  isLoggedIn: boolean;
-}
+import React from "react";
+import { NextPageContext } from "next";
+import App, { AppContext } from "next/app";
+import Header from "../components/header";
+import Utils from "../lib/utils";
 
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }: AppContext) {
     let pageProps: any = {};
 
-    const userInfo = cookies.getByKey(ctx.req, 'userInfo');
+    const userInfo = Utils.cookies.getByKey(ctx.req, "userInfo");
     const isLoggedIn = !!userInfo;
 
     (ctx as any).isLoggedIn = isLoggedIn;
