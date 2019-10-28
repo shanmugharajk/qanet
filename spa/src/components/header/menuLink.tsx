@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "next/link";
-import styled from "styled-components";
+import React from 'react';
+import Link from 'next/link';
+import styled from 'styled-components';
 
 interface IProps {
   header?: boolean;
@@ -12,12 +12,12 @@ interface IProps {
 const MenuLink = function(props: IProps) {
   const { href, text, iconClass, header } = props;
 
-  let cls = "";
+  let cls = '';
 
   if (header) {
-    cls = "header item";
+    cls = 'header item';
   } else {
-    cls = "item"
+    cls = 'item';
   }
 
   return (

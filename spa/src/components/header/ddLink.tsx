@@ -1,8 +1,8 @@
-import React from "react";
-import Link from "next/link";
-import styled from "styled-components";
+import React from 'react';
+import Link from 'next/link';
+import styled from 'styled-components';
 
-const A = styled("a")`
+const A = styled('a')`
   color: #000000de;
   &:hover {
     color: #000000de;
