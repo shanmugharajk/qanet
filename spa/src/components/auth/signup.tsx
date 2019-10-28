@@ -7,7 +7,7 @@ import api, {
   internalServerError
 } from '../../../shared/endpoints';
 import axios from '../../lib/customAxios';
-import Container from '../signin/container';
+import Container from './container';
 import SignupForm from './signupForm';
 
 interface ISignupFormData {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Router from 'next/router';
-import SignIn from '../../components/signin';
+import SignIn from '../../components/auth/signIn';
 import { PageContext } from '../../@types';
 
 interface IProps {}
