@@ -1,7 +1,9 @@
-import React from 'react';
-import styled from 'styled-components';
-import { Menu, Input, Icon, Dropdown, Button } from 'semantic-ui-react';
-import MenuButton from './menuButton';
+import React from "react";
+import styled from "styled-components";
+import { Menu, Input, Dropdown } from "semantic-ui-react";
+import MenuLinkButton from "./menuLinkButton";
+import MenuLink from "./menuLink";
+import DDLink from "./ddLink";
 
 interface IUserInfo {
   userId: string;
@@ -14,16 +16,10 @@ interface IProps {
   userInfo: IUserInfo;
 }
 
-const handleItemClick = () => {
-  // TODO: place holder for now.
-};
-
 const Header = function(props: IProps) {
   return (
     <Menu className={props.className}>
-      <Menu.Item header name="home" onClick={handleItemClick}>
-        QaNet
-      </Menu.Item>
+      <MenuLink href="/" text="QaNet" header />
 
       <Menu.Item>
         <Input
@@ -35,23 +31,31 @@ const Header = function(props: IProps) {
       </Menu.Item>
 
       <Menu.Menu position="right">
-        <Menu.Item name="upcomingEvents" onClick={handleItemClick}>
-          <Icon name="question circle" />
-          Ask Question
-        </Menu.Item>
+        <MenuLink
+          href="/questions/ask"
+          text="Ask Question"
+          iconClass="question circle icon"
+        />
 
         {props.isLoggedIn && (
           <Dropdown item text={props.userInfo.userId}>
             <Dropdown.Menu>
-              <Dropdown.Item>Your profile</Dropdown.Item>
-              <Dropdown.Item>Logout</Dropdown.Item>
+              <Dropdown.Item>
+                <DDLink
+                  href={`/profile/${props.userInfo.userId}`}
+                  text="Your profile"
+                />
+              </Dropdown.Item>
+              <Dropdown.Item>
+                <DDLink href="/logout" text="Logout" />
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         )}
 
         {!props.isLoggedIn && (
           <Menu.Item>
-            <MenuButton href="/signin" text="Sign In" />
+            <MenuLinkButton href="/signin" text="Sign In" />
           </Menu.Item>
         )}
       </Menu.Menu>

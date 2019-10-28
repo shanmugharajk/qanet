@@ -3,14 +3,14 @@ import Link from "next/link";
 import styled from "styled-components";
 
 const A = styled("a")`
-  color: #fff;
+  color: #000000de;
   &:hover {
-    color: #fff;
+    color: #000000de;
   }
 `;
 
 const CustomA = React.forwardRef(({ onClick, href, text }: any, ref: any) => (
-  <A className="ui blue button" href={href} onClick={onClick} ref={ref}>
+  <A href={href} onClick={onClick} ref={ref}>
     {text}
   </A>
 ));
@@ -20,12 +20,12 @@ interface IProps {
   text: string;
 }
 
-const MenuButton = function({ href, text }: IProps) {
+const DDLink = function({ href, text }: IProps) {
   return (
     <Link href={href}>
-      <CustomA text={text}/>
+      <CustomA text={text} href={href} />
     </Link>
   );
 };
 
-export default MenuButton;
+export default DDLink;
