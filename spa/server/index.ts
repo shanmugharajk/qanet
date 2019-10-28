@@ -1,15 +1,9 @@
 import express from 'express';
-import next from 'next';
 import bodyParser from 'body-parser';
 import routes from './routes';
+import nextRoutes from './nextRoutes';
 
 const port = parseInt(process.env.PORT as string, 10) || 3000;
-
-const dev = process.env.NODE_ENV !== 'production';
-
-const app = next({ dev });
-
-const handle = app.getRequestHandler();
 
 const server = express();
 
@@ -21,12 +15,10 @@ server.use(bodyParser.json());
 server.use('/api', routes);
 
 // nextjs requests
-server.all('*', (req, res) => {
-  return handle(req, res);
-});
+server.all('*', nextRoutes.router)
 
 // start server
-app.prepare().then(() => {
+nextRoutes.app.prepare().then(() => {
   server.listen(port, err => {
     if (err) {
       throw err;
