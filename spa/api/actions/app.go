@@ -64,10 +64,16 @@ func App() *buffalo.App {
 		// Set the request content type to JSON
 		app.Use(contenttype.Set("application/json"))
 
+		app.Use(SetCurrentUser)
+
 		api := app.Group("/api")
 		api.GET("/", HomeHandler)
 		api.POST("/signin", SignInHandler)
 		api.POST("/signup", SignupHandler)
+
+		questions := api.Group("/questions")
+		questions.GET("/tags", GetAllTagHandler)
+		questions.POST("/ask", Authenticate(AskQuestion))
 	}
 
 	return app

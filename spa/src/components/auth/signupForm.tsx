@@ -2,16 +2,19 @@ import React from 'react';
 import Link from 'next/link';
 import { Form, Button } from 'semantic-ui-react';
 import { Field, FormikProps } from 'formik';
-import Input from '../input';
+import InputField from '../inputField';
 import ErrorText from '../errorText';
 
-interface ISignupFormProps {}
-
-interface IProps extends FormikProps<ISignupFormProps> {
+interface IProps extends FormikProps<{}> {
   errorMessage: string;
+  redirectUrl?: string;
 }
 
 const SignupForm = function(props: IProps) {
+  const signInUrl = props.redirectUrl
+    ? `/signin?redirectUrl=${props.redirectUrl}`
+    : '/signin';
+
   return (
     <Form onSubmit={props.handleSubmit}>
       {props.errorMessage && <ErrorText text={props.errorMessage}></ErrorText>}
@@ -20,7 +23,7 @@ const SignupForm = function(props: IProps) {
         label="User Id"
         placeholder="User Id minimum 6 letters"
         type="text"
-        component={Input}
+        component={InputField}
         autoComplete="id"
       />
 
@@ -29,7 +32,7 @@ const SignupForm = function(props: IProps) {
         label="Display Name"
         placeholder="enter the display name"
         type="text"
-        component={Input}
+        component={InputField}
         autoComplete="displayName"
       />
 
@@ -38,7 +41,7 @@ const SignupForm = function(props: IProps) {
         label="Email"
         placeholder="Email"
         type="email"
-        component={Input}
+        component={InputField}
         autoComplete="email"
       />
 
@@ -47,7 +50,7 @@ const SignupForm = function(props: IProps) {
         label="Password"
         placeholder="Password"
         type="password"
-        component={Input}
+        component={InputField}
         autoComplete="current-password"
       />
 
@@ -55,7 +58,7 @@ const SignupForm = function(props: IProps) {
         <Button type="submit" color="blue" disabled={props.isSubmitting}>
           Submit
         </Button>
-        <Link href="/signin">
+        <Link href={signInUrl}>
           <a>Already had account? Login now!</a>
         </Link>
       </Form.Field>

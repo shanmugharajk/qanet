@@ -8,8 +8,8 @@ import (
 type Tag struct {
 	ID          string `json:"id"`
 	Description string `json:"description"`
-	CreatedBy   string `json:"createdBy"`
-	UpdatedBy   string `json:"updatedBy"`
+	CreatedBy   string `json:"-"`
+	UpdatedBy   string `json:"-"`
 
 	Base
 }

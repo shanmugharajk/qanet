@@ -1,11 +1,13 @@
 import React from 'react';
-import { Segment, Header } from 'semantic-ui-react';
+import { Segment, Header, Message } from 'semantic-ui-react';
 import { Formik, FormikProps } from 'formik';
 import { useRouter } from 'next/router';
-import api, {
+import api from '../../../shared/endpoints';
+import {
   successCode,
-  internalServerError
-} from '../../../shared/endpoints';
+  internalServerError,
+  doLoginMessage
+} from '../../../shared/messages';
 import axios from '../../lib/customAxios';
 import Container from './container';
 import SignupForm from './signupForm';
@@ -56,7 +58,6 @@ const SignUp: React.SFC = function() {
 
       if (resData.code === successCode) {
         router.push(url);
-        actions.resetForm({ ...initialValues });
       } else {
         setError(resData.data.message || internalServerError);
       }
@@ -73,12 +74,17 @@ const SignUp: React.SFC = function() {
         Signup
       </Header>
       <Segment attached>
+        {redirectUrl && <Message warning content={doLoginMessage} />}
         <Formik
           initialValues={{ ...initialValues }}
           onSubmit={onSubmit}
           validate={validate}
           render={(props: FormikProps<any>) => (
-            <SignupForm {...props} errorMessage={error} />
+            <SignupForm
+              {...props}
+              errorMessage={error}
+              redirectUrl={redirectUrl as string}
+            />
           )}
         />
       </Segment>

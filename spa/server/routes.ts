@@ -1,7 +1,8 @@
 import axios from 'axios';
 import express from 'express';
 import Cookies from 'cookies';
-import { baseUrl, internalServerError, successCode } from '../shared/endpoints';
+import { baseUrl } from '../shared/endpoints';
+import { internalServerError, successCode } from '../shared/messages';
 
 const success = 'SUCCESS';
 const failure = 'ERROR';
