@@ -9,8 +9,8 @@ const A = styled('a')`
   }
 `;
 
-const CustomA = React.forwardRef(({ href, text }: IProps, ref: any) => (
-  <A className="ui blue button" href={href} ref={ref}>
+const CustomA = React.forwardRef(({ onClick, href, text }: any, ref: any) => (
+  <A className="ui blue button" href={href} onClick={onClick} ref={ref}>
     {text}
   </A>
 ));
@@ -20,12 +20,12 @@ interface IProps {
   text: string;
 }
 
-const MenuLinkButton = function({ href, text }: IProps) {
+const MenuButton = function({ href, text }: IProps) {
   return (
     <Link href={href}>
-      <CustomA text={text} href={href} />
+      <CustomA text={text} />
     </Link>
   );
 };
 
-export default MenuLinkButton;
+export default MenuButton;

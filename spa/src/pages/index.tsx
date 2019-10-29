@@ -1,8 +1,5 @@
-import React from "react";
+import React from 'react';
 
-const Index = () => (
-  <>
-  </>
-);
+const Index = () => <></>;
 
 export default Index;
