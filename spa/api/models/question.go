@@ -1,10 +1,13 @@
 package models
 
 import (
+	"strconv"
+	"strings"
 	"time"
 
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
+	"github.com/jinzhu/gorm"
 )
 
 const ERROR_IN_FETCHING = "Error in fetching the details"
@@ -58,4 +61,37 @@ func (q *Question) Validate() *validate.Errors {
 		&validators.StringIsPresent{Field: q.QuestionContent, Name: "QuestionContent"},
 		&validators.StringIsPresent{Field: q.Tags, Name: "Tags"},
 	)
+}
+
+// Post interface implemenation
+func (q *Question) PostId() int64 {
+	return q.ID
+}
+
+func (q *Question) QuestionId() int64 {
+	return q.ID
+}
+
+func (q *Question) TotalVote() int {
+	return q.Votes
+}
+
+func (q *Question) Author() string {
+	return q.CreatedBy
+}
+
+func (q *Question) StrID() string {
+	return strconv.FormatInt(q.ID, 10)
+}
+
+func (q *Question) StrUpdatedAt() string {
+	return strings.Replace(q.UpdatedAt.String(), " +0000 +0000", "", 1)
+}
+
+func (q *Question) UpdateVoteById(tx *gorm.DB, points int) error {
+	db := tx.Model(Question{}).
+		Where("id = ?", q.ID).
+		UpdateColumn("votes", gorm.Expr("votes + ?", points))
+
+	return db.Error
 }

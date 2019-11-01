@@ -1,7 +1,8 @@
 import React from 'react';
+import QuestionDetail from '../../components/question/detail'
 
 const QuestionDetailPage = function() {
-  return <div>ask question</div>;
+  return <QuestionDetail />
 };
 
 export default QuestionDetailPage;

@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { FormikProps, Formik, FormikActions } from 'formik';
 import { useRouter } from 'next/router';
 import { Container } from 'semantic-ui-react';
-import api from '../../../shared/endpoints';
-import { postReq } from '../../lib/customAxios';
+import { stateFromMarkdown } from 'draft-js-import-markdown';
+import { convertToRaw } from 'draft-js';
+import api from '../../../../shared/endpoints';
 import NewQuestionForm from './newQuestionForm';
-import { AxiosResponse } from 'axios';
-import { ITag, IPostReqResponse } from '../../@types';
-import { successCode, internalServerError } from '../../../shared/messages';
+import { postReq } from '../../../lib/customAxios';
+import { ITag } from '../../../@types';
 
 interface IProps {
   tags: ITag[];
@@ -61,6 +61,18 @@ const NewQuestion = function(props: IProps) {
     const toPost: any = { ...values };
     toPost.tags = [...toPost.tags].join(',');
 
+    const content = (
+      convertToRaw(
+        stateFromMarkdown(toPost.questionContent, {
+          parserOptions: {
+            breaks: true,
+          },
+        })
+      )
+    );
+
+    toPost.questionContent = JSON.stringify(content);
+
     // Clear the existing error after submitting.
     setError('');
 
@@ -73,8 +85,7 @@ const NewQuestion = function(props: IProps) {
       return;
     }
 
-    // TODO: push to the questionDetail page with id
-    // router.push('url');
+    router.push(`/questions/${res.data}`);
   };
 
   return (

@@ -8,4 +8,5 @@ export default {
   signUp: `${authBaseUrl}/signup`,
   tags: `${baseUrl}/questions/tags`,
   askQuestion: `${baseUrl}/questions/ask`,
+  questionDetail: (id: string) => `${baseUrl}/questions/${id}`,
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import ErrorPage from '../_error';
 import { PageContext, ITag } from '../../@types';
 import auth from '../../lib/auth';
-import NewQuestion from '../../components/question/newQuestion';
+import NewQuestion from '../../components/question/new';
 import endpoints from '../../../shared/endpoints';
 import { successCode } from '../../../shared/messages';
 import customAxios from '../../lib/customAxios';

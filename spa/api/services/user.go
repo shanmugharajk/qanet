@@ -65,6 +65,40 @@ func LoginUser(tx *gorm.DB, u *models.User) (*models.User, error) {
 	return existing[0], nil
 }
 
+func UpdateUserPointsById(tx *gorm.DB, userId string, points int) error {
+	if points == 0 {
+		return nil
+	}
+
+	if points < 0 {
+		return DeductUserPointsById(tx, userId, points)
+	}
+
+	if points > 0 {
+		return AddUserPointsById(tx, userId, points)
+	}
+
+	return nil
+}
+
+func AddUserPointsById(tx *gorm.DB, userId string, points int) error {
+	db := tx.Model(models.User{}).
+		Where("id = ?", userId).
+		UpdateColumn("points", gorm.Expr("points + ?", points))
+
+	return db.Error
+}
+
+func DeductUserPointsById(tx *gorm.DB, userId string, points int) error {
+	db := tx.Exec(`
+		UPDATE users SET points =
+			CASE WHEN users.points > ? THEN users.points + ?
+			ELSE 1 END
+		WHERE id = ?`, points+1, points, userId)
+
+	return db.Error
+}
+
 func firstOrCreateNormalUser(tx *gorm.DB) (*models.UserRole, error) {
 	userRole := new(models.UserRole)
 	userRole.ID = models.GetRole(models.NormalUser)

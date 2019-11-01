@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"strconv"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
@@ -29,5 +31,37 @@ func AskQuestion(c buffalo.Context) error {
 		return c.Render(200, r.JSON(response.Failure(verrors.Error())))
 	}
 
-	return c.Render(401, r.JSON(response.Success(q.ID)))
+	return c.Render(200, r.JSON(response.Success(q.ID)))
+}
+
+// QuestionDetail returns the question with all its details.
+// 1ast 5 comments for questions + answers and 1st 5 Answers.
+func QuestionDetail(c buffalo.Context) error {
+	// Get the DB connection from the context
+	tx, _ := c.Value("tx").(*gorm.DB)
+	questionID := c.Param("questionID")
+
+	qid, err := strconv.ParseInt(questionID, 10, 64)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+
+	userID := c.Value("userId")
+
+	question, err := services.GetQuestionDetails(tx, userID, qid)
+	if err != nil {
+		return c.Render(200, r.JSON(response.Failure(err.Error())))
+	}
+
+	answers, err := services.GetAnswers(tx, userID, qid, 1, 5)
+	if err != nil {
+		return c.Render(200, r.JSON(response.Failure(err.Error())))
+	}
+
+	res := map[string]interface{}{
+		"questionDetail": question,
+		"answers":        answers,
+	}
+
+	return c.Render(200, r.JSON(response.Success(res)))
 }

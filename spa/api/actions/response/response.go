@@ -12,6 +12,10 @@ const (
 	ErrorCode   ResponseCode = "ERROR"
 )
 
+const (
+	InternalServerError = "internal server error"
+)
+
 func Success(data interface{}) *Response {
 	return getResponse(SuccessCode, data)
 }

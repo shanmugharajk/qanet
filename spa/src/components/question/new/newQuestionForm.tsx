@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form, Button, Message } from 'semantic-ui-react';
 import { Field, FormikProps } from 'formik';
-import InputField from '../inputField';
-import TextAreaField from '../textAreaField';
-import DropdownField from '../dropDownField';
-import { ITag } from '../../@types';
+import InputField from '../../inputField';
+import TextAreaField from '../../textAreaField';
+import DropdownField from '../../dropDownField';
+import { ITag } from '../../../@types';
 
 interface IProps extends FormikProps<{}> {
   errorMessage: string;
