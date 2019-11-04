@@ -19,6 +19,14 @@ export interface ICustomAxiosResponse {
   error?: string;
 }
 
+export interface IActionBase {
+  type: string;
+}
+
+export interface IAction<Payload> extends IActionBase {
+  payload: Payload;
+}
+
 // TODO: Replace any with actual typings.
 export interface IQuestionDetails {
   answers: any[];
@@ -45,6 +53,7 @@ export interface IQuestionDetail {
   tags: string;
   hasMoreComments: boolean;
   askedAt: string;
+  modifiedAt: string;
   authorPoints: number;
   hasAcceptedAnswer: boolean;
   totalAnswers: number;
@@ -53,10 +62,22 @@ export interface IQuestionDetail {
   selfBookmarked: boolean;
 }
 
-export interface IActionBase {
-  type: string;
+export interface IApiData {
+  totalRecords: number;
+  totalPage: number;
+  nextPage: number;
+  prevPage: number;
+  pageNum: number;
+  recordsPerPage: number;
+  cursor: string;
+  records: any;
 }
 
-export interface IAction<Payload> extends IActionBase {
-  payload: Payload;
+export interface IQuestionsApiData extends IApiData {
+  records: IQuestionDetail[] | any;
+}
+
+export interface IQuestionsApiResult {
+  code: string;
+  data: IQuestionsApiData;
 }

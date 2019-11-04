@@ -64,6 +64,7 @@ func GetQuestionDetails(tx *gorm.DB, userID interface{}, id int64) (*models.Ques
 				end from answers
 				where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
 			created_at as asked_at,
+			updated_at as modified_at,
 			(select points from users where id = questions.created_by) as author_points,
 			(select vote from votes where post_id = questions.id AND voter_id = ? AND post_type = 1) as self_vote,
 			(select case
@@ -144,7 +145,7 @@ func getQuestionsListQuery(tx *gorm.DB) *gorm.DB {
 			where question_id = questions.id AND is_accepted = true) as has_accepted_answer,
 			(select count(*) from answers where question_id = questions.id) as total_answers,
 			created_at as asked_at,
-			updated_at as updated_at,
+			updated_at as modified_at,
 			(select points from users where id = questions.created_by) as author_points`).
 		Order("updated_at desc, id desc")
 }

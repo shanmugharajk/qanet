@@ -16,14 +16,14 @@ type QaNetModel interface {
 }
 
 type Pagination struct {
-	TotalRecords   int64
-	TotalPage      int
-	NextPage       int
-	PrevPage       int
-	Records        interface{}
-	PageNum        int
-	RecordsPerPage int
-	Cursor         string
+	TotalRecords   int64       `json:"totalRecords"`
+	TotalPage      int         `json:"totalPage"`
+	NextPage       int         `json:"nextPage"`
+	PrevPage       int         `json:"prevPage"`
+	Records        interface{} `json:"records"`
+	PageNum        int         `json:"pageNum"`
+	RecordsPerPage int         `json:"recordsPerPage"`
+	Cursor         string      `json:"cursor"`
 }
 
 type PaginationParam struct {
@@ -74,16 +74,27 @@ func Paginate(p *PaginationParam) (*Pagination, error) {
 	paginator.Records = p.Result
 	paginator.PageNum = p.PageNum
 
-	if p.PageNum > 1 {
-		paginator.PrevPage = p.PageNum - 1
-	} else {
-		paginator.PrevPage = p.PageNum
-	}
+	// TODO: refactor this
+	if totalPage == 0 {
+		if p.PageNum > 1 {
+			paginator.PrevPage = p.PageNum - 1
+		} else {
+			paginator.PrevPage = p.PageNum
+		}
 
-	if p.PageNum == paginator.TotalPage {
 		paginator.NextPage = p.PageNum
 	} else {
-		paginator.NextPage = p.PageNum + 1
+		if p.PageNum > 1 {
+			paginator.PrevPage = p.PageNum - 1
+		} else {
+			paginator.PrevPage = p.PageNum
+		}
+
+		if p.PageNum == paginator.TotalPage {
+			paginator.NextPage = p.PageNum
+		} else {
+			paginator.NextPage = p.PageNum + 1
+		}
 	}
 
 	return &paginator, nil

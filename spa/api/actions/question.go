@@ -65,3 +65,18 @@ func QuestionDetail(c buffalo.Context) error {
 
 	return c.Render(200, r.JSON(response.Success(res)))
 }
+
+func GetQuestions(c buffalo.Context) error {
+	id, timestamp, err := services.ExtractCursorInfo(c.Param("cursor"))
+	if err != nil {
+		return c.Render(200, r.JSON(response.Failure(err.Error())))
+	}
+
+	tx, _ := c.Value("tx").(*gorm.DB)
+	results, err := services.GetQuestions(tx, id, timestamp)
+	if err != nil {
+		return c.Render(200, r.JSON(response.Failure(err.Error())))
+	}
+
+	return c.Render(200, r.JSON(response.Success(results)))
+}

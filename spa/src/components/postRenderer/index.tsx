@@ -1,17 +1,17 @@
 import React from 'react';
 import redraft from 'redraft';
-import Container from './container';
+import style from './style';
 import { renderer } from '../../lib/renderer';
 
 interface IProps {
   content: string;
 }
 
-const PostRenderer = function(props: IProps) {
+const PostRenderer = function (props: IProps) {
   return (
-    <Container>
+    <div css={style}>
       {props.content && redraft(JSON.parse(props.content), renderer)}
-    </Container>
+    </div>
   );
 };
 

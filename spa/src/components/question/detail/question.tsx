@@ -1,5 +1,10 @@
 import React from 'react';
-import PostItem from '../../postItem';
+import Menus from './menus';
+import style from './style';
+import FlexContainer from '../../flexConatiner';
+import PostRenderer from '../../postRenderer';
+import TagsList from '../../tagsList';
+import Vote from '../../vote';
 import { IQuestionDetail } from '../../../@types';
 
 interface IProps {
@@ -8,8 +13,23 @@ interface IProps {
 
 const Question = function(props: IProps) {
   const { questionDetail } = props;
+  const { votes } = questionDetail;
 
-  return <PostItem questionDetail={questionDetail} />;
+  return (
+    <FlexContainer css={style}>
+      <Vote votes={votes} />
+      <div>
+        <PostRenderer content={questionDetail.questionContent} />
+        <TagsList
+          tags={questionDetail.questionTags}
+          style={{ marginTop: 15 }}
+        />
+        <FlexContainer>
+          <Menus />
+        </FlexContainer>
+      </div>
+    </FlexContainer>
+  );
 };
 
 export default Question;

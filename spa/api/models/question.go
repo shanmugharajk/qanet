@@ -46,6 +46,7 @@ type Question struct {
 	Tags              string    `json:"tags" gorm:"-"`
 	HasMoreComments   bool      `json:"hasMoreComments" gorm:"-"`
 	AskedAt           time.Time `json:"askedAt" gorm:"-"`
+	ModifiedAt        time.Time `json:"modifiedAt" gorm:"-"`
 	AuthorPoints      int       `json:"authorPoints" gorm:"-"`
 	HasAcceptedAnswer bool      `json:"hasAcceptedAnswer" gorm:"-"`
 	TotalAnswers      int       `json:"totalAnswers" gorm:"-"`

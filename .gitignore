@@ -25,3 +25,4 @@ dist/
 generated/
 .vendor/
 queries
+qanet

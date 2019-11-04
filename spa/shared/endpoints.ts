@@ -9,4 +9,6 @@ export default {
   tags: `${baseUrl}/questions/tags`,
   askQuestion: `${baseUrl}/questions/ask`,
   questionDetail: (id: string) => `${baseUrl}/questions/${id}`,
+  getQuestions: (cursor?: string) =>
+    cursor ? `${baseUrl}/questions?cursor=${cursor}` : `${baseUrl}/questions`
 };

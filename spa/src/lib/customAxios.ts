@@ -1,12 +1,19 @@
 import axios from 'axios';
-import { successCode, unauthorized, internalServerError } from '../../shared/messages';
+import {
+  successCode,
+  unauthorized,
+  internalServerError
+} from '../../shared/messages';
 import { ICustomAxiosResponse } from '../@types';
 
 axios.defaults.withCredentials = true;
 
 const customAxios = axios;
 
-export const postReq = async function (url: string, data: any): Promise<ICustomAxiosResponse> {
+export const postReq = async function(
+  url: string,
+  data: any
+): Promise<ICustomAxiosResponse> {
   try {
     const res = await axios.post(url, data);
     const resData = res.data;
@@ -25,9 +32,11 @@ export const postReq = async function (url: string, data: any): Promise<ICustomA
 
     return { data: null, error: internalServerError };
   }
-}
+};
 
-export const getReq = async function (url: string): Promise<ICustomAxiosResponse> {
+export const getReq = async function(
+  url: string
+): Promise<ICustomAxiosResponse> {
   try {
     const res = await axios.get(url);
     const resData = res.data;
@@ -46,6 +55,6 @@ export const getReq = async function (url: string): Promise<ICustomAxiosResponse
 
     return { data: null, error: internalServerError };
   }
-}
+};
 
 export default customAxios;

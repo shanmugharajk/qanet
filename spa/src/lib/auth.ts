@@ -6,17 +6,17 @@ import Router from 'next/router';
  * @param ctx page context
  * @param redirectUrl The Url to redirect when the user is not signed
  */
-export default function (ctx: PageContext, redirectUrl: string) {
-    const { res, isLoggedIn } = ctx;
-    const url = `/signin?redirectUrl=${redirectUrl}`;
+export default function(ctx: PageContext, redirectUrl: string) {
+  const { res, isLoggedIn } = ctx;
+  const url = `/signin?redirectUrl=${redirectUrl}`;
 
-    if (!isLoggedIn) {
-        if (typeof window === 'undefined') {
-            (res as any).redirect(url);
-        } else {
-            Router.push(url);
-        }
+  if (!isLoggedIn) {
+    if (typeof window === 'undefined') {
+      (res as any).redirect(url);
+    } else {
+      Router.push(url);
     }
+  }
 
-    return {};
-};
+  return {};
+}

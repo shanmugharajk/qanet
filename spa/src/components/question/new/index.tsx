@@ -61,14 +61,12 @@ const NewQuestion = function(props: IProps) {
     const toPost: any = { ...values };
     toPost.tags = [...toPost.tags].join(',');
 
-    const content = (
-      convertToRaw(
-        stateFromMarkdown(toPost.questionContent, {
-          parserOptions: {
-            breaks: true,
-          },
-        })
-      )
+    const content = convertToRaw(
+      stateFromMarkdown(toPost.questionContent, {
+        parserOptions: {
+          breaks: true
+        }
+      })
     );
 
     toPost.questionContent = JSON.stringify(content);

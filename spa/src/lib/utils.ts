@@ -2,7 +2,7 @@ import cookie from 'cookie';
 
 export default {
   cookies: {
-    parseCookies: function (req?: any, options = {}) {
+    parseCookies: function(req?: any, options = {}) {
       return cookie.parse(
         req ? req.headers.cookie || '' : document.cookie,
         options

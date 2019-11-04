@@ -1,4 +1,4 @@
-import { IQuestionDetails, IAction } from '../../../@types'
+import { IQuestionDetails, IAction } from '../../../@types';
 
 export const SET_QUESTION_DETAIL = 'SET_QUESTION_DETAIL';
 export const SET_ERROR = 'SET_ERROR';
@@ -9,7 +9,7 @@ export interface IState extends IQuestionDetails {
   error?: string;
 }
 
-export default function (draft: IState, action: IAction<any>) {
+export default function(draft: IState, action: IAction<any>) {
   const { type, payload } = action;
 
   switch (type) {

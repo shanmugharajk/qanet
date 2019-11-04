@@ -67,11 +67,12 @@ func App() *buffalo.App {
 		app.Use(SetCurrentUser)
 
 		api := app.Group("/api")
-		api.GET("/", HomeHandler)
+		api.GET("/", GetQuestions)
 		api.POST("/signin", SignInHandler)
 		api.POST("/signup", SignupHandler)
 
 		questions := api.Group("/questions")
+		questions.GET("/", GetQuestions)
 		questions.GET("/tags", GetAllTagHandler)
 		questions.POST("/ask", Authenticate(AskQuestion))
 		questions.GET("/{questionID}", QuestionDetail)
