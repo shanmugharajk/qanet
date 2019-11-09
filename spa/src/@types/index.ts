@@ -1,7 +1,12 @@
 import { NextPageContext } from 'next';
 
+export interface IUserInfo {
+  userId: string;
+  userName: string;
+}
+
 export interface ICustomContext extends NextPageContext {
-  userInfo: any;
+  userInfo: IUserInfo;
   isLoggedIn: boolean;
 }
 
@@ -33,6 +38,19 @@ export interface IQuestionDetails {
   questionDetail: IQuestionDetail | any;
 }
 
+export interface IComment {
+  id: number;
+  comments: string;
+  questionId: number;
+  closeVotes: number;
+  isActive: boolean;
+  deactivatedBy: string;
+  createdBy: string;
+  updatedBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface IQuestionDetail {
   id: string | number;
   title: string;
@@ -48,7 +66,7 @@ export interface IQuestionDetail {
   deactivated_by: string;
   createdBy: string;
   updatedBy: string;
-  comments: any;
+  comments: IComment[] | any;
   questionTags: Array<ITag>;
   tags: string;
   hasMoreComments: boolean;

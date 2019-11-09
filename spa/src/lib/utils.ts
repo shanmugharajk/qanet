@@ -1,4 +1,5 @@
 import cookie from 'cookie';
+import moment from 'moment';
 
 export default {
   cookies: {
@@ -15,6 +16,15 @@ export default {
 
     getByKey(req: any, key: string): any {
       return (this.parseCookies(req) || {})[key];
+    }
+  },
+  dateTime: {
+    format: function(
+      dateTime: string,
+      // tslint:disable-next-line: quotemark
+      dateFormatterString = "MMM DD'YY HH:mm"
+    ) {
+      return moment(dateTime).format(dateFormatterString);
     }
   }
 };

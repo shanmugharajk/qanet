@@ -4,10 +4,11 @@ export default css`
   width: 100%;
 
   a {
-    color: #C91D2E;
+    color: #005998;
 
-    :hover, :active {
-      color: #9c1724;
+    :hover,
+    :active {
+      color: #36a7f9;
     }
   }
 
@@ -79,6 +80,8 @@ export default css`
   :not(pre) > code,
   :not(pre) > code[class*='language-'] {
     background: #f9ecee;
+    /* background: #f9ecee; */
+    /* color: #db2828e8; */
     color: #db2828e8;
     margin: 0.3em;
     padding: 0.2em, 0;

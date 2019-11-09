@@ -1,8 +1,12 @@
 import { css } from 'styled-components';
 
 export default css`
+  .bottom-row {
+    margin-top: 20px;
+  }
+
   .post-menus {
-    margin-top: 30px;
+    flex: 1 auto;
 
     a {
       font-size: 13px;

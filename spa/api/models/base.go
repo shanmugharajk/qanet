@@ -4,6 +4,6 @@ import "time"
 
 // Base model for all model structs.
 type Base struct {
-	UpdatedAt time.Time `json:"-"`
-	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"createdAt"`
 }

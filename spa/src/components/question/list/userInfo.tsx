@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import utils from '../../../lib/utils';
 
 interface IProps {
   modifiedAt: string;
@@ -7,15 +7,10 @@ interface IProps {
   userId: string;
 }
 
-// tslint:disable-next-line: quotemark
-const dateFormatterString = "MMM DD'YY HH:mm";
-
 const UserInfo = function(props: IProps) {
   return (
     <div className="user-info">
-      <span>{`asked ${moment(props.modifiedAt).format(
-        dateFormatterString
-      )}`}</span>
+      <span>{`asked ${utils.dateTime.format(props.modifiedAt)}`}</span>
       <a href={`/users/${props.userId}`}>{props.userId}</a>
       <span>{props.points}</span>
     </div>

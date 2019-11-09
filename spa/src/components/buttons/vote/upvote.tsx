@@ -1,6 +1,6 @@
 import React from 'react';
-import ButtonBase, { IButtonBaseProps } from './buttonBase';
-import IconBase from './iconBase';
+import ButtonBase, { IButtonBaseProps } from '../buttonBase';
+import IconBase from '../iconBase';
 
 const Upvote = function(props: IButtonBaseProps) {
   return (

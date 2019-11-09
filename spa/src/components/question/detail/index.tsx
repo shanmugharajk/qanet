@@ -6,6 +6,7 @@ import DetailContainer from './container';
 import Question from './question';
 import reducer, { IState } from './reducer';
 import actions from './actions';
+import { ICustomContext } from '../../../@types';
 
 const initialState: IState = {
   answers: [],
@@ -14,7 +15,10 @@ const initialState: IState = {
   error: ''
 };
 
-const QuestionDetail = function () {
+interface IProps extends ICustomContext {}
+
+const QuestionDetail = function(props: IProps) {
+  const { userInfo } = props;
   const router = useRouter();
   const [state, dispatch] = useImmerReducer(reducer, initialState);
 
@@ -30,7 +34,7 @@ const QuestionDetail = function () {
           <Header as="h3" dividing>
             {state.questionDetail.title}
           </Header>
-          <Question questionDetail={state.questionDetail} />
+          <Question questionDetail={state.questionDetail} userInfo={userInfo} />
         </>
       )}
     </DetailContainer>
