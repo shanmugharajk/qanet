@@ -25,6 +25,7 @@ export default function(draft: IState, action: IAction<any>) {
     case SET_QUESTION_DETAIL:
       draft.loading = false;
       draft.questionDetail = payload.questionDetail;
+      draft.answers = payload.answers;
       break;
 
     default:

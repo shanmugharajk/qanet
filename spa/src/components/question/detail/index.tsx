@@ -2,6 +2,7 @@ import React from 'react';
 import { useImmerReducer } from 'use-immer';
 import { Header } from 'semantic-ui-react';
 import { useRouter } from 'next/router';
+import Answers from './answers/index';
 import DetailContainer from './container';
 import Question from './question';
 import reducer, { IState } from './reducer';
@@ -35,6 +36,7 @@ const QuestionDetail = function(props: IProps) {
             {state.questionDetail.title}
           </Header>
           <Question questionDetail={state.questionDetail} userInfo={userInfo} />
+          <Answers answers={state.answers} userInfo={userInfo} />
         </>
       )}
     </DetailContainer>

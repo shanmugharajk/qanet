@@ -32,9 +32,29 @@ export interface IAction<Payload> extends IActionBase {
   payload: Payload;
 }
 
+export interface IAnswer {
+  id: number;
+  answerContent: string;
+  votes: number;
+  closeVotes: number;
+  isClosed: false;
+  isActive: true;
+  isAccepted: true;
+  createdBy: string;
+  updatedBy: string;
+  deactivatedBy: string;
+  questionId: number;
+  updatedAt: string;
+  createdAt: string;
+  comments: IComment[] | any;
+  authorPoints: number;
+  selfVote: number;
+  selfIsAccepted: number;
+}
+
 // TODO: Replace any with actual typings.
 export interface IQuestionDetails {
-  answers: any[];
+  answers: IAnswer[] | any;
   questionDetail: IQuestionDetail | any;
 }
 

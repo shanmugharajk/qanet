@@ -6,11 +6,12 @@ import Bookmark from '../buttons/bookmark';
 type PostType = string;
 
 export const QUESTION: PostType = 'QUESTION';
+export const ANSWER: PostType = 'ANSWER';
 
 interface IProps {
   votes: number;
   type: PostType;
-  bookmarks: number;
+  bookmarks?: number;
 }
 
 const Vote = function(props: IProps) {
@@ -21,7 +22,9 @@ const Vote = function(props: IProps) {
       <Upvote />
       <PointsText>{votes}</PointsText>
       <DownVote />
-      {type === QUESTION && <Bookmark bookmarks={bookmarks} />}
+      {type === QUESTION && (
+        <Bookmark bookmarks={parseInt((bookmarks || '0').toString())} />
+      )}
     </VoteContainer>
   );
 };

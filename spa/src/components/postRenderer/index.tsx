@@ -7,7 +7,7 @@ interface IProps {
   content: string;
 }
 
-const PostRenderer = function (props: IProps) {
+const PostRenderer = function(props: IProps) {
   return (
     <div css={style}>
       {props.content && redraft(JSON.parse(props.content), renderer)}

@@ -75,6 +75,7 @@ func App() *buffalo.App {
 		questions.GET("/", GetQuestions)
 		questions.GET("/tags", GetAllTagHandler)
 		questions.POST("/ask", Authenticate(AskQuestion))
+		questions.POST("/{questionID}/answer/submit", Authenticate(SubmitAnswer))
 		questions.GET("/{questionID}", QuestionDetail)
 	}
 

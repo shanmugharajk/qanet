@@ -1,10 +1,24 @@
 package services
 
 import (
+	"github.com/gobuffalo/validate"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"github.com/shanmugharajk/qanet/spa/api/models"
 )
+
+func AddAnswer(tx *gorm.DB, answer *models.Answer) (*validate.Errors, error) {
+	verrs := answer.Validate()
+	if verrs.HasAny() {
+		return verrs, nil
+	}
+
+	if db := tx.Create(answer); db.Error != nil {
+		return validate.NewErrors(), db.Error
+	}
+
+	return validate.NewErrors(), nil
+}
 
 func GetAnswers(tx *gorm.DB, userId interface{}, questionId int64, pageNo int, noOfRecords int) ([]*models.Answer, error) {
 	answers := []*models.Answer{}
