@@ -28,6 +28,7 @@
     "semantic-ui-react": "^0.88.1",
     "styled-components": "^4.4.0",
     "typescript": "^3.6.4",
+    "unstated-next": "^1.1.0",
     "use-immer": "^0.3.4"
   },
   "scripts": {
