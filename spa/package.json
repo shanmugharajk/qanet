@@ -19,7 +19,7 @@
     "immer": "^4.0.2",
     "isomorphic-unfetch": "^3.0.0",
     "moment": "^2.24.0",
-    "next": "^9.1.1",
+    "next": "^9.3.2",
     "prism-react-renderer": "^1.0.2",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
