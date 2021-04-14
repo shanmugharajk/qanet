@@ -30,7 +30,7 @@ class Post(Base, OwnerEditorMixin, TimeStampMixin):
 
     bookmarks_count = Column(Integer, default=0)
 
-    close_vote = Column(Integer, nullable=True)
+    close_votes = Column(Integer, nullable=True)
     closed_by_user_id = Column(String, ForeignKey("qanet_user.id"), nullable=True)
     closed_date = Column(DateTime, nullable=True)
     deleted_date = Column(DateTime, nullable=True)

@@ -30,7 +30,7 @@ def upgrade():
         sa.Column("answers_count", sa.Integer(), nullable=True),
         sa.Column("accepted_answer_id", sa.Integer(), nullable=True),
         sa.Column("bookmarks_count", sa.Integer(), nullable=True),
-        sa.Column("close_vote", sa.Integer(), nullable=True),
+        sa.Column("close_votes", sa.Integer(), nullable=True),
         sa.Column("closed_by_user_id", sa.String(), nullable=True),
         sa.Column("closed_date", sa.DateTime(), nullable=True),
         sa.Column("deleted_date", sa.DateTime(), nullable=True),

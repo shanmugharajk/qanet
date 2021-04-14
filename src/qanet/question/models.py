@@ -21,7 +21,7 @@ class QuestionRead(QuestionBase):
     tags: List[PostTagBase]
     points: Optional[int]
 
-    close_vote: Optional[int]
+    close_votes: Optional[int]
     closed_by: Optional[UserRead]
 
     bookmarks_count: int
