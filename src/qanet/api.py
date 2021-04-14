@@ -6,13 +6,16 @@ from fastapi.openapi.utils import get_openapi
 
 from qanet.auth.service import set_current_user
 from qanet.auth.views import auth_router
+from qanet.post_tag.views import authenticated_post_tags_router
 
 
 api_router = APIRouter(default_response_class=JSONResponse)
 authenticated_api_router = APIRouter(default_response_class=JSONResponse)
 
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
-
+authenticated_api_router.include_router(
+    authenticated_post_tags_router, prefix="/tags", tags=["tags"]
+)
 
 # doc routes
 doc_router = APIRouter()
