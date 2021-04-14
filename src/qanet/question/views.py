@@ -15,12 +15,12 @@ authenticated_questions_router = APIRouter()
 questions_router = APIRouter()
 
 
-@questions_router.get("", response_model=List[QuestionRead])
+@questions_router.get("", response_model=List[QuestionRead], tags=["questions"])
 def get_questions(db_session: Session = Depends(get_db)):
     return get_all(db_session=db_session)
 
 
-@authenticated_questions_router.post("/add", response_model=QuestionRead)
+@authenticated_questions_router.post("/add", response_model=QuestionRead, tags=["questions"])
 def create_question(
     request: Request,
     question_in: QuestionCreate,
@@ -32,7 +32,7 @@ def create_question(
 
 
 @authenticated_questions_router.post(
-    "/{question_id}/answers/add", response_model=answer_models.AnswerRead
+    "/{question_id}/answers/add", response_model=answer_models.AnswerRead, tags=["answers"]
 )
 def create_answer(
     request: Request,

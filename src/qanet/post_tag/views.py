@@ -1,9 +1,9 @@
-from fastapi import APIRouter
-from fastapi.params import Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from starlette.requests import Request
 
 from sqlalchemy.orm import session
+from sqlalchemy.exc import IntegrityError
 
 from qanet.database.core import get_db
 
@@ -20,4 +20,7 @@ def create_post_tag(
     post_tag: PostTagCreate,
     db_session: session = Depends(get_db),
 ) -> PostTag:
-    return create(db_session=db_session, current_user=request.state.user.id, new_post=post_tag)
+    try:
+        return create(db_session=db_session, current_user=request.state.user.id, new_post=post_tag)
+    except IntegrityError:
+        raise HTTPException(status_code=409, detail="A post tag already exists with this name.")

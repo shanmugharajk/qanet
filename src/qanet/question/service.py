@@ -11,8 +11,7 @@ def get_all(*, db_session: Session):
     """Gets all the Question"""
     return (
         db_session.query(Post)
-        .filter(Post.post_type == PostType.question)
-        .filter(Post.deleted_date.is_(None))
+        .filter(Post.post_type == PostType.question, Post.deleted_date.is_(None))
         .order_by(Post.id.desc())
         .all()
     )

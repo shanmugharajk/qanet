@@ -6,6 +6,7 @@ from fastapi.openapi.utils import get_openapi
 
 from qanet.auth.service import set_current_user
 from qanet.auth.views import auth_router
+from qanet.comment.views import authenticated_comments_router
 from qanet.post_tag.views import authenticated_post_tags_router
 from qanet.question.views import questions_router, authenticated_questions_router
 
@@ -13,7 +14,7 @@ from qanet.question.views import questions_router, authenticated_questions_route
 api_router = APIRouter(default_response_class=JSONResponse)
 
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
-api_router.include_router(questions_router, prefix="/questions", tags=["questions"])
+api_router.include_router(questions_router, prefix="/questions")
 
 # authenticated routes
 authenticated_api_router = APIRouter(default_response_class=JSONResponse)
@@ -21,8 +22,9 @@ authenticated_api_router = APIRouter(default_response_class=JSONResponse)
 authenticated_api_router.include_router(
     authenticated_post_tags_router, prefix="/tags", tags=["tags"]
 )
+authenticated_api_router.include_router(authenticated_questions_router, prefix="/questions")
 authenticated_api_router.include_router(
-    authenticated_questions_router, prefix="/questions", tags=["questions"]
+    authenticated_comments_router, prefix="/posts", tags=["comments"]
 )
 
 # doc routes

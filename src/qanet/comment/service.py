@@ -13,3 +13,5 @@ def create(*, db_session: Session, current_user: str, post_id: int, comment_in: 
 
     db_session.add(comment)
     db_session.commit()
+
+    return comment

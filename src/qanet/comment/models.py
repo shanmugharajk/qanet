@@ -24,7 +24,12 @@ class CommentBase(QanetBase):
     content: str
 
 
+class CommentCreate(CommentBase):
+    pass
+
+
 class CommentRead(CommentBase):
+    post_id: int
     points: Optional[int]
     close_votes: Optional[int]
 
