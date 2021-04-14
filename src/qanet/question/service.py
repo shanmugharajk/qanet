@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from qanet.enums import PostType
+from qanet.comment.models import Comment
 from qanet.post_tag import service as post_tag_service
 from qanet.post.models import Post
 
@@ -11,7 +12,10 @@ def get_all(*, db_session: Session):
     """Gets all the Question"""
     return (
         db_session.query(Post)
+        .select_from(Comment)
+        .join(Comment.post_id)
         .filter(Post.post_type == PostType.question, Post.deleted_date.is_(None))
+        .join()
         .order_by(Post.id.desc())
         .all()
     )

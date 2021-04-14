@@ -2,6 +2,7 @@ import datetime
 from typing import List, Optional
 
 from qanet.models import QanetBase
+from qanet.comment.models import CommentRead
 from qanet.auth.models import UserRead
 from qanet.post_tag.models import PostTagBase
 
@@ -32,3 +33,5 @@ class QuestionRead(QuestionBase):
     modified_date: datetime.datetime
     owner: UserRead
     last_editor: UserRead
+
+    comments: List[CommentRead]

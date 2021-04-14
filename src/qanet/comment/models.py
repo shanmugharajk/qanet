@@ -29,6 +29,7 @@ class CommentCreate(CommentBase):
 
 
 class CommentRead(CommentBase):
+    id: int
     post_id: int
     points: Optional[int]
     close_votes: Optional[int]

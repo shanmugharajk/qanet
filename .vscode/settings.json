@@ -1,0 +1,14 @@
+{
+   "python.venvPath": "${env:VENV_PATH}",
+   "python.pythonPath": "${env:VENV_PATH}/bin/python",
+   "python.languageServer": "Pylance",
+   "python.linting.flake8Enabled": true,
+   "python.linting.flake8Path": "${env:VENV_PATH}/bin/flake8",
+   "python.formatting.blackPath": "${env:VENV_PATH}/bin/black",
+   "python.formatting.provider": "black",
+   "python.formatting.blackArgs": ["--line-length", "100"],
+   "editor.formatOnSave": true,
+   "python.linting.enabled": true,
+   "editor.tabSize": 4,
+   "python.analysis.extraPaths": ["./src/qanet"]
+ }
