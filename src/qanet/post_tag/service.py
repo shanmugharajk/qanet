@@ -8,7 +8,7 @@ def get(*, db_session: Session, post_id: str):
 
 
 def create(*, db_session: Session, current_user: str, new_post: PostTagCreate) -> PostTag:
-    """Creates a new Qanet user."""
+    """Creates a new PostTag."""
     post_tag = PostTag(**new_post.dict())
 
     post_tag.owner_user_id = current_user

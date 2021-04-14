@@ -1,3 +1,4 @@
+import datetime
 from typing import List, Optional
 
 from qanet.models import QanetBase
@@ -18,11 +19,16 @@ class QuestionCreate(QuestionBase):
 class QuestionRead(QuestionBase):
     id: Optional[int]
     tags: List[PostTagBase]
+    points: Optional[int]
+
+    close_vote: Optional[int]
+    closed_by: Optional[UserRead]
+
+    bookmarks_count: int
+    answers_count: int
+    accepted_answer_id: Optional[int]
+
+    created_date: datetime.datetime
+    modified_date: datetime.datetime
     owner: UserRead
     last_editor: UserRead
-
-
-class QuestionsList(QuestionRead):
-    votes: int
-    answers_count: int
-    accepted_answer_id: int

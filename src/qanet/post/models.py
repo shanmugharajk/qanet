@@ -34,3 +34,5 @@ class Post(Base, OwnerEditorMixin, TimeStampMixin):
     closed_by_user_id = Column(String, ForeignKey("qanet_user.id"), nullable=True)
     closed_date = Column(DateTime, nullable=True)
     deleted_date = Column(DateTime, nullable=True)
+
+    closed_by = relationship("QanetUser", foreign_keys=[closed_by_user_id])

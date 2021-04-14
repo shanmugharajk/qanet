@@ -20,17 +20,17 @@ def get_all(*, db_session: Session):
 
 def create(*, db_session: Session, current_user: str, question_in: QuestionCreate):
     """Creates a new Question."""
-    question = Post(**question_in.dict(exclude={"tags"}))
+    post = Post(**question_in.dict(exclude={"tags"}))
 
     tags = []
 
     for tag in question_in.tags:
         tags.append(post_tag_service.get(db_session=db_session, post_id=tag))
 
-    question.tags = tags
-    question.owner_user_id = current_user
-    question.last_editor_user_id = current_user
+    post.tags = tags
+    post.owner_user_id = current_user
+    post.last_editor_user_id = current_user
 
-    db_session.add(question)
+    db_session.add(post)
     db_session.commit()
-    return question
+    return post

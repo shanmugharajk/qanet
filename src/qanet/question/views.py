@@ -22,7 +22,9 @@ def get_questions(db_session: Session = Depends(get_db)):
 @authenticated_questions_router.post("/add", response_model=QuestionRead)
 def create_question(
     request: Request,
-    question: QuestionCreate,
+    question_in: QuestionCreate,
     db_session: Session = Depends(get_db),
 ) -> Post:
-    return create(db_session=db_session, current_user=request.state.user.id, question_in=question)
+    return create(
+        db_session=db_session, current_user=request.state.user.id, question_in=question_in
+    )
