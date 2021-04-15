@@ -1,4 +1,5 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, contains_eager
+
 
 from qanet.enums import PostType
 from qanet.comment.models import Comment
@@ -10,13 +11,23 @@ from .models import QuestionCreate
 
 def get_all(*, db_session: Session):
     """Gets all the Question"""
+    # https://stackoverflow.com/questions/43727268/limit-child-collections-in-initial-query-sqlalchemy
+    subq = (
+        db_session.query(Comment)
+        .filter(Comment.post_id == Post.id)
+        .order_by(Comment.id.desc())
+        .limit(5)
+        .subquery()
+        .lateral()
+    )
+
     return (
         db_session.query(Post)
-        .select_from(Comment)
-        .join(Comment.post_id)
-        .filter(Post.post_type == PostType.question, Post.deleted_date.is_(None))
-        .join()
+        .outerjoin(subq)
+        .options(contains_eager(Post.comments, alias=subq))
+        .filter(Post.post_type == PostType.question)
         .order_by(Post.id.desc())
+        .limit(10)
         .all()
     )
 

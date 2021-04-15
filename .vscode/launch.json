@@ -9,6 +9,15 @@
         "PYTHONPATH": "src"
       },
       "program": "${workspaceFolder}/bin/run.py"
+    },
+    {
+      "name": "Seed initial data",
+      "type": "python",
+      "request": "launch",
+      "env": {
+        "PYTHONPATH": "src"
+      },
+      "program": "${workspaceFolder}/bin/seed.py"
     }
   ]
 }

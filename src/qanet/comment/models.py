@@ -19,6 +19,8 @@ class Comment(Base, OwnerEditorMixin, TimeStampMixin):
     closed_by_user_id = Column(String, ForeignKey("qanet_user.id"), nullable=True)
     closed_by = relationship("QanetUser", foreign_keys=[closed_by_user_id])
 
+    post = relationship("Post", foreign_keys=[post_id])
+
 
 class CommentBase(QanetBase):
     content: str
