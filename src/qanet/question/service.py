@@ -1,35 +1,27 @@
-from sqlalchemy.orm import Session, contains_eager
+from sqlalchemy.orm import Session
 
-
+from qanet.models import CursorPaginate
 from qanet.enums import PostType
-from qanet.comment.models import Comment
 from qanet.post_tag import service as post_tag_service
 from qanet.post.models import Post
 
-from .models import QuestionCreate
+from .models import QuestionCreate, QuestionRead
 
 
-def get_all(*, db_session: Session):
-    """Gets all the Question"""
-    # https://stackoverflow.com/questions/43727268/limit-child-collections-in-initial-query-sqlalchemy
-    subq = (
-        db_session.query(Comment)
-        .filter(Comment.post_id == Post.id)
-        .order_by(Comment.id.desc())
-        .limit(5)
-        .subquery()
-        .lateral()
-    )
+def get(*, db_session: Session, cursor: int = 0, item_per_page: int = 50):
+    """Gets Questions based on the cursor"""
+    q = db_session.query(Post).filter(Post.post_type == PostType.question)
 
-    return (
-        db_session.query(Post)
-        .outerjoin(subq)
-        .options(contains_eager(Post.comments, alias=subq))
-        .filter(Post.post_type == PostType.question)
-        .order_by(Post.id.desc())
-        .limit(10)
-        .all()
-    )
+    total = q.count()
+
+    if cursor == 0:
+        q = q.filter(Post.id > cursor)
+    else:
+        q = q.filter(Post.id < cursor)
+
+    items = q.order_by(Post.id.desc()).limit(item_per_page).all()
+
+    return CursorPaginate[QuestionRead](items=items, items_per_page=item_per_page, total=total)
 
 
 def create(*, db_session: Session, current_user: str, question_in: QuestionCreate):

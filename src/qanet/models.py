@@ -1,16 +1,40 @@
 from datetime import datetime
+from typing import Generic, List, TypeVar
 
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, DateTime, event, ForeignKey, String
 from sqlalchemy.ext.declarative import declared_attr
 
 from pydantic import BaseModel
+from pydantic.generics import GenericModel
+from humps import camelize
+
+
+def to_camel(string):
+    return camelize(string)
 
 
 class QanetBase(BaseModel):
     class Config:
         orm_mode = True
         validate_assignment = True
+        alias_generator = to_camel
+        allow_population_by_field_name = True
+
+
+T = TypeVar("T")
+
+
+class CursorPaginate(GenericModel, Generic[T]):
+    items: List[T]
+    items_per_page: int
+    total: int
+
+    class Config:
+        orm_mode = True
+        validate_assignment = True
+        alias_generator = to_camel
+        allow_population_by_field_name = True
 
 
 class TimeStampMixin(object):

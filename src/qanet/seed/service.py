@@ -121,7 +121,7 @@ def create_answers(user_id=USER_ID, post_id=1):
     print("[INFO] creating answers completed...")
 
 
-def create_comments(user_id=USER_ID, post_id=40):
+def create_comments(user_id=USER_ID, post_id=80):
     print("\n[INFO] creating comments...")
 
     db_session: Session = next(get_db())
