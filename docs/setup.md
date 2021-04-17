@@ -48,6 +48,7 @@ export DB_PASSWORD="password"
 export QANET_JWT_SECRET="password"
 export VENV_PATH="venv path"
 export STATIC_DIR="src/qanet/static/qanet/public"
+export ALEMBIC_INI_PATH="src/qanet/alembic.ini"
 ```
 
 ## vscode settings

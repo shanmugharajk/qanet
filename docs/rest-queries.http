@@ -1,0 +1,23 @@
+@host=http://localhost:8000/api/v1
+###
+
+# @name login
+POST {{host}}/auth/login HTTP/1.1
+content-type: application/json
+
+{
+    "id": "sherlock",
+    "password": "sherlock@123"
+}
+###
+
+@token={{login.response.body.$.token}}
+###
+
+# @name questions
+GET {{host}}/questions HTTP/1.1
+###
+
+# @name answers
+GET {{host}}/questions/1/answers HTTP/1.1
+###
