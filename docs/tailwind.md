@@ -2,6 +2,15 @@
 
 PostCSS compatibility issues refer [here](https://tailwindcss.com/docs/installation#post-css-7-compatibility-build).
 
+```sh
+# install compatible postcss, autoprefixer
+npm uninstall tailwindcss postcss autoprefixer
+npm install -D tailwindcss@npm:@tailwindcss/postcss7-compat @tailwindcss/postcss7-compat postcss@^7 autoprefixer@^9
+
+# init tailwind
+npx tailwindcss init -p
+```
+
 Recommended vscode settings for this
 
 ```json
